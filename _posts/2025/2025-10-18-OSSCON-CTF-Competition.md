@@ -3,7 +3,7 @@ title: "OSSCON CTF Competition"
 date: 2025-10-18
 categories: [Competition]
 tags: [cybersecurity, CTF, OSSCON, offsec]
-image: 
+image: /assets/lib/IMG_1981.jpg
 alt: "Image alt text"
 ---
 
@@ -13,4 +13,4 @@ At OSSCON this past weekend, my team and I were able to take advantage of this w
 
 This experience not only enhanced my technical skills but also improved my teamwork and communication in high-pressure environments. Overall, I'm proud of what my team and I achieved here and am excited to build on this success in upcoming competitions.
 
-![About](/assets/lib/IMG_1981.jpg)
+
