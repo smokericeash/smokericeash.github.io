@@ -3,7 +3,7 @@ title: "OSSCON CTF Competition"
 date: 2025-10-18
 categories: [Competition]
 tags: [cybersecurity, CTF, OSSCON, offsec]
-image: 
+image: /assets/img/IMG_1981.jpg
 alt: "Image alt text"
 ---
 
