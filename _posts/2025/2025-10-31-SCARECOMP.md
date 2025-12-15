@@ -3,7 +3,7 @@ title: "SWIFT SCARE CTF COMPETITION"
 date: 2025-10-31
 categories: [Competition]
 tags: [cybersecurity, CTF, OSSCON, offsec]
-image: 
+image: /assets/img/image67.png
 alt: "Image alt text"
 ---
 
