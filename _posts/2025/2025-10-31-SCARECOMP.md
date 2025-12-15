@@ -64,7 +64,7 @@ Across all four days, the SCARE CTF pushed me through a full range of cybersecur
 - Steganography and data extraction  
 - Realistic exploitation chains instead of isolated one-offs  
 
-By the time I finished, it felt less like a competition and more like a condensed red-team training scenario.
+By the time I finished, it felt less like a competition and more like a condensed red-team training scenario. I had placed 4th, but the experiences were more exciting than the striving for placement.
 
 And honestly—  
 **I learned a ton.**  
