@@ -4,7 +4,7 @@ date: 2025-10-31
 categories: [Competition]
 tags: [cybersecurity, CTF, OSSCON, offsec]
 image: /assets/img/image67.png
-alt: "Image alt text"
+alt: "SWIFT SCARE CTF COMPETITION"
 ---
 
 This SCARE Competition was hosted by my club, SWIFT, where we were tasked with attacking 2 Debian machines and a Windows machine. The format was a multi-day red-team style CTF where we were given access to **two Debian machines** and **one Windows host**, each containing a blend of vulnerabilities, misconfigurations, and hidden artifacts.  
