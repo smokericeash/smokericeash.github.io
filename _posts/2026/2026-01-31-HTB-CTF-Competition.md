@@ -3,7 +3,7 @@ title: "Hack The Box Capture The Flag Competition by Coastline"
 date: 2026-01-31
 categories: [Competition]
 tags: [cybersecurity, HTB, infosec, CTF]
-image: /assets/img/image4333.png
+image: /assets/img/images4333.png
 alt: "HTB CTF Competition"
 ---
 
