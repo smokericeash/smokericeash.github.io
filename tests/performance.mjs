@@ -15,6 +15,7 @@ try {
     ["home", "/"],
     ["journal", "/research/"],
     ["article", "/posts/MISSA-ITC-Competition/"],
+    ["journey", "/journey/"],
   ]) {
     for (const desktop of [false, true]) {
       const device = desktop ? "desktop" : "mobile";

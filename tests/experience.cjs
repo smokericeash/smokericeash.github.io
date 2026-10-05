@@ -1,0 +1,305 @@
+const { chromium, firefox, webkit } = require("playwright");
+const { default: AxeBuilder } = require("@axe-core/playwright");
+const assert = require("node:assert/strict");
+const fs = require("node:fs");
+const name = process.env.TEST_BROWSER || "chromium";
+const base = process.env.TEST_URL || "http://127.0.0.1:4173";
+const results = { browser: name, checks: [], errors: [] };
+(async () => {
+  const browser = await { chromium, firefox, webkit }[name].launch({
+    headless: true,
+    ...(name === "chromium" && process.env.CHROME_CHANNEL
+      ? { channel: process.env.CHROME_CHANNEL }
+      : {}),
+  });
+  try {
+    const context = await browser.newContext({
+      viewport: { width: 1440, height: 1000 },
+      colorScheme: "dark",
+    });
+    const page = await context.newPage();
+    page.on("pageerror", (error) => results.errors.push(error.message));
+    const select = async (index) => {
+      await page.waitForFunction(
+        (index) =>
+          document
+            .querySelectorAll(".chronicle-entry")
+            [index].hasAttribute("data-current"),
+        index,
+      );
+      assert.equal(
+        await page.locator(".chronicle-entry[data-current]").count(),
+        1,
+      );
+    };
+    for (const route of ["/", "/journey/"]) {
+      await page.goto(base + route);
+      const timeline = page.locator(".chronicle");
+      await timeline.scrollIntoViewIfNeeded();
+      assert.equal(await page.locator(".chronicle-entry").count(), 9);
+      await page.getByRole("button", { name: "Next milestone" }).click();
+      await select(1);
+      await page.getByRole("button", { name: "Previous milestone" }).click();
+      await select(0);
+      await page.locator('[data-year-jump="2026"]').click();
+      await select(3);
+      await page.locator(".chronicle input").fill("8");
+      await select(8);
+      assert.equal(
+        await page.getByRole("button", { name: "Next milestone" }).isDisabled(),
+        true,
+      );
+      assert.match(
+        await page.locator(".chronicle input").getAttribute("aria-valuetext"),
+        /Network\+/,
+      );
+      const viewport = page.locator(".chronicle-window");
+      await viewport.focus();
+      await page.keyboard.press("Home");
+      await select(0);
+      await page.keyboard.press("End");
+      await select(8);
+      await page.keyboard.press("ArrowLeft");
+      await select(7);
+      results.checks.push(
+        `${route}: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value`,
+      );
+
+      await page.locator(".chronicle input").fill("0");
+      await select(0);
+      const bounds = await viewport.boundingBox();
+      await page.mouse.move(
+        bounds.x + Math.min(320, bounds.width - 25),
+        bounds.y + 120,
+      );
+      await page.mouse.down();
+      await page.mouse.move(bounds.x + 20, bounds.y + 120, { steps: 16 });
+      await page.mouse.up();
+      await select(1);
+      assert.equal(new URL(page.url()).pathname, route);
+      results.checks.push(
+        `${route}: mouse drag advances timeline without activating an entry`,
+      );
+
+      for (const width of [360, 430, 768, 1920, 2560, 3440]) {
+        await page.setViewportSize({ width, height: 1000 });
+        await page.locator(".chronicle input").fill("8");
+        await select(8);
+        const geometry = await viewport.evaluate((element) => {
+          const last = element
+            .querySelector(".chronicle-entry:last-child")
+            .getBoundingClientRect();
+          const frame = element.getBoundingClientRect();
+          return {
+            documentWidth: document.documentElement.scrollWidth,
+            width: innerWidth,
+            fits: last.left >= frame.left - 2 && last.right <= frame.right + 2,
+          };
+        });
+        assert.ok(
+          geometry.documentWidth <= geometry.width + 1,
+          `Page overflow at ${width}`,
+        );
+        assert.ok(geometry.fits, `Last milestone unreachable at ${width}`);
+      }
+      results.checks.push(
+        `${route}: final milestone fully reachable at all six responsive widths`,
+      );
+      await page.setViewportSize({ width: 1440, height: 1000 });
+      for (const theme of ["light", "dark"]) {
+        await page.selectOption("#theme-select", theme);
+        const audit = await new AxeBuilder({ page })
+          .withTags([
+            "wcag2a",
+            "wcag2aa",
+            "wcag21a",
+            "wcag21aa",
+            "wcag22aa",
+            "best-practice",
+          ])
+          .analyze();
+        if (audit.violations.length)
+          console.log(
+            JSON.stringify(
+              audit.violations.map((v) => ({
+                id: v.id,
+                nodes: v.nodes.map((n) => ({
+                  target: n.target,
+                  reason: n.failureSummary,
+                })),
+              })),
+              null,
+              2,
+            ),
+          );
+        assert.deepEqual(
+          audit.violations.map((v) => v.id),
+          [],
+          `${theme} accessibility`,
+        );
+      }
+    }
+    await page.goto(base);
+    assert.equal(await page.locator(".field-notes a").count(), 4);
+    assert.equal(await page.locator(".topology").count(), 0);
+    const destination = await page
+      .locator(".field-notes a")
+      .first()
+      .getAttribute("href");
+    await page.locator(".field-notes a").first().click();
+    assert.ok(page.url().endsWith(destination));
+    assert.equal(await page.locator(".reading-trace").count(), 1);
+    await page.evaluate(() =>
+      window.scrollTo({ top: document.body.scrollHeight, behavior: "instant" }),
+    );
+    await page.waitForFunction(
+      () =>
+        getComputedStyle(document.querySelector(".reading-trace")).transform ===
+        "matrix(1, 0, 0, 1, 0, 0)",
+    );
+    results.checks.push(
+      "Field notes link to real evidence; article reading trace reaches completion",
+    );
+
+    await page.emulateMedia({ reducedMotion: "reduce" });
+    await page.goto(base + "/journey/");
+    await page.locator('[data-year-jump="2026"]').click();
+    await select(3);
+    assert.equal(
+      await page
+        .locator(".chronicle-card")
+        .first()
+        .evaluate((el) => getComputedStyle(el).transitionDuration),
+      "0s",
+    );
+    assert.equal(
+      await page.evaluate(
+        () =>
+          document
+            .getAnimations()
+            .filter((animation) => animation.playState === "running").length,
+      ),
+      0,
+    );
+    results.checks.push(
+      "Reduced motion: no active animations, instant timeline navigation",
+    );
+
+    // Hold the cover response so cached images cannot hide a layout regression.
+    for (const width of [412, 1440]) {
+      const delayed = await context.newPage();
+      await delayed.setViewportSize({ width, height: 1000 });
+      let release;
+      const ready = new Promise((resolve) => {
+        release = resolve;
+      });
+      await delayed.route("**/assets/media/missa-*.webp", async (route) => {
+        await ready;
+        await route.continue();
+      });
+      try {
+        await delayed.goto(base + "/posts/MISSA-ITC-Competition/", {
+          waitUntil: "domcontentloaded",
+        });
+        const geometry = () =>
+          delayed.locator(".article-cover img").evaluate((image) => ({
+            height: image.getBoundingClientRect().height,
+            gridTop: document
+              .querySelector(".article-grid")
+              .getBoundingClientRect().top,
+          }));
+        const before = await geometry();
+        assert.ok(
+          before.height > 0,
+          `Cover space missing before decode at ${width}`,
+        );
+        release();
+        await delayed
+          .locator(".article-cover img")
+          .evaluate((image) => image.decode());
+        const after = await geometry();
+        assert.ok(
+          Math.abs(after.gridTop - before.gridTop) < 1,
+          `Cover shifts content at ${width}`,
+        );
+      } finally {
+        release();
+        await delayed.close();
+      }
+    }
+    results.checks.push(
+      "Delayed article cover reserves its space on mobile and desktop",
+    );
+    await context.close();
+
+    const staticContext = await browser.newContext({
+      javaScriptEnabled: false,
+      viewport: { width: 360, height: 800 },
+    });
+    const staticPage = await staticContext.newPage();
+    await staticPage.goto(base + "/journey/");
+    assert.equal(await staticPage.locator(".chronicle-entry").count(), 9);
+    assert.equal(
+      await staticPage.locator(".chronicle-controls").isVisible(),
+      false,
+    );
+    await staticPage.locator(".chronicle-entry:last-child a").first().focus();
+    await staticPage.keyboard.press("Enter");
+    await staticPage.waitForURL("**/posts/NETWORK+/");
+    assert.ok(staticPage.url().endsWith("/posts/NETWORK+/"));
+    await staticContext.close();
+    results.checks.push(
+      "No-JS timeline preserves all entries and keyboard-accessible destinations",
+    );
+    if (name === "chromium") {
+      const touchContext = await browser.newContext({
+        viewport: { width: 390, height: 844 },
+        isMobile: true,
+        hasTouch: true,
+      });
+      const touchPage = await touchContext.newPage();
+      await touchPage.goto(base + "/journey/");
+      await touchPage.locator(".chronicle-window").scrollIntoViewIfNeeded();
+      const box = await touchPage.locator(".chronicle-window").boundingBox();
+      const session = await touchContext.newCDPSession(touchPage);
+      const y = Math.min(box.y + 100, 700);
+      await session.send("Input.dispatchTouchEvent", {
+        type: "touchStart",
+        touchPoints: [{ x: 330, y }],
+      });
+      for (let x = 310; x >= 70; x -= 20) {
+        await session.send("Input.dispatchTouchEvent", {
+          type: "touchMove",
+          touchPoints: [{ x, y }],
+        });
+        await touchPage.waitForTimeout(20);
+      }
+      await session.send("Input.dispatchTouchEvent", {
+        type: "touchEnd",
+        touchPoints: [],
+      });
+      await touchPage.waitForFunction(
+        () => document.querySelector(".chronicle-window").scrollLeft > 100,
+      );
+      assert.ok(touchPage.url().endsWith("/journey/"));
+      await touchContext.close();
+      results.checks.push(
+        "Native mobile touch swipe scrolls the timeline without following links",
+      );
+    }
+    assert.deepEqual(results.errors, []);
+    results.passed = true;
+  } finally {
+    await browser.close();
+    fs.writeFileSync(
+      `test-results/experience-${name}.json`,
+      JSON.stringify(results, null, 2),
+    );
+  }
+  console.log(
+    `PASS: ${name}; ${results.checks.length} experience check groups, zero browser errors`,
+  );
+})().catch((error) => {
+  console.error(error);
+  process.exitCode = 1;
+});
