@@ -1,0 +1,50 @@
+{
+  "chromium": {
+    "browser": "chromium",
+    "checks": [
+      "Four primary destinations; concise factual home; three illustrated posts and full-width nine-entry timeline",
+      "Journal: native page-in/page-out transition with normal navigation",
+      "Journey: native page-in/page-out transition with normal navigation",
+      "About: native page-in/page-out transition with normal navigation",
+      "Home: native page-in/page-out transition with normal navigation",
+      "Back and forward retain browser history and correct pages",
+      "All nine Journal previews decode and match their original article cover image and destination",
+      "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+      "Reduced motion disables scroll and page animations without delaying links"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "firefox": {
+    "browser": "firefox",
+    "checks": [
+      "Four primary destinations; concise factual home; three illustrated posts and full-width nine-entry timeline",
+      "Journal: fallback entrance with normal navigation",
+      "Journey: fallback entrance with normal navigation",
+      "About: fallback entrance with normal navigation",
+      "Home: fallback entrance with normal navigation",
+      "Back and forward retain browser history and correct pages",
+      "All nine Journal previews decode and match their original article cover image and destination",
+      "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+      "Reduced motion disables scroll and page animations without delaying links"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "webkit": {
+    "browser": "webkit",
+    "checks": [
+      "Four primary destinations; concise factual home; three illustrated posts and full-width nine-entry timeline",
+      "Journal: native page-in/page-out transition with normal navigation",
+      "Journey: native page-in/page-out transition with normal navigation",
+      "About: native page-in/page-out transition with normal navigation",
+      "Home: native page-in/page-out transition with normal navigation",
+      "Back and forward retain browser history and correct pages",
+      "All nine Journal previews decode and match their original article cover image and destination",
+      "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+      "Reduced motion disables scroll and page animations without delaying links"
+    ],
+    "errors": [],
+    "passed": true
+  }
+}

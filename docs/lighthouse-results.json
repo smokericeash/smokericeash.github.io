@@ -3,15 +3,15 @@
     "page": "home",
     "device": "mobile",
     "scores": {
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.6 s",
+      "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "100 ms"
     },
     "warnings": []
   },
@@ -41,7 +41,7 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.4 s",
+      "LCP": "1.7 s",
       "CLS": "0",
       "TBT": "0 ms"
     },
@@ -57,7 +57,7 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.3 s",
+      "LCP": "0.4 s",
       "CLS": "0",
       "TBT": "0 ms"
     },
@@ -107,7 +107,7 @@
     "metrics": {
       "LCP": "1.5 s",
       "CLS": "0",
-      "TBT": "50 ms"
+      "TBT": "0 ms"
     },
     "warnings": []
   },

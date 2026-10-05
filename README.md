@@ -1,6 +1,6 @@
 # Aidan Chen — portfolio and journal
 
-A custom Jekyll site: original layouts, a navy/indigo visual system, light and dark appearances, selected work, and a technical journal. No premade theme, client framework, web-font dependency, analytics, or third-party runtime script.
+A custom Jekyll portfolio: a factual introduction, illustrated journal entries, and an interactive timeline in a navy/indigo visual system with light and dark appearances. No premade theme, client framework, web-font dependency, analytics, or third-party runtime script.
 
 ## Local preview
 
@@ -24,10 +24,12 @@ Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='producti
 
 - `_posts/`: original posts, unchanged; existing `/posts/:title/` URLs.
 - `_tabs/`: original biography and archive destinations.
-- `_data/profile.yml`: professional links, credential display, focus, and optional résumé URL. An empty résumé URL produces a clearly labeled email request.
-- `_data/work.yml`: sourced case-study summaries; each references an original post.
+- `_data/profile.yml`: introduction, professional links, credentials and optional résumé URL. An empty résumé URL produces a clearly labeled email request.
+- `_data/work.yml`: sourced case-study summaries. The existing Work routes remain valid, but Work is no longer a primary navigation destination or homepage section.
 - `_data/journey.yml`: optional short titles and summaries keyed by original post URL. Timeline dates and order come from the posts themselves; new posts appear automatically with their title/description as a fallback.
-- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. `_includes/field-notes.html` is the quiet hero index; `_includes/chronicle.html` is shared by Home and Journey.
+- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. Home contains a concise introduction, the three latest posts and a full-width timeline. Navigation is Home / Journal / Journey / About.
+- `_includes/post-preview.html`: homepage post highlights. `_includes/post-row.html`: illustrated Journal, taxonomy and related-entry rows. Both use each post's original image through responsive derivatives and optional summaries from `_data/journey.yml`.
+- `_includes/chronicle.html`: the timeline shared by Home and Journey.
 - `assets/css/experience.css` and `assets/js/experience.js`: timeline controls and restrained interaction details, separate from the base design.
 - `_plugins/portfolio.rb`: static taxonomy and work pages, descriptions, article TOC, image metadata, semantic article rendering.
 - `_plugins/posts-lastmod-hook.rb`: publication history from Git.
@@ -38,6 +40,8 @@ Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='producti
 Add posts with the existing Markdown/front-matter format. Article layouts support headings, references, images, tables, Rouge syntax highlighting, copy-code controls, and blockquote callouts. Tags and categories generate at build time. Case-only taxonomy variants share one combined archive rather than overwriting each other.
 
 The timeline supports mouse dragging, native touch scrolling, year jumps, previous/next buttons and a range scrubber. Focus its viewport to use Left/Right/Home/End. Dates are publication dates from the original entries; milestones are evenly spaced for reading rather than proportional to elapsed time. Without JavaScript, the full list remains horizontally scrollable with keyboard-accessible links. Reduced-motion preferences disable decorative transitions and make timeline navigation immediate. Section entrances play once; article reading progress is a quiet line beneath the header.
+
+Motion uses image-mask reveals, staggered text movement and small line draws for offscreen content. Homepage images also move by a few pixels with native scroll timelines where supported. Same-origin page navigation uses [native document view transitions](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/At-rules/@view-transition), keeping the header stable while content changes. Browsers without that feature receive a brief entrance on internal navigation. Links and browser history stay native; there is no scroll interception or client router. Reduced motion disables these effects. Content is visible by default and animations never leave persistent hidden states.
 
 ## Validation
 
@@ -53,7 +57,7 @@ npm run test:performance
 
 The browser and performance tests expect the built site at port 4173. On Windows with installed Chrome, set `$env:CHROME_CHANNEL='chrome'`. To test Firefox or WebKit, install their Playwright binaries and set `TEST_BROWSER=firefox` or `webkit`. `PLAYWRIGHT_BROWSERS_PATH` can point to a workspace-local `.browser-cache` directory.
 
-The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs both the general browser suite and the interaction suite. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises timeline dragging, year/range/keyboard controls, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. Lighthouse checks home, journal, article and journey on mobile and desktop. Results are generated in ignored `test-results/`.
+The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs the general browser, interaction and editorial/motion suites. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises timeline dragging, year/range/keyboard controls, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. `npm run test:editorial` verifies image-to-article correspondence, four navigation destinations, real page/scroll animations, back/forward history and reduced motion. Lighthouse checks home, journal, article and journey on mobile and desktop. Results are generated in ignored `test-results/`.
 
 ## Safe deployment
 
