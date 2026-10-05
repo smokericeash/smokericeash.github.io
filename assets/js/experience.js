@@ -178,31 +178,71 @@
     sync();
   });
 
-  // One entrance per section, with content visible by default. No reveal class
-  // can leave the page blank if JavaScript or IntersectionObserver is absent.
+  // Content starts visible. Only elements below the fold receive a one-time
+  // reveal, so initial rendering and failed scripts never leave blank content.
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (!entry.isIntersecting) return;
           observer.unobserve(entry.target);
+          if (motion.matches) return;
+          const element = entry.target;
+          element.classList.add('is-revealed');
+          const media = element.querySelector(
+            '.post-preview-media, .post-thumbnail',
+          );
+          const copy = element.querySelector(
+            '.post-preview-copy, .post-row-copy',
+          );
+          if (media) {
+            animate(
+              media,
+              [
+                {
+                  clipPath: 'inset(0 0 100% 0 round 5px)',
+                  transform: 'translateY(16px)',
+                },
+                {
+                  clipPath: 'inset(0 0 0% 0 round 5px)',
+                  transform: 'translateY(0)',
+                },
+              ],
+              { duration: 780, easing: 'cubic-bezier(.22,.68,.15,1)' },
+            );
+          }
           animate(
-            entry.target,
-            [{ transform: 'translateY(12px)' }, { transform: 'translateY(0)' }],
-            { duration: 550, easing: 'cubic-bezier(.2,.65,.3,1)' },
+            copy || element,
+            [{ transform: 'translateY(26px)' }, { transform: 'translateY(0)' }],
+            {
+              duration: 720,
+              delay: media ? 70 : 0,
+              easing: 'cubic-bezier(.22,.68,.15,1)',
+              fill: 'backwards',
+            },
           );
         });
       },
-      { threshold: 0.12 },
+      { threshold: 0.08, rootMargin: '0px 0px -24px 0px' },
     );
-    document
-      .querySelectorAll(
-        '.section-heading, .focus-band, .journey-intro, .contact-section > h2',
-      )
-      .forEach((element) => {
-        if (element.getBoundingClientRect().top >= innerHeight)
-          observer.observe(element);
-      });
+    document.querySelectorAll('[data-reveal]').forEach((element) => {
+      if (element.getBoundingClientRect().top >= innerHeight - 24)
+        observer.observe(element);
+    });
+  }
+
+  // Browsers without native document transitions receive a short entrance.
+  // Navigation itself remains immediate: no click interception or fake router.
+  if (!('CSSViewTransitionRule' in window)) {
+    addEventListener('pageshow', (event) => {
+      if (event.persisted || !document.referrer) return;
+      if (new URL(document.referrer).origin !== location.origin) return;
+      animate(
+        document.querySelector('#main'),
+        [{ transform: 'translateY(18px)' }, { transform: 'translateY(0)' }],
+        { duration: 440, easing: 'cubic-bezier(.22,.68,.15,1)' },
+      );
+    });
   }
 
   // A quiet reading-position trace lives on article pages only.
