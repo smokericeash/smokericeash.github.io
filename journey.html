@@ -1,0 +1,7 @@
+---
+layout: default
+title: Journey
+description: Milestones in Aidan Chen's cybersecurity education, competitions, and certification journey.
+permalink: /journey/
+---
+<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">A CONTINUING PRACTICE</p><h1>Progress has a history<span>.</span></h1><p>From the first competition in this journal to a stronger networking foundation. The lessons accumulate.</p></header><ol class="timeline full-timeline">{% for item in site.data.journey %}<li><p class="eyebrow">{{ item.date }} <span>{{ item.label }}</span></p><h2><a href="{{ item.url | relative_url }}">{{ item.title }} ↗</a></h2><p>{{ item.detail }}</p></li>{% endfor %}</ol><a class="button" href="{{ '/archives/' | relative_url }}">Explore the complete archive ↗</a></div>

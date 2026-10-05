@@ -1,0 +1,12 @@
+---
+layout: default
+---
+{% assign article = content | article_html %}
+<article class="shell page-shell article-page">
+  <a class="back-link" href="{{ '/research/' | relative_url }}">← Back to the journal</a>
+  <header class="article-heading"><div class="eyebrow">{% for category in page.categories %}<a href="{{ '/categories/' | append: category | slug_path | relative_url }}">{{ category }}</a>{% unless forloop.last %} / {% endunless %}{% endfor %}</div><h1>{{ page.title }}</h1><div class="article-meta"><span>Aidan Chen</span><time datetime="{{ page.date | date_to_xmlschema }}">{{ page.date | date: '%B %d, %Y' }}</time><span>{{ content | number_of_words | divided_by: 220 | plus: 1 }} min read</span>{% if page.last_modified_at %}<span>Updated {{ page.last_modified_at | date: '%b %d, %Y' }}</span>{% endif %}</div><div class="tags">{% for tag in page.tags %}<a href="{{ '/tags/' | append: tag | slug_path | relative_url }}">{{ tag }}</a>{% endfor %}</div></header>
+  {% if page.image %}<figure class="article-cover">{% include image.html src=page.image alt=page.alt eager=true sizes='(max-width: 760px) 100vw, 1100px' %}</figure>{% endif %}
+  <div class="article-grid"><aside class="toc">{% if page.toc %}{{ article | article_toc }}{% endif %}</aside><div class="prose article-body">{{ article }}</div></div>
+  <nav class="article-pagination" aria-label="Adjacent articles">{% if page.previous %}<a href="{{ page.previous.url | relative_url }}"><span class="eyebrow">← PREVIOUS ENTRY</span><strong>{{ page.previous.title }}</strong></a>{% endif %}{% if page.next %}<a href="{{ page.next.url | relative_url }}"><span class="eyebrow">NEXT ENTRY →</span><strong>{{ page.next.title }}</strong></a>{% endif %}</nav>
+  {% assign related_count = 0 %}<section class="related section"><p class="eyebrow">CONTINUE EXPLORING</p><h2>Related entries.</h2>{% for post in site.posts %}{% if post.url != page.url and related_count < 2 %}{% assign shared = false %}{% for category in post.categories %}{% if page.categories contains category %}{% assign shared = true %}{% endif %}{% endfor %}{% if shared %}{% include post-row.html post=post %}{% assign related_count = related_count | plus: 1 %}{% endif %}{% endif %}{% endfor %}{% if related_count == 0 %}<p><a href="{{ '/research/' | relative_url }}">Explore the rest of the journal ↗</a></p>{% endif %}</section>
+</article>

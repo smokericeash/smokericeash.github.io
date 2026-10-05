@@ -1,0 +1,1 @@
+(function(){document.documentElement.classList.add('js');var t='system';try{t=localStorage.getItem('aidan-appearance')||'system'}catch(e){}if(!['system','light','dark'].includes(t))t='system';document.documentElement.dataset.preference=t;document.documentElement.dataset.theme=t==='system'?(matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'):t})();

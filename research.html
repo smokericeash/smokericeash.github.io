@@ -1,0 +1,7 @@
+---
+layout: default
+title: Journal
+description: Aidan Chen's technical journal of cybersecurity competitions, networking, certifications, and hands-on learning.
+permalink: /research/
+---
+<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">RESEARCH, REFLECTION & FIELD NOTES</p><h1>Learning, in writing<span>.</span></h1><p>A record of the challenges, questions, and experiences that shape my understanding of cybersecurity.</p></header><h2 class="sr-only">Journal entries</h2><div class="journal-tools" hidden><label>Find an entry<input id="journal-search" type="search" placeholder="Search titles, topics, tags…" autocomplete="off"></label><label>Category<select id="category-filter"><option value="">All categories</option>{% for category in site.categories %}<option value="{{ category[0] | escape }}">{{ category[0] }}</option>{% endfor %}</select></label><p id="search-status" role="status" aria-live="polite">{{ site.posts.size }} entries</p></div><div class="archive-links"><a href="{{ '/categories/' | relative_url }}">Browse categories ↗</a><a href="{{ '/tags/' | relative_url }}">Browse tags ↗</a><a href="{{ '/archives/' | relative_url }}">By date ↗</a></div><div class="post-list">{% for post in site.posts %}{% include post-row.html post=post %}{% endfor %}</div><p id="no-results" hidden>No entries match. Try another search or choose all categories.</p></div>
