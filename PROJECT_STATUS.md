@@ -1,10 +1,20 @@
 # Aidan Chen portfolio redesign — persistent handoff
 
-Updated: October 4, 2026 (America/Los_Angeles).
+Updated: October 5, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The redesign is implemented, locally validated, and ready for review.** No known failing local checks remain. No implementation task is currently running. Nothing has been pushed, merged, or deployed.
+**The redesign and requested interaction refinements are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. Chrome, Firefox and WebKit pass the full regression and timeline interaction suites. All eight final Lighthouse runs score 100 in every category. Nothing has been pushed, merged, or deployed.
+
+### Completed refinement session
+
+- Replaced the orbital hero illustration with a quiet, linked field-notes index.
+- Added a shared chronological timeline to Home and Journey, using all nine original posts and their actual publication dates. Supports mouse drag, native touch scrolling, year jumps, previous/next buttons, a range scrubber and keyboard navigation.
+- Added restrained line/arrow feedback, one-time section entrances and an article reading-position trace. Reduced motion disables decorative movement; content remains readable without JavaScript.
+- Fixed final-card alignment across all six responsive widths and avoided text opacity/background transitions that caused transient contrast failures.
+- New interaction tests pass in all three engines, including no-JS, reduced motion, both themes, drag, keyboard and final-card visibility; native touch swiping also passes in Chrome.
+- Fixed an intermittent article-cover layout shift exposed by a slow image load; new delayed-response regression tests pass on mobile and desktop in all three engines.
+- Reviewed final desktop dark/mobile light hero and timeline screenshots. Refreshed validation evidence, README and this handoff; implementation and test changes are recorded as logical local commits below.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -18,7 +28,7 @@ Updated: October 4, 2026 (America/Los_Angeles).
 - Audited architecture, deployment, source content, URLs, assets, and theme dependencies in `docs/AUDIT.txt`.
 - Replaced Chirpy with a custom Jekyll/Liquid design and minimal vanilla JavaScript.
 - Custom home, selected work, four sourced case studies, journal, journey, About, posts, archives, categories/tags, 404, feed, and SEO/social metadata.
-- Deliberate dark/light navy and indigo design, original topology motif, favicon, social preview, responsive horizontal navigation, system/light/dark preference control.
+- Deliberate dark/light navy and indigo design, quiet field-notes hero, favicon, social preview, responsive horizontal navigation, system/light/dark preference control. The previous orbital hero was removed at the user's request; the rest of the design direction is retained.
 - Preserved all nine original Markdown posts, four tabs (including biography), twelve original images, original post URLs, front matter, taxonomy and professional contacts.
 - Generated responsive WebP derivatives while preserving original files exactly.
 - Added build-time TOC, semantic article heading treatment, responsive tables/images, captions, Rouge code styling, copy controls, related and adjacent articles.
@@ -36,26 +46,30 @@ Updated: October 4, 2026 (America/Los_Angeles).
 2. `5a36100` — custom portfolio layouts and accessible navy/indigo design system.
 3. `1d9dcb3` — responsive WebP derivatives, original assets retained.
 4. `45ca2f1` — content, browser, accessibility, performance and deployment validation.
-5. The handoff documentation commit follows these. Use `git log` for its current hash.
+5. `dd7366e` — verified initial redesign handoff.
+6. `2ccb781` — quieter field-notes hero, draggable timeline, restrained motion and stable article cover sizing.
+7. `f0f2215` — timeline, reduced-motion and delayed-image regression checks; Journey added to Lighthouse.
+8. The final refinement handoff/evidence commit follows these; use `git log` for its hash.
 
 ## Testing performed
 
 - Clean production Jekyll 4.4.1 build on Ruby 3.4 succeeds, with 47 HTML pages.
 - 26 original-file hashes verified. Local bytes match exactly; CI accepts only Git's CRLF/LF normalization for text.
-- Nine original post routes preserved; 1,155 internal links, anchors, assets and srcset references resolve.
+- Nine original post routes preserved; 1,281 internal links, anchors, assets and srcset references resolve.
 - Every generated page has one h1, title, description, canonical, and Open Graph image. Feed/sitemap XML parses.
 - `/preview` baseurl build passes the same route/reference/metadata checks.
 - Nine article-rendering fixture checks pass: headings, TOC, Rouge, tables, callouts, image captions/dimensions, prefixed URLs and taxonomy slugs.
 - Chrome 153, Playwright Firefox 155, and Playwright WebKit 26.6 pass all browser tests: **282 route checks, 396 responsive checks, 66 axe scans**, with zero reported violations or browser/network errors.
 - Responsive widths: 360, 430, 768, 1920, 2560, 3440 CSS pixels; dark/light coverage.
 - Keyboard menu/Tab/Escape/focus, search/category/empty results, system theme changes, persisted overrides, reduced motion, copy code, no-JS rendering and blocked localStorage all pass.
+- Focused interaction suite passes 11 check groups in Chrome and 10 each in Firefox/WebKit. Covers dragging, year/step/range/keyboard controls, accessible values, final-card visibility at all widths, no-JS, reduced motion, evidence links, reading progress and delayed article images. Chromium also verifies a native touch swipe via CDP. Twelve additional axe scans bring the total to 78 with zero reported violations.
 - Worker retirement and preservation of unrelated scopes pass in an isolated local fixture.
-- Final Lighthouse: **100 performance / 100 accessibility / 100 best practices / 100 SEO** on home, journal and ITC article, for both mobile and desktop. Zero measured CLS; mobile LCP 1.2–1.5s. These are local lab results, not live deployment measurements.
+- Final Lighthouse: **100 performance / 100 accessibility / 100 best practices / 100 SEO** on home, journal, ITC article and journey, for both mobile and desktop. Zero measured CLS across all eight runs; mobile LCP 1.4–1.7s. These are local lab results, not live deployment measurements.
 - GitHub/Credly/X public HEAD requests return 200. LinkedIn returns 405 to HEAD; original URL retained but live profile content is not verified.
 - Desktop and mobile screenshots plus article, About and social image visually inspected. Tests load lazy images before screenshots.
 - `bundle check`, JavaScript syntax checks, and Git whitespace checks pass.
 
-Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/lighthouse-results.json`. Full local HTML/JSON Lighthouse reports and screenshots are in ignored `test-results/`.
+Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-results.json`, `docs/lighthouse-results.json`. Full local HTML/JSON Lighthouse reports and screenshots are in ignored `test-results/`.
 
 ## Important design and technical decisions
 
@@ -64,6 +78,8 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/lighthouse-r
 - Home / Work / Journal (`/research/`) / Journey / About; old archive, taxonomy and article destinations remain.
 - Featured work is competition experience supported by original writing. No invented research papers, project repositories, jobs, graduation dates or certifications.
 - Current-focus language is explicitly tied to the latest documented journal entries.
+- The timeline derives its dates and order from original post publication metadata. Entries are evenly spaced for legibility, not proportional to elapsed time. `_data/journey.yml` provides optional short summaries keyed by post URL; new posts appear automatically with title/description fallbacks. Do not invent dates or activities to fill years.
+- Interaction refinements live in `assets/css/experience.css` and `assets/js/experience.js`. Native scrolling and semantic links remain usable without scripts. Motion is brief, only follows interaction or a section's first entrance, never loops, and respects reduced motion. Keep text at full contrast during animation.
 - Original MIT notice remains for retained starter material.
 - Node dependencies are development/test tools only. Unused html-proofer/wdm dependencies were removed; custom checks cover source preservation and generated output.
 - Ruby 3.4 in CI matches the local environment. Gemfile.lock includes Windows and Linux platforms.
@@ -81,7 +97,7 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/lighthouse-r
 
 ## Exact recommended next task
 
-**Review the local redesign at `http://127.0.0.1:4173/` in both themes. Then, when continuing toward publication, push only `codex/portfolio-v2` and open a review PR to run the committed GitHub Actions checks. Verify actual domain settings and any supplied résumé URL before considering a production merge. Do not push or merge directly into main.**
+**Review the refined hero at `http://127.0.0.1:4173/` and drag the timeline at `/journey/` in both themes. The requested implementation is complete; do not rebuild it. When continuing toward publication, push only `codex/portfolio-v2` and open a review PR to run the committed GitHub Actions checks. Verify actual domain settings and any supplied résumé URL before considering a production merge. Do not push or merge directly into main.**
 
 If visual/content changes are requested, preserve this design direction, edit the existing components/data, and rerun affected checks. Do not rebuild completed work or redo the audit without new evidence.
 
@@ -100,7 +116,7 @@ In a separate shell:
 
 ```powershell
 $env:CHROME_CHANNEL='chrome'
-node tests/browser.cjs
+npm.cmd test
 node tests/worker-migration.cjs
 node tests/performance.mjs
 ```
@@ -110,7 +126,7 @@ For other engines:
 ```powershell
 $env:PLAYWRIGHT_BROWSERS_PATH=Join-Path (Get-Location) '.browser-cache'
 $env:TEST_BROWSER='webkit' # or firefox
-node tests/browser.cjs
+npm.cmd test
 ```
 
 Firefox's tab subprocess is blocked by this Windows execution sandbox. The successful Firefox runs used narrowly scoped elevated execution; do not disable browser security preferences. The downloaded test browsers are isolated in ignored `.browser-cache`.

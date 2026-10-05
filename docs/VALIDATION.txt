@@ -1,5 +1,5 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Validated October 4, 2026 (America/Los_Angeles).
+Validated October 5, 2026 (America/Los_Angeles).
 
 RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
@@ -12,7 +12,7 @@ BUILD AND PRESERVATION
   four tabs (including the original biography), and twelve original images.
 - Exact raw hashes match on this Windows checkout. CI also accepts only Git's
   CRLF-to-LF conversion in text files; image bytes are always checked exactly.
-- 1,155 internal links, anchors, assets and srcset references resolve.
+- 1,281 internal links, anchors, assets and srcset references resolve.
 - Every page has one h1, title, description, canonical, and Open Graph image.
 - Atom feed and sitemap parse correctly; no localhost URLs in production XML.
 - A /preview baseurl build passes the same link/metadata checks.
@@ -37,8 +37,24 @@ Chrome 153.0.8010.53, Playwright Firefox 155.0 and WebKit 26.6 all pass:
 Totals: 282 route checks, 396 responsive checks, 66 automated axe scans.
 Machine-readable evidence: docs/browser-results.json.
 
+The new interaction suite also passes in all three engines:
+- Mouse drag, year jumps, previous/next, range scrubber, Home/End/Arrow keys.
+- All nine original entries, meaningful accessible values and endpoint states.
+- Last milestone fully visible at all six widths on both Home and Journey.
+- Four additional axe scans per engine across both pages and both themes.
+- No-JS scrollable timeline and keyboard-accessible article links.
+- Reduced motion disables decorative animation and smooth navigation.
+- Field notes lead to real evidence; article reading progress reaches completion.
+- Delayed cover-image response preserves content position before/after decode
+  at 412px and 1440px. Explicit CSS width fixes the collapsed preload box found
+  during this session's Lighthouse run (the previous mobile CLS was 0.144).
+- Chromium CDP touch events verify native mobile swiping without link activation.
+Totals including focused scans: 78 axe scans; zero reported violations.
+Machine-readable evidence: docs/experience-results.json.
+
 Visual review: desktop dark/light, phone layouts, article layout, About at 360px,
-and the social image. Full-page screenshot fixtures load lazy images first.
+and the social image. The refined field-notes hero and timeline were reviewed
+at desktop dark and mobile light sizes. Full-page screenshots load lazy images first.
 Screenshots are available in ignored test-results/. The About overflow, journal
 heading hierarchy and delayed-control layout movement found in earlier passes
 were fixed and retested. Navigation explicitly exposes normal tabindex=0 links
@@ -52,14 +68,16 @@ Journal    Mobile       100            100             100      100
 Journal    Desktop      100            100             100      100
 ITC post   Mobile       100            100             100      100
 ITC post   Desktop      100            100             100      100
+Journey    Mobile       100            100             100      100
+Journey    Desktop      100            100             100      100
 
-Mobile simulated LCP: 1.2–1.5 seconds. Desktop LCP: 0.3–0.4 seconds.
-CLS: 0 for all six runs. TBT: 0–50ms. No run warnings.
+Mobile simulated LCP: 1.4–1.7 seconds. Desktop LCP: 0.3–0.4 seconds.
+CLS: 0 for all eight runs. TBT: 0–50ms. No run warnings.
 These are local lab results, not live Cloudflare/GitHub field measurements.
 Machine-readable summary: docs/lighthouse-results.json.
 Full HTML and JSON reports: test-results/lighthouse-*.html / *.json.
 Approximate transferable source sizes (gzip, hosting compression dependent):
-CSS 7.4KB; shared JS 1.6KB; home HTML 6KB. No external runtime scripts/fonts.
+CSS 9.5KiB; shared JS 4.1KiB; home HTML 6.7KiB. No external runtime scripts/fonts.
 
 MIGRATION AND EXTERNAL LINKS
 - Isolated browser fixture verifies sw.min.js retires the old registration.

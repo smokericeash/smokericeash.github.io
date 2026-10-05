@@ -1,0 +1,54 @@
+{
+  "chromium": {
+    "browser": "chromium",
+    "checks": [
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/journey/: mouse drag advances timeline without activating an entry",
+      "/journey/: final milestone fully reachable at all six responsive widths",
+      "Field notes link to real evidence; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations",
+      "Native mobile touch swipe scrolls the timeline without following links"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "firefox": {
+    "browser": "firefox",
+    "checks": [
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/journey/: mouse drag advances timeline without activating an entry",
+      "/journey/: final milestone fully reachable at all six responsive widths",
+      "Field notes link to real evidence; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "webkit": {
+    "browser": "webkit",
+    "checks": [
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/journey/: mouse drag advances timeline without activating an entry",
+      "/journey/: final milestone fully reachable at all six responsive widths",
+      "Field notes link to real evidence; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations"
+    ],
+    "errors": [],
+    "passed": true
+  }
+}

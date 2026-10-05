@@ -9,7 +9,7 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.4 s",
+      "LCP": "1.6 s",
       "CLS": "0",
       "TBT": "0 ms"
     },
@@ -25,7 +25,7 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.3 s",
+      "LCP": "0.4 s",
       "CLS": "0",
       "TBT": "0 ms"
     },
@@ -41,9 +41,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.2 s",
+      "LCP": "1.4 s",
       "CLS": "0",
-      "TBT": "50 ms"
+      "TBT": "0 ms"
     },
     "warnings": []
   },
@@ -73,6 +73,38 @@
       "seo": 100
     },
     "metrics": {
+      "LCP": "1.7 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "article",
+    "device": "desktop",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "0.4 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "journey",
+    "device": "mobile",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
       "LCP": "1.5 s",
       "CLS": "0",
       "TBT": "50 ms"
@@ -80,7 +112,7 @@
     "warnings": []
   },
   {
-    "page": "article",
+    "page": "journey",
     "device": "desktop",
     "scores": {
       "performance": 100,

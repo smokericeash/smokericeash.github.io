@@ -26,8 +26,9 @@ Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='producti
 - `_tabs/`: original biography and archive destinations.
 - `_data/profile.yml`: professional links, credential display, focus, and optional résumé URL. An empty résumé URL produces a clearly labeled email request.
 - `_data/work.yml`: sourced case-study summaries; each references an original post.
-- `_data/journey.yml`: dated milestones supported by the journal.
-- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation.
+- `_data/journey.yml`: optional short titles and summaries keyed by original post URL. Timeline dates and order come from the posts themselves; new posts appear automatically with their title/description as a fallback.
+- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. `_includes/field-notes.html` is the quiet hero index; `_includes/chronicle.html` is shared by Home and Journey.
+- `assets/css/experience.css` and `assets/js/experience.js`: timeline controls and restrained interaction details, separate from the base design.
 - `_plugins/portfolio.rb`: static taxonomy and work pages, descriptions, article TOC, image metadata, semantic article rendering.
 - `_plugins/posts-lastmod-hook.rb`: publication history from Git.
 - `assets/img/`: original documentary assets, unchanged.
@@ -35,6 +36,8 @@ Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='producti
 - `assets/social-preview.svg`: editable, original social artwork; the PNG is used for social sharing.
 
 Add posts with the existing Markdown/front-matter format. Article layouts support headings, references, images, tables, Rouge syntax highlighting, copy-code controls, and blockquote callouts. Tags and categories generate at build time. Case-only taxonomy variants share one combined archive rather than overwriting each other.
+
+The timeline supports mouse dragging, native touch scrolling, year jumps, previous/next buttons and a range scrubber. Focus its viewport to use Left/Right/Home/End. Dates are publication dates from the original entries; milestones are evenly spaced for reading rather than proportional to elapsed time. Without JavaScript, the full list remains horizontally scrollable with keyboard-accessible links. Reduced-motion preferences disable decorative transitions and make timeline navigation immediate. Section entrances play once; article reading progress is a quiet line beneath the header.
 
 ## Validation
 
@@ -50,7 +53,7 @@ npm run test:performance
 
 The browser and performance tests expect the built site at port 4173. On Windows with installed Chrome, set `$env:CHROME_CHANNEL='chrome'`. To test Firefox or WebKit, install their Playwright binaries and set `TEST_BROWSER=firefox` or `webkit`. `PLAYWRIGHT_BROWSERS_PATH` can point to a workspace-local `.browser-cache` directory.
 
-The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. Lighthouse checks home, journal, and article on mobile and desktop. Results are generated in ignored `test-results/`.
+The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs both the general browser suite and the interaction suite. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises timeline dragging, year/range/keyboard controls, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. Lighthouse checks home, journal, article and journey on mobile and desktop. Results are generated in ignored `test-results/`.
 
 ## Safe deployment
 
