@@ -1,25 +1,27 @@
-- date: May 2026
-  title: A stronger networking foundation.
-  detail: Passed CompTIA Network+, connecting coursework and competition experience with network fundamentals.
-  url: /posts/NETWORK+/
-  label: Certification
-- date: Apr 2026
-  title: Technical findings, human impact.
-  detail: Contributed 20+ hours to ITC's red teaming track. Our team finished in the Top 5.
-  url: /posts/MISSA-ITC-Competition/
-  label: Assessment
-- date: Mar 2026
-  title: From solving challenges to keeping services alive.
-  detail: First place at Tech Symposium; then defensive operations with the SWIFT team at NCAE Cyber Games.
-  url: /posts/TS-CTF/
-  label: Competition
-- date: Jan 2026
-  title: New perspectives at Coastline.
-  detail: Second place in the Hack The Box CTF at Coastline College's CyberAI Research Symposium.
-  url: /posts/HTB-CTF-Competition/
-  label: Competition
-- date: Oct 2025
-  title: Learning alongside a team.
-  detail: Third place overall, tied with second, at OSSCON. A first entry in this journal of hands-on learning.
-  url: /posts/OSSCON-CTF-Competition/
-  label: Competition
+/posts/OSSCON-CTF-Competition/:
+  title: OSSCON CTF
+  summary: Third place overall, tied with second. A team experience spanning network analysis, cryptography, Linux fundamentals, and physical security.
+/posts/SCARECOMP/:
+  title: SWIFT SCARE CTF
+  summary: Four days of Debian and Windows challenges, network forensics, and hidden artifacts. Finished fourth, with plenty of new lessons to carry forward.
+/posts/KOTH-COMP/:
+  title: King of the Hill
+  summary: Practiced attack and defense together, maintaining and recovering services across a mixed Linux and Windows environment on AWS.
+/posts/HTB-CTF-Competition/:
+  title: Coastline × Hack The Box
+  summary: Second place in the CTF at Coastline College's CyberAI Research Symposium, working across forensics, cryptography, OSINT, and reverse engineering.
+/posts/RVB-Competition/:
+  title: Red vs. Blue
+  summary: Defended five Linux and Windows machines with my team while balancing service uptime, system hardening, and written business tasks.
+/posts/TS-CTF/:
+  title: Tech Symposium CTF
+  summary: First place among around 50 participants, completing roughly 80–90% of the challenges across multiple security disciplines.
+/posts/NCAE-CYBERGAMES/:
+  title: NCAE Cyber Games
+  summary: Supported SSH service administration and challenge-solving with Cal Poly Pomona's SWIFT team. A lesson in availability, fundamentals, and communication.
+/posts/MISSA-ITC-Competition/:
+  title: MISSA ITC assessment
+  summary: Contributed more than 20 hours to a two-week assessment and client-facing report. Our team finished in the Top 5.
+/posts/NETWORK+/:
+  title: CompTIA Network+
+  summary: Passed Network+, connecting practical experience with routing, switching, subnetting, troubleshooting, and network security foundations.

@@ -415,24 +415,7 @@ main:focus {
 .hero .socials {
   margin-top: 27px;
 }
-.topology {
-  color: var(--accent);
-  position: relative;
-  max-width: 550px;
-}
-.topology-label {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font: 9px var(--mono);
-  letter-spacing: 0.07em;
-  color: var(--muted);
-  border-bottom: 1px solid var(--line);
-  padding: 16px 0;
-}
-.topology-label > span:last-child {
-  margin-left: auto;
-}
+
 .status-dot {
   width: 6px;
   height: 6px;
@@ -441,43 +424,7 @@ main:focus {
   border-radius: 50%;
   flex-shrink: 0;
 }
-.topology svg {
-  width: 100%;
-  display: block;
-}
-.topology-text {
-  fill: var(--muted);
-  font: 9px var(--mono);
-  letter-spacing: 1px;
-}
-.node-core {
-  fill: var(--surface);
-  stroke: var(--accent);
-  stroke-width: 1.2;
-}
-.node-halo {
-  stroke: var(--accent);
-  opacity: 0.22;
-  fill: var(--soft-accent);
-}
-.satellite {
-  fill: var(--surface);
-  stroke: var(--accent);
-  stroke-width: 1.5;
-}
-.topology-caption {
-  display: flex;
-  justify-content: space-between;
-  color: var(--muted);
-  font-size: 12px;
-  border-top: 1px solid var(--line);
-  padding-top: 17px;
-  line-height: 1.7;
-}
-.topology-caption .mono {
-  text-align: right;
-  font-size: 9px;
-}
+
 .context-strip {
   display: flex;
   align-items: center;
@@ -1273,7 +1220,8 @@ main:focus {
 }
 .article-cover img {
   max-height: 440px;
-  width: auto;
+  /* Keep the HTML aspect ratio effective before the image has decoded. */
+  width: 100%;
   max-width: 100%;
   object-fit: contain;
 }
@@ -1496,7 +1444,7 @@ main:focus {
     display: block !important;
     visibility: hidden;
   }
-  .js .menu-toggle[aria-expanded="false"] + .primary-nav {
+  .js .menu-toggle[aria-expanded='false'] + .primary-nav {
     display: none;
   }
   .shell {
@@ -1552,17 +1500,7 @@ main:focus {
   .hero-intro {
     max-width: 590px;
   }
-  .topology {
-    max-width: 530px;
-    width: 100%;
-    margin: auto;
-  }
-  .topology svg {
-    max-height: 330px;
-  }
-  .topology-label {
-    padding-top: 0;
-  }
+
   .context-strip {
     flex-wrap: wrap;
     gap: 15px 28px;
@@ -1803,12 +1741,7 @@ main:focus {
   .socials {
     gap: 22px;
   }
-  .topology svg {
-    max-height: 280px;
-  }
-  .topology-caption {
-    font-size: 11px;
-  }
+
   .context-strip {
     font-size: 10px;
     gap: 13px;
@@ -2119,7 +2052,6 @@ main:focus {
 @media print {
   .site-header,
   .site-footer,
-  .topology,
   .toc,
   .journal-tools,
   .copy-code {
