@@ -19,6 +19,20 @@ const results = { browser: name, checks: [], errors: [] };
     });
     const page = await context.newPage();
     page.on("pageerror", (error) => results.errors.push(error.message));
+    let postCount;
+    const jumpToLatestYear = async () => {
+      const button = page.locator("[data-year-jump]").last();
+      const year = await button.getAttribute("data-year-jump");
+      const index = await page
+        .locator(".chronicle-entry")
+        .evaluateAll(
+          (entries, year) =>
+            entries.findIndex((entry) => entry.dataset.year === year),
+          year,
+        );
+      await button.click();
+      await select(index);
+    };
     const select = async (index) => {
       await page.waitForFunction(
         (index) =>
@@ -36,31 +50,35 @@ const results = { browser: name, checks: [], errors: [] };
       await page.goto(base + route);
       const timeline = page.locator(".chronicle");
       await timeline.scrollIntoViewIfNeeded();
-      assert.equal(await page.locator(".chronicle-entry").count(), 9);
+      postCount = await page.locator(".chronicle-entry").count();
+      assert.ok(postCount >= 9, "Original milestones remain available");
+      const lastIndex = postCount - 1;
       await page.getByRole("button", { name: "Next milestone" }).click();
       await select(1);
       await page.getByRole("button", { name: "Previous milestone" }).click();
       await select(0);
-      await page.locator('[data-year-jump="2026"]').click();
-      await select(3);
-      await page.locator(".chronicle input").fill("8");
-      await select(8);
+      await jumpToLatestYear();
+      await page.locator(".chronicle input").fill(String(lastIndex));
+      await select(lastIndex);
       assert.equal(
         await page.getByRole("button", { name: "Next milestone" }).isDisabled(),
         true,
       );
-      assert.match(
+      assert.equal(
         await page.locator(".chronicle input").getAttribute("aria-valuetext"),
-        /Network\+/,
+        await page
+          .locator(".chronicle-entry")
+          .last()
+          .getAttribute("data-milestone-label"),
       );
       const viewport = page.locator(".chronicle-window");
       await viewport.focus();
       await page.keyboard.press("Home");
       await select(0);
       await page.keyboard.press("End");
-      await select(8);
+      await select(lastIndex);
       await page.keyboard.press("ArrowLeft");
-      await select(7);
+      await select(lastIndex - 1);
       results.checks.push(
         `${route}: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value`,
       );
@@ -83,8 +101,8 @@ const results = { browser: name, checks: [], errors: [] };
 
       for (const width of [360, 430, 768, 1920, 2560, 3440]) {
         await page.setViewportSize({ width, height: 1000 });
-        await page.locator(".chronicle input").fill("8");
-        await select(8);
+        await page.locator(".chronicle input").fill(String(lastIndex));
+        await select(lastIndex);
         const geometry = await viewport.evaluate((element) => {
           const last = element
             .querySelector(".chronicle-entry:last-child")
@@ -140,7 +158,7 @@ const results = { browser: name, checks: [], errors: [] };
       }
     }
     await page.goto(base);
-    assert.equal(await page.locator(".post-preview img").count(), 3);
+    assert.equal(await page.locator(".post-preview").count(), 3);
     assert.equal(await page.locator(".topology").count(), 0);
     const destination = await page
       .locator(".post-preview h3 a")
@@ -163,8 +181,7 @@ const results = { browser: name, checks: [], errors: [] };
 
     await page.emulateMedia({ reducedMotion: "reduce" });
     await page.goto(base + "/journey/");
-    await page.locator('[data-year-jump="2026"]').click();
-    await select(3);
+    await jumpToLatestYear();
     assert.equal(
       await page
         .locator(".chronicle-card")
@@ -238,15 +255,22 @@ const results = { browser: name, checks: [], errors: [] };
     });
     const staticPage = await staticContext.newPage();
     await staticPage.goto(base + "/journey/");
-    assert.equal(await staticPage.locator(".chronicle-entry").count(), 9);
+    assert.equal(
+      await staticPage.locator(".chronicle-entry").count(),
+      postCount,
+    );
     assert.equal(
       await staticPage.locator(".chronicle-controls").isVisible(),
       false,
     );
-    await staticPage.locator(".chronicle-entry:last-child a").first().focus();
+    const lastLink = staticPage
+      .locator(".chronicle-entry:last-child a")
+      .first();
+    const lastDestination = await lastLink.getAttribute("href");
+    await lastLink.focus();
     await staticPage.keyboard.press("Enter");
-    await staticPage.waitForURL("**/posts/NETWORK+/");
-    assert.ok(staticPage.url().endsWith("/posts/NETWORK+/"));
+    await staticPage.waitForURL(base + lastDestination);
+    assert.ok(staticPage.url().endsWith(lastDestination));
     await staticContext.close();
     results.checks.push(
       "No-JS timeline preserves all entries and keyboard-accessible destinations",

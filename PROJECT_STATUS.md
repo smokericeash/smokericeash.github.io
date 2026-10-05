@@ -4,7 +4,7 @@ Updated: October 5, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The requested simplification and motion improvements are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. All three browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The redesign and self-service Markdown authoring workflow are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. All three browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,18 @@ Updated: October 5, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## Completed this session
+## Post authoring follow-up
+
+- Posts remain ordinary Markdown in `_posts/`, optionally grouped by year. No layout or manual timeline edits are needed to add one.
+- Added `docs/post-template.md` and `docs/POSTING.txt`, linked from README, covering front matter, images, drafts, preview and publication.
+- New JPG/PNG files go directly in `assets/img/`; run `python tools/optimize_images.py` to generate responsive files and dimension metadata, then commit those generated changes with the post.
+- Text-only posts now omit the cover/thumbnail correctly; the default social image remains SEO metadata rather than becoming a dimensionless article image.
+- Removed fixed nine-post counts, last-entry assumptions, fixed latest-year indices and fixed search/category result counts from browser tests. New posts and years no longer require editing those tests.
+- Verified two temporary 2027 posts in an isolated build (one with a cover, one without; description fallback also tested): 11 post routes, 49 pages, 1,656 references. All three browser suites pass in Chrome, Firefox and WebKit against that build. Evidence: `docs/authoring-results.json`.
+- Removed both temporary source posts and rebuilt the normal preview: original nine posts, 47 pages, 1,598 references and all 26 preserved files pass. No sample posts were published.
+- No authoring work remains in progress. Use the template for the next real post; the existing publication checks below still apply.
+
+## Completed editorial session
 
 - Removed Work from primary navigation. The four destinations are Home, Journal (`/research/`), Journey and About. Existing Work/case-study URLs remain valid for compatibility.
 - Replaced the sprawling homepage with a factual introduction, the three latest original posts and a full-width timeline displaying all nine original entries.

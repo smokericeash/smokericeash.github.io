@@ -93,7 +93,14 @@ const report = {
       for (const route of primary) {
         await page.goto(base + route);
         const axe = await new AxeBuilder({ page })
-          .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa", "best-practice"])
+          .withTags([
+            "wcag2a",
+            "wcag2aa",
+            "wcag21a",
+            "wcag21aa",
+            "wcag22aa",
+            "best-practice",
+          ])
           .analyze();
         report.accessibility.push({
           theme,
@@ -142,11 +149,33 @@ const report = {
       "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
     );
     await page.goto(base + "/research/");
+    const networkMatches = await page
+      .locator(".post-row")
+      .evaluateAll(
+        (rows) =>
+          rows.filter((row) => row.dataset.search.includes("network")).length,
+      );
     await page.locator("#journal-search").fill("network");
-    assert.equal(await page.locator(".post-row:visible").count(), 1);
+    assert.ok(networkMatches >= 1);
+    assert.equal(
+      await page.locator(".post-row:visible").count(),
+      networkMatches,
+    );
     await page.locator("#journal-search").fill("");
+    const certificationMatches = await page
+      .locator(".post-row")
+      .evaluateAll(
+        (rows) =>
+          rows.filter((row) =>
+            row.dataset.category.split("|").includes("Certification"),
+          ).length,
+      );
     await page.selectOption("#category-filter", "Certification");
-    assert.equal(await page.locator(".post-row:visible").count(), 1);
+    assert.ok(certificationMatches >= 1);
+    assert.equal(
+      await page.locator(".post-row:visible").count(),
+      certificationMatches,
+    );
     await page.locator("#journal-search").fill("no-matching-entry");
     assert.equal(await page.locator(".post-row:visible").count(), 0);
     assert.equal(await page.locator("#no-results").isVisible(), true);

@@ -1,0 +1,99 @@
+ADDING YOUR OWN POSTS
+
+Yes: the content source is the _posts/ folder. You write Markdown; the website
+builds the pages, previews, dates, categories, tags and timeline automatically.
+You do not need to edit HTML, CSS, JavaScript, layouts or the timeline data.
+
+1. CREATE A MARKDOWN FILE
+
+Copy docs/post-template.md into _posts/2026/ (or the matching year folder).
+Rename it using YYYY-MM-DD-short-title.md, for example:
+
+  _posts/2026/2026-10-05-my-networking-lab.md
+
+Year subfolders are just organization. Files directly inside _posts/ also work.
+Use lowercase words and hyphens for new filenames. Keep the filename after
+publication: it determines the stable URL /posts/my-networking-lab/.
+Edit the sample date to your real publication date; match the filename date.
+Future-dated posts are not included in normal builds, so use today or an earlier
+date when you are ready to publish. A future date does not schedule an automatic
+rebuild; the site must be built again for the entry to become visible.
+
+2. EDIT THE HEADER AND WRITE
+
+Keep the opening and closing --- markers. Inside them:
+
+  title: the title displayed on the website (quote it)
+  date: publication date, YYYY-MM-DD
+  categories: [Competition] or [Certification], [Projects], etc.
+  tags: [linux, networking, cybersecurity]
+  description: one or two factual sentences for previews and search metadata
+  image: optional path to a cover image
+  alt: describe the cover when you supply one
+
+Below the second --- is ordinary Markdown. Use ## for section headings: the
+website already displays the post title as its main heading. Links, images,
+lists, code fences, tables, bold and italics work. Example inline screenshot:
+
+  ![A diagram of my lab network](/assets/img/my-lab-diagram.png)
+
+An explicit description is recommended. Without it, the first paragraph is used.
+For a text-only post, leave the template's image/alt lines commented out. It will
+still appear normally, without an empty image box. Cover images are recommended
+for illustrated previews. Do not add the post to _data/journey.yml: that file
+only contains optional editorial overrides for existing entries.
+
+3. ADD IMAGES (ONLY WHEN NEEDED)
+
+Place JPG/JPEG/PNG files directly in assets/img/. Use descriptive unique basenames
+such as my-networking-lab-cover.jpg; avoid names that differ only by extension.
+Set image: /assets/img/my-networking-lab-cover.jpg in the Markdown header.
+After adding or replacing images, run from the repository root:
+
+  python tools/optimize_images.py
+
+This creates WebP sizes and updates _data/images.json; originals stay untouched.
+Run it for inline screenshots too, so the build has their dimensions. The tool
+requires Pillow (already available in this workspace). On a new machine, install
+it once with: python -m pip install Pillow
+Commit the originals, generated assets/media files, and _data/images.json with
+the post. You never need to edit image metadata or derivatives manually.
+
+4. PREVIEW LOCALLY
+
+From the repository root:
+
+  bundle exec jekyll serve --host 127.0.0.1 --port 4000
+
+Open http://127.0.0.1:4000/. Jekyll rebuilds when you save a post; refresh the
+browser to see it. The existing port 4173 preview serves a static build and does
+not rebuild itself when Markdown changes.
+
+For drafts, create _drafts/ at the repository root and save my-post.md there
+without a date prefix. Preview drafts with:
+
+  bundle exec jekyll serve --drafts --host 127.0.0.1 --port 4000
+
+Drafts are omitted from normal production builds. To publish one, move it into
+_posts/YYYY/, add the date prefix, and set the publication date in its header.
+Do not put confidential material in a draft committed to a public repository:
+the source is still public even though it is omitted from the website.
+
+5. CHECK AND PUBLISH
+
+Run:
+
+  bundle exec jekyll build
+  bundle exec ruby tests/verify_site.rb
+
+Your post appears automatically in Journal, the timeline on Home and Journey,
+its category/tag archives, and the feed. If it is one of the three newest posts,
+it also appears in Home's Recent posts section. Older entries stay in Journal.
+
+Commit your post and image changes to your working branch, then use a reviewed
+pull request and the repository's GitHub Actions workflow. Saving locally alone
+does not update the public website. This redesign is currently on the local
+codex/portfolio-v2 branch and has not been deployed; until it is published, edit
+this repository rather than the untouched original production checkout.
+
+Official Markdown-post/draft reference: https://jekyllrb.com/docs/posts/

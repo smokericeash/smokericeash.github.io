@@ -20,6 +20,12 @@ python -m http.server 4173 --bind 127.0.0.1 --directory _site
 
 Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='production'` in PowerShell). The local preview in this redesign session uses port 4173.
 
+## Add a post
+
+All posts live in `_posts/` as Markdown files. Copy [`docs/post-template.md`](docs/post-template.md) to `_posts/YYYY/YYYY-MM-DD-short-title.md`, edit the header and write below it. Home, Journal, Journey, archives and feeds update automatically at build time. No layout edits or manual timeline entries are needed.
+
+See [`docs/POSTING.txt`](docs/POSTING.txt) for images, drafts, live preview and publication. New images go in `assets/img/`; run `python tools/optimize_images.py` to generate their responsive versions before building.
+
 ## Content and components
 
 - `_posts/`: original posts, unchanged; existing `/posts/:title/` URLs.

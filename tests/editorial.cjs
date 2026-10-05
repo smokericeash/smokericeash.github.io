@@ -52,7 +52,8 @@ const result = { browser: name, checks: [], errors: [] };
       "About",
     ]);
     assert.equal(await page.locator(".post-preview").count(), 3);
-    assert.equal(await page.locator(".chronicle-entry").count(), 9);
+    const postCount = await page.locator(".chronicle-entry").count();
+    assert.ok(postCount >= 9, "Original milestones remain available");
     assert.ok(
       await page
         .locator(".home-timeline .chronicle")
@@ -68,7 +69,7 @@ const result = { browser: name, checks: [], errors: [] };
       /Curiosity is the start|Good work starts|Building stronger foundations|A little more understanding/,
     );
     result.checks.push(
-      "Four primary destinations; concise factual home; three illustrated posts and full-width nine-entry timeline",
+      "Four primary destinations; concise factual home; three latest post previews and full-width timeline",
     );
 
     for (const [label, path] of [
@@ -125,30 +126,29 @@ const result = { browser: name, checks: [], errors: [] };
       .evaluateAll((images) =>
         Promise.all(images.map((image) => image.decode())),
       );
-    const entries = await page
-      .locator(".post-row")
-      .evaluateAll((rows) =>
-        rows.map((row) => ({
-          href: row.querySelector("h3 a").getAttribute("href"),
-          src: row.querySelector("img").getAttribute("src"),
-          imageHref: row.querySelector(".post-thumbnail").getAttribute("href"),
-        })),
-      );
-    assert.equal(entries.length, 9);
+    const entries = await page.locator(".post-row").evaluateAll((rows) =>
+      rows.map((row) => ({
+        href: row.querySelector("h3 a").getAttribute("href"),
+        src: row.querySelector("img")?.getAttribute("src"),
+        imageHref: row.querySelector(".post-thumbnail")?.getAttribute("href"),
+      })),
+    );
+    assert.equal(entries.length, postCount);
     for (const entry of entries) {
       const response = await page.request.get(base + entry.href);
       assert.equal(response.status(), 200);
       const cover = (await response.text()).match(
         /<figure class="article-cover">[\s\S]*?<img src="([^"]+)"/,
       );
-      assert.equal(entry.src, cover[1], `Wrong preview for ${entry.href}`);
+      assert.equal(entry.src, cover?.[1], `Wrong preview for ${entry.href}`);
+      if (!entry.src) continue;
       assert.equal(entry.imageHref, entry.href);
     }
     result.checks.push(
-      "All nine Journal previews decode and match their original article cover image and destination",
+      "All Journal previews decode and match their original article cover image and destination",
     );
 
-    const target = page.locator(".post-row").nth(4);
+    const target = page.locator(".post-row:has(.post-thumbnail)").nth(4);
     await target.scrollIntoViewIfNeeded();
     await page.waitForFunction(() => motionEvidence.reveals > 0);
     await page.waitForFunction(() =>

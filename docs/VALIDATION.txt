@@ -125,3 +125,17 @@ LIMITS / REQUIRED BEFORE PRODUCTION MERGE
   screen-reader and real-device review remain useful prepublication checks.
 - No claims of independent research, extra credentials or work experience were
   added beyond the source evidence.
+
+POST AUTHORING FOLLOW-UP
+- Added an excluded Markdown template and step-by-step posting guide.
+- Removed fixed post counts, latest-post/year assumptions and category/search
+  result counts from browser tests, while keeping original-content checks.
+- New text-only posts omit the default social image from article covers/previews.
+- Isolated test build with two temporary 2027 Markdown posts (--future only for
+  the fixture): 11 routes, 49 HTML pages, 1,656 references and 26 preserved files.
+- All three browser suites pass in Chrome, Firefox and WebKit on that build,
+  including new-year navigation, the new endpoint, image/text-only previews,
+  description fallback, category/search filtering and no-JS access.
+- Fixture sources removed; normal production build passes with nine posts,
+  47 HTML pages and 1,598 references. Existing rendered posts remain unchanged.
+- Evidence: docs/authoring-results.json. No sample posts were published.

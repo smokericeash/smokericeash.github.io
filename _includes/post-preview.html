@@ -1,5 +1,5 @@
 {% assign note = site.data.journey[include.post.url] %}
 <article class="post-preview" data-reveal>
-  <a class="post-preview-media" href="{{ include.post.url | relative_url }}" tabindex="-1" aria-hidden="true">{% if include.post.image %}{% include image.html src=include.post.image alt='' sizes='(max-width: 560px) 100vw, (max-width: 800px) 50vw, 420px' %}{% endif %}</a>
+  {% if include.post.image and include.post.image != site.logo %}<a class="post-preview-media" href="{{ include.post.url | relative_url }}" tabindex="-1" aria-hidden="true">{% include image.html src=include.post.image alt='' sizes='(max-width: 560px) 100vw, (max-width: 800px) 50vw, 420px' %}</a>{% endif %}
   <div class="post-preview-copy"><p class="post-meta"><time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: '%b %d, %Y' }}</time><span>{{ include.post.categories | first }}</span></p><h3><a href="{{ include.post.url | relative_url }}">{{ include.post.title }} <span aria-hidden="true">↗</span></a></h3><p>{{ note.summary | default: include.post.description | strip_html | normalize_whitespace | truncate: 200 }}</p></div>
 </article>
