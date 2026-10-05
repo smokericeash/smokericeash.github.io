@@ -1,0 +1,75 @@
+require 'json'
+require 'digest'
+require 'nokogiri'
+require 'uri'
+require 'pathname'
+
+root = File.expand_path('..', __dir__)
+output = File.expand_path(ARGV[0] || '_site', root)
+prefix = ENV.fetch('TEST_BASEURL', '')
+errors = []
+manifest = JSON.parse(File.read(File.join(root, 'docs/content-baseline.json'), encoding: 'bom|utf-8'))
+manifest.each do |record|
+  path = File.join(root, record['path'])
+  unchanged = File.file?(path) && Digest::SHA256.file(path).hexdigest.casecmp?(record['sha256'])
+  # Git normalizes text line endings on Linux; no other source changes allowed.
+  unchanged ||= File.file?(path) && record['sha256_lf'] && Digest::SHA256.hexdigest(File.binread(path).gsub("\r\n", "\n")) == record['sha256_lf']
+  errors << "Content changed: #{record['path']}" unless unchanged
+end
+expected_posts = Dir.chdir(root) { Dir.glob('_posts/**/*.md') }.map { |path| File.basename(path, '.md').sub(/^\d{4}-\d{2}-\d{2}-/, '') }
+errors << 'No source posts found' if expected_posts.empty?
+expected_posts.each { |slug| errors << "Missing preserved route #{slug}" unless File.file?(File.join(output, 'posts', slug, 'index.html')) }
+documents = {}
+Dir.chdir(output) { Dir.glob('**/*.html') }.each do |relative|
+  file = File.join(output, relative)
+  documents[file] = Nokogiri::HTML(File.read(file, encoding: 'utf-8'))
+end
+errors << 'No generated HTML pages found' if documents.empty?
+links = 0
+documents.each do |file, doc|
+  label = Pathname.new(file).relative_path_from(Pathname.new(output)).to_s
+  errors << "#{label}: expected one h1" unless doc.css('h1').size == 1
+  errors << "#{label}: missing title/description/canonical" if doc.at_css('title')&.text.to_s.empty? || doc.at_css('meta[name="description"]')&.[]('content').to_s.empty? || doc.at_css('link[rel="canonical"]')&.[]('href').to_s.empty?
+  canonical = doc.at_css('link[rel="canonical"]')&.[]('href').to_s
+  errors << "#{label}: wrong canonical #{canonical}" unless canonical.start_with?("https://smokericeash.github.io#{prefix}/")
+  errors << "#{label}: missing social preview" unless doc.at_css('meta[property="og:image"]')
+  ids = doc.css('[id]').map { |node| node['id'] }
+  errors << "#{label}: duplicate ids" unless ids.uniq.size == ids.size
+  doc.css('img').each do |img|
+    errors << "#{label}: missing image alt/dimensions" if img['alt'].nil? || img['width'].nil? || img['height'].nil?
+  end
+  refs = doc.css('a[href],img[src],script[src],link[href]').map { |node| node['href'] || node['src'] }
+  refs += doc.css('img[srcset]').flat_map { |node| node['srcset'].split(',').map { |part| part.strip.split.first } }
+  refs.each do |reference|
+    next if reference =~ /\A(?:[a-z][a-z0-9+.-]*:|\/\/)/i
+    links += 1
+    path, anchor = reference.split('#', 2)
+    path = URI::DEFAULT_PARSER.unescape(path.split('?').first.to_s)
+    if path.start_with?('/')
+      errors << "#{label}: unprefixed path #{reference}" if !prefix.empty? && !path.start_with?(prefix + '/')
+      path = path.delete_prefix(prefix) unless prefix.empty?
+      target = File.join(output, path.delete_prefix('/'))
+    elsif path.empty?
+      target = file
+    else
+      target = File.expand_path(path, File.dirname(file))
+    end
+    target = File.join(target, 'index.html') if File.directory?(target)
+    if !File.file?(target)
+      errors << "#{label}: broken reference #{reference}"
+    elsif anchor && !anchor.empty? && documents[target]
+      id = URI::DEFAULT_PARSER.unescape(anchor)
+      errors << "#{label}: missing anchor #{reference}" unless documents[target].css('[id]').any? { |node| node['id'] == id }
+    end
+  end
+end
+%w[sitemap.xml feed.xml].each do |name|
+  xml = Nokogiri::XML(File.read(File.join(output, name))) { |cfg| cfg.strict }
+  errors << "#{name}: contains localhost" if xml.to_s.include?('localhost')
+end
+errors << 'Theme dependency remains' if File.read(File.join(root, 'Gemfile')).include?('jekyll-theme')
+if errors.any?
+  warn errors.join("\n")
+  abort "FAILED: #{errors.size} issue(s)"
+end
+puts "PASS: #{manifest.size} original files unchanged; #{expected_posts.size} post routes preserved; #{documents.size} HTML pages; #{links} local references/anchors/assets; metadata and XML valid."

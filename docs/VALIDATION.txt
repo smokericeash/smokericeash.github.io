@@ -1,0 +1,96 @@
+AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
+Validated October 4, 2026 (America/Los_Angeles).
+
+RESULT
+Ready for design review and a branch-only remote CI run. No changes have been
+pushed, merged or deployed. The original source checkout is unchanged.
+
+BUILD AND PRESERVATION
+- Clean JEKYLL_ENV=production build succeeds with Ruby 3.4 / Jekyll 4.4.1.
+- 47 generated HTML pages, nine original post routes preserved.
+- 26 inventoried original files unchanged: nine posts, one placeholder,
+  four tabs (including the original biography), and twelve original images.
+- Exact raw hashes match on this Windows checkout. CI also accepts only Git's
+  CRLF-to-LF conversion in text files; image bytes are always checked exactly.
+- 1,155 internal links, anchors, assets and srcset references resolve.
+- Every page has one h1, title, description, canonical, and Open Graph image.
+- Atom feed and sitemap parse correctly; no localhost URLs in production XML.
+- A /preview baseurl build passes the same link/metadata checks.
+- Dependency installation is satisfied; lockfile includes Windows and Linux.
+- Nine fixture checks verify heading/TOC behavior, Rouge syntax output, keyboard
+  table scrolling, callouts, captions, responsive image metadata, baseurl links
+  and case-folded taxonomy generation.
+
+BROWSER / RESPONSIVE / ACCESSIBILITY
+Chrome 153.0.8010.53, Playwright Firefox 155.0 and WebKit 26.6 all pass:
+- 94 route checks (47 pages x dark/light).
+- 132 responsive checks per browser (11 significant pages x 6 widths x 2 themes).
+- Widths: 360, 430, 768, 1920, 2560, 3440 CSS pixels.
+- 22 axe scans per browser: WCAG 2 A/AA, 2.1 A/AA, 2.2 AA and best practices.
+- Zero reported violations, JS exceptions, failed HTTP responses or requests.
+- Keyboard menu activation, tab order, Escape close and focus return.
+- Search, combined category filtering, empty-results feedback.
+- System theme changes, explicit preference persistence, reduced motion.
+- Exact code copying in a nonpublished fixture.
+- No-JS navigation, readable content and build-time article TOC.
+- Theme operation when localStorage throws.
+Totals: 282 route checks, 396 responsive checks, 66 automated axe scans.
+Machine-readable evidence: docs/browser-results.json.
+
+Visual review: desktop dark/light, phone layouts, article layout, About at 360px,
+and the social image. Full-page screenshot fixtures load lazy images first.
+Screenshots are available in ignored test-results/. The About overflow, journal
+heading hierarchy and delayed-control layout movement found in earlier passes
+were fixed and retested. Navigation explicitly exposes normal tabindex=0 links
+to WebKit's keyboard traversal without changing their document order.
+
+LIGHTHOUSE 13.5 — FINAL LOCAL RUN
+Page       Device    Performance  Accessibility  Best practices  SEO
+Home       Mobile       100            100             100      100
+Home       Desktop      100            100             100      100
+Journal    Mobile       100            100             100      100
+Journal    Desktop      100            100             100      100
+ITC post   Mobile       100            100             100      100
+ITC post   Desktop      100            100             100      100
+
+Mobile simulated LCP: 1.2–1.5 seconds. Desktop LCP: 0.3–0.4 seconds.
+CLS: 0 for all six runs. TBT: 0–50ms. No run warnings.
+These are local lab results, not live Cloudflare/GitHub field measurements.
+Machine-readable summary: docs/lighthouse-results.json.
+Full HTML and JSON reports: test-results/lighthouse-*.html / *.json.
+Approximate transferable source sizes (gzip, hosting compression dependent):
+CSS 7.4KB; shared JS 1.6KB; home HTML 6KB. No external runtime scripts/fonts.
+
+MIGRATION AND EXTERNAL LINKS
+- Isolated browser fixture verifies sw.min.js retires the old registration.
+- Site enhancement unregisters the known legacy worker only; unrelated worker
+  registrations survive. The old caches are not indiscriminately deleted.
+- GitHub, Credly and X return HTTP 200 to public HEAD checks.
+- LinkedIn rejects HEAD with HTTP 405; its original profile URL is retained.
+  This is not proof of a broken profile, nor is it a successful live verification.
+- Email and resume-request actions use the original aidanchenn1@gmail.com.
+
+ARCHITECTURAL / DEPLOYMENT CHANGES
+- Removed Chirpy, its submodule and presentation configuration; replaced
+  theme taxonomy generation with a local generator that merges colliding slugs.
+- Removed unused html-proofer/wdm dependencies; dedicated checks now validate
+  source preservation and generated output. Retained original MIT license.
+- Ruby CI changes from 3.3 to tested 3.4. No runtime Node dependency: Node is
+  used only for browser/accessibility/Lighthouse validation and formatting.
+- PR/manual branch runs produce review artifacts. Deployment permissions are
+  restricted to the production deploy job, main/master only, after validation.
+- Existing GitHub Pages hosting, url, baseurl and timezone remain intact.
+
+LIMITS / REQUIRED BEFORE PRODUCTION MERGE
+- No actual custom domain or CNAME is in the repository. Cloudflare DNS/TLS,
+  Pages domain settings, live canonical behavior and cache behavior remain
+  unverified. Do not invent or change them without the actual domain details.
+- No resume document was supplied. The current CTA accurately says Request
+  resume; configure _data/profile.yml if a real download URL becomes available.
+- GitHub-hosted Linux CI has not run because the branch has not been pushed.
+  Passing local tests and resolving Linux dependencies do not establish CI success.
+- WebKit testing on Windows does not replace testing actual Safari/iOS devices.
+- Automated accessibility checks do not certify full WCAG compliance; manual
+  screen-reader and real-device review remain useful prepublication checks.
+- No claims of independent research, extra credentials or work experience were
+  added beyond the source evidence.

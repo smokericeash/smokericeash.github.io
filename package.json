@@ -1,0 +1,17 @@
+{
+  "name": "aidan-chen-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Custom Jekyll portfolio and technical journal for Aidan Chen",
+  "scripts": {
+    "test:site": "bundle exec ruby tests/verify_site.rb",
+    "test": "node tests/browser.cjs",
+    "test:performance": "node tests/performance.mjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "lighthouse": "^13.5.0",
+    "playwright": "^1.63.0",
+    "prettier": "^3.9.9"
+  }
+}
