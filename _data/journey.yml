@@ -1,0 +1,25 @@
+- date: May 2026
+  title: A stronger networking foundation.
+  detail: Passed CompTIA Network+, connecting coursework and competition experience with network fundamentals.
+  url: /posts/NETWORK+/
+  label: Certification
+- date: Apr 2026
+  title: Technical findings, human impact.
+  detail: Contributed 20+ hours to ITC's red teaming track. Our team finished in the Top 5.
+  url: /posts/MISSA-ITC-Competition/
+  label: Assessment
+- date: Mar 2026
+  title: From solving challenges to keeping services alive.
+  detail: First place at Tech Symposium; then defensive operations with the SWIFT team at NCAE Cyber Games.
+  url: /posts/TS-CTF/
+  label: Competition
+- date: Jan 2026
+  title: New perspectives at Coastline.
+  detail: Second place in the Hack The Box CTF at Coastline College's CyberAI Research Symposium.
+  url: /posts/HTB-CTF-Competition/
+  label: Competition
+- date: Oct 2025
+  title: Learning alongside a team.
+  detail: Third place overall, tied with second, at OSSCON. A first entry in this journal of hands-on learning.
+  url: /posts/OSSCON-CTF-Competition/
+  label: Competition

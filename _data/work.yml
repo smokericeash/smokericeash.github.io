@@ -1,0 +1,78 @@
+- id: itc-2026
+  title: Beyond the finding.
+  subtitle: ITC 2026 · Red team assessment
+  category: Security assessment
+  date: 2026-04-19
+  source: /posts/MISSA-ITC-Competition/
+  image: /assets/img/missa.png
+  alt: MISSA Information Technology Competition
+  summary: A two-week competition that connected technical findings with business impact, remediation, and a client-facing report.
+  tools: [Active Directory, Kubernetes, Reporting]
+  result: Top 5 team finish
+  sections:
+    - title: The brief
+      text: Compete in the red teaming track of MISSA's Information Technology Competition. Approach an enterprise-style environment as an assessment, then communicate findings to technical judges and a client audience.
+    - title: The environment
+      text: The competition included Active Directory, internal web applications, Kubernetes workloads, source control and deployment platforms, file shares, and cloud-connected services.
+    - title: My contribution
+      text: I contributed more than 20 hours across two weeks. My work focused on evaluating repository and configuration exposure, access to sensitive information, and the business consequences of excessive access.
+    - title: From findings to a report
+      text: The final deliverable connected technical evidence to business impact and remediation guidance, with an executive summary and presentation. Clear communication and careful validation mattered as much as the technical investigation.
+    - title: Outcome and reflection
+      text: Our team finished in the Top 5. The main lesson was the value of disciplined validation, professional judgment, teamwork, and explaining risk clearly to the people responsible for addressing it.
+- id: red-vs-blue
+  title: Keep the services running.
+  subtitle: SWIFT · Red vs. Blue
+  category: Defensive operations
+  date: 2026-02-28
+  source: /posts/RVB-Competition/
+  image: /assets/img/image5443.png
+  alt: SWIFT Red vs. Blue competition artwork
+  summary: Defending a mixed Linux and Windows environment while balancing service availability, system hardening, and business injects.
+  tools: [Linux, Windows Server, DNS]
+  result: Hands-on defensive operations
+  sections:
+    - title: The challenge
+      text: Defend five machines against an active red team while keeping scored services available. The competition was hosted by SWIFT at Cal Poly Pomona.
+    - title: Systems and dependencies
+      text: The environment included Windows Server 2022, two Debian 12 systems, and Hannah Montana Linux. DNS, a Flask application, Active Directory, and a WordPress service created dependencies that needed careful attention.
+    - title: The work
+      text: Our team reviewed SSH access and configuration, maintained DNS, managed Windows users and permissions, and worked through service hardening. Written business injects ran alongside the technical defense work.
+    - title: What changed my thinking
+      text: Hardening is an ongoing practice. Understanding service dependencies before making changes, coordinating with teammates, and responding quickly all matter when availability is part of the score.
+- id: tech-symposium
+  title: Follow the evidence.
+  subtitle: Tech Symposium 2026 · CTF
+  category: Capture the flag
+  date: 2026-03-14
+  source: /posts/TS-CTF/
+  image: /assets/img/techsymposium26.jpg
+  alt: Tech Symposium 2026 event artwork
+  summary: First place in a multidisciplinary CTF spanning network analysis, cryptography, OSINT, and physical security.
+  tools: [Wireshark, Cryptography, OSINT]
+  result: 1st place · around 50 participants
+  sections:
+    - title: The setting
+      text: Cal Poly Pomona's SWIFT club hosted Tech Symposium 2026 with workshops, speakers, and a Capture the Flag competition running over several hours.
+    - title: Breadth of practice
+      text: Challenges covered OSINT and geolocation, web security, binary analysis, cryptography, steganography, packet captures, and physical security. The variety rewarded careful observation and adaptability.
+    - title: Outcome
+      text: I completed approximately 80–90% of the challenges and placed first among around 50 participants. Workshops and conversations with speakers made the event valuable beyond the competition itself.
+- id: ncae-cyber-games
+  title: Security includes availability.
+  subtitle: NCAE Cyber Games 2026
+  category: Defensive operations
+  date: 2026-03-15
+  source: /posts/NCAE-CYBERGAMES/
+  image: /assets/img/channels4_profile.jpg
+  alt: NCAE Cyber Games artwork
+  summary: SSH service administration, troubleshooting, and team coordination with Cal Poly Pomona's SWIFT team.
+  tools: [SSH, Linux, Networking]
+  result: Team-based defensive experience
+  sections:
+    - title: The objective
+      text: Support assigned services while solving cybersecurity challenges under time pressure. I competed with the Cal Poly Pomona SWIFT team in March 2026.
+    - title: My contribution
+      text: I supported assigned SSH service administration and challenge-solving tasks, monitored service behavior, and coordinated with teammates as technical issues arose.
+    - title: Lessons learned
+      text: Networking, Linux, authentication, and troubleshooting fundamentals were useful throughout. Clear communication and an understanding of normal system behavior were essential to maintaining availability.

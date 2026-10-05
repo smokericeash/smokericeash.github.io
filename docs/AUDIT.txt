@@ -1,0 +1,80 @@
+PORTFOLIO V2 — AUDIT AND DESIGN DECISIONS
+Source: smokericeash.github.io, da50b14 (main). October 4, 2026.
+
+A. ARCHITECTURE / INFRASTRUCTURE TO PRESERVE
+Jekyll + Chirpy 7.4.1; nine Markdown posts, four tabs, twelve image assets.
+GitHub Actions builds with Ruby 3.3 and deploys main/master to Pages.
+No CNAME, DNS records, populated Cloudflare token or resume link is present.
+Preserve url/baseurl/timezone and /posts/:title/; no DNS changes are proposed.
+The old _site is stale local output and is not authoritative source content.
+
+B. THEME DEPENDENCIES TO REMOVE
+Chirpy gem, theme assets/lib submodule, .gitmodules, Font Awesome configuration,
+theme layouts and JS, theme sidebar/PWA behavior and theme-only configuration.
+Retain the starter's MIT notice for retained material. Retire the known legacy
+sw.min.js worker at this site's scope so visitors can receive the new site.
+
+C. CONTENT TO PRESERVE
+All post bytes, including front matter, body, dates, tags, category spelling,
+image references and URLs. All original image bytes. About biography. GitHub,
+LinkedIn, X, email, and the Network+ Credly link. Hash baseline is in
+docs/content-baseline.json. Keep /about/, /archives/, /categories/, /tags/.
+No standalone research papers, resume, project repositories, graduation date
+or additional certifications are present; do not invent them.
+
+D. NEW INFORMATION ARCHITECTURE
+Home / Work / Journal / Journey / About. Journal uses /research/ while honestly
+describing existing writing. Four sourced competition case studies lead to
+unchanged original posts. Socials and resume URL are structured data. The
+resume CTA says Request resume until a real URL is supplied.
+
+E. VISUAL SYSTEM
+Dark: #09111f canvas, #101d30 surface, #edf2ff text, #a7b5cb secondary,
+#9baaff accent. Light: #f6f8fc canvas, #ffffff surface, #142238 text,
+#53627a secondary, #454cc2 accent. Indigo button fills with white text.
+System sans-serif, selective monospace metadata, fluid oversized headings,
+8px spacing rhythm, 1280px maximum shell, 72ch article width. Restrained
+borders/radii/shadows. No scroll hijacking. Reduced-motion support.
+A custom connected-systems SVG is the only decorative motif.
+
+F. HOMEPAGE WIREFRAME
+Horizontal navigation; large name/introduction beside abstract topology;
+visible professional links; education/credential strip; asymmetric featured
+work; learning focus; editorial journal; journey; evidence-linked capabilities;
+credentials; contact and quiet copyright attribution.
+
+G. COMPONENT ARCHITECTURE / REBUILD FROM SCRATCH
+Liquid header/footer/socials/icons/topology/work-card/post-row/image includes.
+Custom base, home, page, post, work, journal and taxonomy layouts. Structured
+profile/work/milestone data. Small JS for appearance, menu, copy and filtering.
+Build-time article TOC, responsive tables and image metadata.
+
+H. MIGRATION
+Independent clone in authorized workspace, branch codex/portfolio-v2. Source
+checkout and main untouched. Preserve history for lastmod. Original posts stay
+unchanged; summaries live in data. Merge case-only taxonomy variants sharing
+a URL (BlueTeam/Blueteam) to prevent one archive overwriting another.
+Keep Pages deployment, add PR validation without deployment permissions.
+
+I. TESTING STRATEGY
+Clean production build; content hashes and original routes; every internal
+link/anchor/asset; SEO/canonical/feed/sitemap; light/dark/system; keyboard menu
+and focus; reduced motion; no JS; storage failures; filtering; code copy.
+Widths: 360, 430, 768, 1920, 2560, 3440. Accessibility and Lighthouse runs.
+Record measured results and unavailable browsers separately. Test baseurl
+prefix and legacy worker migration. No production push or merge.
+
+VISUAL PATTERNS TO DISCARD
+Fixed sidebar, avatar-led identity, theme card feed as homepage, inherited
+typography/spacing/colors, old navigation, section order and animations.
+
+ASSET DECISIONS
+Reuse event photos, competition art, certification image and report screenshot
+as evidence. Keep originals plus optimized WebP derivatives. Keep pfpRyu.png
+in the archive but replace its branding role with an AC mark. Create favicon,
+social preview and topology motif. No stock hacker images or fake terminal.
+
+EXTERNAL PRINCIPLES (not copied templates or styles)
+https://www.apple.com/ — concise introductions and clear hierarchy.
+https://www.nvidia.com/en-us/ — technical categorization and work organization.
+https://www.cloudflare.com/ — readable technical storytelling.
