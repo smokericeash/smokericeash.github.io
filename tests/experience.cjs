@@ -140,13 +140,13 @@ const results = { browser: name, checks: [], errors: [] };
       }
     }
     await page.goto(base);
-    assert.equal(await page.locator(".field-notes a").count(), 4);
+    assert.equal(await page.locator(".post-preview img").count(), 3);
     assert.equal(await page.locator(".topology").count(), 0);
     const destination = await page
-      .locator(".field-notes a")
+      .locator(".post-preview h3 a")
       .first()
       .getAttribute("href");
-    await page.locator(".field-notes a").first().click();
+    await page.locator(".post-preview h3 a").first().click();
     assert.ok(page.url().endsWith(destination));
     assert.equal(await page.locator(".reading-trace").count(), 1);
     await page.evaluate(() =>
@@ -158,7 +158,7 @@ const results = { browser: name, checks: [], errors: [] };
         "matrix(1, 0, 0, 1, 0, 0)",
     );
     results.checks.push(
-      "Field notes link to real evidence; article reading trace reaches completion",
+      "Homepage post previews link to original entries; article reading trace reaches completion",
     );
 
     await page.emulateMedia({ reducedMotion: "reduce" });
