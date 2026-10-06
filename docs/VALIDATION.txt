@@ -87,8 +87,8 @@ ITC post   Desktop      100            100             100      100
 Journey    Mobile       100            100             100      100
 Journey    Desktop      100            100             100      100
 
-Mobile simulated LCP: 1.5–1.7 seconds. Desktop LCP: 0.4 seconds.
-CLS: 0 for all eight runs. TBT: 0–100ms. No run warnings.
+Mobile simulated LCP: 1.7 seconds. Desktop LCP: 0.4 seconds.
+CLS: 0 for all eight runs. TBT: 0–90ms. No run warnings.
 These are local lab results, not live Cloudflare/GitHub field measurements.
 Machine-readable summary: docs/lighthouse-results.json.
 Full HTML and JSON reports: test-results/lighthouse-*.html / *.json.
