@@ -895,14 +895,6 @@ main:focus {
   align-items: center;
   gap: 20px;
 }
-.footer-name {
-  font-size: 24px;
-  font-weight: 600;
-  letter-spacing: -0.04em;
-}
-.footer-name span {
-  color: var(--accent);
-}
 .footer-bottom {
   display: flex;
   gap: 22px;

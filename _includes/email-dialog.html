@@ -1,0 +1,10 @@
+<dialog class="email-dialog" id="email-dialog" aria-labelledby="email-dialog-title" aria-describedby="email-dialog-description" data-address="{{ site.data.profile.email | escape }}">
+  <form method="dialog"><button class="email-dialog-close" aria-label="Close email options" autofocus>×</button></form>
+  <p class="eyebrow">GET IN TOUCH</p>
+  <h2 id="email-dialog-title">Email Aidan</h2>
+  <p id="email-dialog-description">Choose where to compose your message.</p>
+  <p class="email-dialog-address">{{ site.data.profile.email }}</p>
+  <div class="email-dialog-actions"><a class="button button-primary" data-email-app href="mailto:{{ site.data.profile.email }}">Open email app <span aria-hidden="true">↗</span></a><a class="button" data-email-gmail href="https://mail.google.com/mail/?view=cm&amp;fs=1&amp;to={{ site.data.profile.email | uri_escape }}" target="_blank" rel="noopener noreferrer">Compose in Gmail <span aria-hidden="true">↗</span></a><button class="email-copy" type="button" data-email-copy>Copy email address</button></div>
+  <p class="email-dialog-note" data-email-note>You review and send the message yourself.</p>
+  <p class="email-dialog-status" role="status" aria-live="polite" data-email-status></p>
+</dialog>

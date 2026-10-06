@@ -7,7 +7,7 @@ layout: default
     <div class="profile-summary"><p>{{ site.data.profile.intro }}</p><a class="credential-link" href="{{ '/posts/NETWORK+/' | relative_url }}">CompTIA Network+ certified <span aria-hidden="true">↗</span></a>{% include socials.html %}</div>
   </section>
   <section id="recent-posts" class="home-posts" aria-labelledby="journal-title">
-    <div class="section-heading" data-reveal><div><p class="eyebrow">01 / JOURNAL</p><h2 id="journal-title">Recent posts</h2></div><a class="text-link" href="{{ '/research/' | relative_url }}">All {{ site.posts.size }} entries <span aria-hidden="true">↗</span></a></div>
+    <div class="section-heading" data-reveal><div><p class="eyebrow">01 / JOURNAL</p><h2 id="journal-title">Recent posts</h2></div><a class="text-link" href="{{ '/research/' | relative_url }}">All entries <span aria-hidden="true">↗</span></a></div>
     <div class="post-highlights">{% for post in site.posts limit:3 %}{% include post-preview.html post=post %}{% endfor %}</div>
   </section>
   <section class="home-timeline" aria-labelledby="journey-title">

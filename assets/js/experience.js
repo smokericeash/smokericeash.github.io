@@ -178,8 +178,33 @@
     sync();
   });
 
-  // Content starts visible. Only elements below the fold receive a one-time
-  // reveal, so initial rendering and failed scripts never leave blank content.
+  // A direct visit introduces the factual homepage in two restrained strokes.
+  // Content is never hidden, so failed scripts still leave the page complete.
+  const intro = document.querySelector('.profile-intro');
+  if (
+    intro &&
+    (!document.referrer ||
+      new URL(document.referrer).origin !== location.origin)
+  ) {
+    [...intro.children].forEach((element, index) =>
+      animate(
+        element,
+        [
+          { transform: `translateX(${index ? 30 : -30}px)` },
+          { transform: 'translateX(0)' },
+        ],
+        {
+          duration: 720,
+          delay: 80 + index * 90,
+          easing: 'cubic-bezier(.22,.68,.15,1)',
+          fill: 'backwards',
+        },
+      ),
+    );
+  }
+
+  // Elements below the fold enter from alternating sides once. The clipped
+  // image edge gives long journal pages a measured rhythm as the user scrolls.
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -195,28 +220,40 @@
           const copy = element.querySelector(
             '.post-preview-copy, .post-row-copy',
           );
+          const index = Number(element.dataset.revealIndex || 0);
+          const direction = index % 2 ? 1 : -1;
           if (media) {
             animate(
               media,
               [
                 {
-                  clipPath: 'inset(0 0 100% 0 round 5px)',
-                  transform: 'translateY(16px)',
+                  clipPath:
+                    direction < 0
+                      ? 'inset(0 100% 0 0 round 5px)'
+                      : 'inset(0 0 0 100% round 5px)',
+                  transform: `translateX(${direction * 20}px)`,
                 },
                 {
-                  clipPath: 'inset(0 0 0% 0 round 5px)',
-                  transform: 'translateY(0)',
+                  clipPath: 'inset(0 0 0 0 round 5px)',
+                  transform: 'translateX(0)',
                 },
               ],
-              { duration: 780, easing: 'cubic-bezier(.22,.68,.15,1)' },
+              { duration: 820, easing: 'cubic-bezier(.22,.68,.15,1)' },
             );
           }
           animate(
             copy || element,
-            [{ transform: 'translateY(26px)' }, { transform: 'translateY(0)' }],
+            [
+              {
+                transform: media
+                  ? `translateX(${direction * -24}px)`
+                  : 'translateX(-24px)',
+              },
+              { transform: 'translateX(0)' },
+            ],
             {
-              duration: 720,
-              delay: media ? 70 : 0,
+              duration: 760,
+              delay: media ? 90 : 0,
               easing: 'cubic-bezier(.22,.68,.15,1)',
               fill: 'backwards',
             },
@@ -225,13 +262,14 @@
       },
       { threshold: 0.08, rootMargin: '0px 0px -24px 0px' },
     );
-    document.querySelectorAll('[data-reveal]').forEach((element) => {
+    document.querySelectorAll('[data-reveal]').forEach((element, index) => {
+      element.dataset.revealIndex = String(index);
       if (element.getBoundingClientRect().top >= innerHeight - 24)
         observer.observe(element);
     });
   }
 
-  // Browsers without native document transitions receive a short entrance.
+  // Browsers without native document transitions receive the same fluid cue.
   // Navigation itself remains immediate: no click interception or fake router.
   if (!('CSSViewTransitionRule' in window)) {
     addEventListener('pageshow', (event) => {
@@ -239,8 +277,17 @@
       if (new URL(document.referrer).origin !== location.origin) return;
       animate(
         document.querySelector('#main'),
-        [{ transform: 'translateY(18px)' }, { transform: 'translateY(0)' }],
-        { duration: 440, easing: 'cubic-bezier(.22,.68,.15,1)' },
+        [
+          {
+            clipPath: 'ellipse(75% 0% at 50% -5%)',
+            transform: 'translateY(22px)',
+          },
+          {
+            clipPath: 'ellipse(150% 160% at 50% 0%)',
+            transform: 'translateY(0)',
+          },
+        ],
+        { duration: 760, easing: 'cubic-bezier(.22,.68,.15,1)' },
       );
     });
   }

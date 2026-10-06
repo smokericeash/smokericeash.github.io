@@ -364,6 +364,7 @@
   gap: 70px;
   padding: 76px 0 68px;
   border-bottom: 1px solid var(--line);
+  overflow-x: clip;
 }
 .profile-intro h1 {
   font-size: clamp(58px, 6.5vw, 92px);
@@ -517,8 +518,113 @@
   font-size: clamp(18px, 2vw, 25px);
   margin: 12px 0 20px;
 }
+.footer-top {
+  justify-content: flex-end;
+}
+.footer-top .socials {
+  margin-left: auto;
+}
 .about-aside h2 {
   font-size: 30px;
+}
+
+/* Email remains a normal mailto link without JavaScript. Enhanced browsers
+   offer explicit compose and copy choices without publishing a résumé file. */
+.email-dialog {
+  width: min(560px, calc(100% - 34px));
+  margin: auto;
+  padding: clamp(27px, 4vw, 44px);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: 0 30px 100px rgb(3 9 20 / 32%);
+}
+.email-dialog[open] {
+  animation: email-dialog-in 420ms cubic-bezier(0.22, 0.68, 0.15, 1) both;
+}
+.email-dialog::backdrop {
+  background: rgb(3 9 20 / 72%);
+  backdrop-filter: blur(5px);
+  animation: email-backdrop-in 300ms ease-out both;
+}
+.email-dialog form {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+}
+.email-dialog-close {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid transparent;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--muted);
+  font: 26px/1 var(--sans);
+}
+.email-dialog-close:is(:hover, :focus-visible) {
+  border-color: var(--line);
+  color: var(--text);
+}
+.email-dialog h2 {
+  margin: 14px 48px 10px 0;
+  font-size: clamp(30px, 4vw, 42px);
+  letter-spacing: -0.045em;
+}
+.email-dialog-address {
+  width: fit-content;
+  margin: 24px 0;
+  padding-bottom: 5px;
+  border-bottom: 1px solid var(--accent);
+  color: var(--accent);
+  font-size: clamp(16px, 2.4vw, 21px);
+}
+.email-dialog-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.email-dialog-actions .button {
+  gap: 14px;
+  text-align: center;
+}
+.email-copy {
+  grid-column: 1 / -1;
+  min-height: 44px;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-weight: 600;
+}
+.email-copy:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.email-dialog-note,
+.email-dialog-status {
+  margin: 17px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.7;
+}
+.email-dialog-status:empty {
+  display: none;
+}
+@keyframes email-dialog-in {
+  from {
+    transform: translateY(20px) scale(0.985);
+  }
+  to {
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes email-backdrop-in {
+  from {
+    background: rgb(3 9 20 / 0%);
+  }
 }
 
 /* The short line is the recurring motion cue, tied to entering a section. */
@@ -561,14 +667,19 @@
   view-transition-name: site-header;
 }
 ::view-transition-group(*) {
-  animation-duration: 420ms;
+  animation-duration: 760ms;
   animation-timing-function: cubic-bezier(0.22, 0.68, 0.15, 1);
 }
+::view-transition-image-pair(page-content) {
+  isolation: isolate;
+  overflow: clip;
+}
 ::view-transition-old(page-content) {
-  animation: page-out 160ms ease-out both;
+  animation: river-out 520ms cubic-bezier(0.4, 0, 0.2, 1) both;
 }
 ::view-transition-new(page-content) {
-  animation: page-in 440ms cubic-bezier(0.22, 0.68, 0.15, 1) both;
+  z-index: 2;
+  animation: river-in 760ms cubic-bezier(0.22, 0.68, 0.15, 1) both;
 }
 ::view-transition-old(site-header) {
   animation: none;
@@ -577,19 +688,19 @@
 ::view-transition-new(site-header) {
   animation: none;
 }
-@keyframes page-out {
+@keyframes river-out {
   to {
-    opacity: 0;
-    transform: translateY(-8px);
+    transform: translateY(-12px) scale(0.995);
+    filter: blur(1.5px);
   }
 }
-@keyframes page-in {
+@keyframes river-in {
   from {
-    opacity: 0;
-    transform: translateY(18px);
+    clip-path: ellipse(75% 0% at 50% -5%);
+    transform: translateY(22px);
   }
   to {
-    opacity: 1;
+    clip-path: ellipse(150% 160% at 50% 0%);
     transform: translateY(0);
   }
 }
@@ -690,6 +801,15 @@
   .contact-section {
     padding: 38px 0;
   }
+  .footer-top .socials {
+    margin-left: 0;
+  }
+  .email-dialog-actions {
+    grid-template-columns: 1fr;
+  }
+  .email-copy {
+    grid-column: auto;
+  }
 }
 @media (prefers-reduced-motion: reduce) {
   @view-transition {
@@ -705,7 +825,10 @@
   }
   .post-preview-media img,
   .post-thumbnail img,
-  .post-preview h3 a > span {
+  .post-preview h3 a > span,
+  .email-dialog[open],
+  .email-dialog::backdrop {
+    animation: none;
     transition: none;
     transform: none !important;
   }

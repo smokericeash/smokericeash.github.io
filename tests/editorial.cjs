@@ -72,6 +72,75 @@ const result = { browser: name, checks: [], errors: [] };
       "Four primary destinations; concise factual home; three latest post previews and full-width timeline",
     );
 
+    assert.equal(await page.locator(".footer-name").count(), 0);
+    assert.equal(
+      (await page.locator(".footer-bottom").innerText()).includes(
+        "© 2026 Aidan Chen",
+      ),
+      true,
+    );
+    const archive = await page.request.get(base + "/archives/");
+    const archiveHtml = await archive.text();
+    assert.match(
+      archiveHtml,
+      /Every entry, in order\. Moments of learning documented so far\./,
+    );
+    assert.doesNotMatch(archiveHtml, /\d+ moments of learning/);
+    result.checks.push(
+      "Footer keeps one Aidan Chen copyright; archive wording has no manual count",
+    );
+
+    const contactEmail = page.locator(".contact-email");
+    await contactEmail.click();
+    const emailDialog = page.locator("#email-dialog");
+    await emailDialog.waitFor({ state: "visible" });
+    assert.equal(
+      await emailDialog.locator("[data-email-app]").getAttribute("href"),
+      "mailto:aidanchenn1@gmail.com",
+    );
+    assert.match(
+      await emailDialog.locator("[data-email-gmail]").getAttribute("href"),
+      /^https:\/\/mail\.google\.com\/mail\/\?.*to=aidanchenn1%40gmail\.com/,
+    );
+    await emailDialog.locator(".email-dialog-close").click();
+    assert.equal(await emailDialog.isVisible(), false);
+    assert.equal(
+      await contactEmail.evaluate((link) => link === document.activeElement),
+      true,
+    );
+
+    await page
+      .getByRole("link", { name: "Request résumé", exact: true })
+      .click();
+    await emailDialog.waitFor({ state: "visible" });
+    assert.equal(
+      await emailDialog.locator("#email-dialog-title").textContent(),
+      "Request a résumé",
+    );
+    assert.match(
+      await emailDialog.locator("[data-email-app]").getAttribute("href"),
+      /^mailto:aidanchenn1@gmail\.com\?subject=R%C3%A9sum%C3%A9%20request&body=/,
+    );
+    assert.match(
+      await emailDialog.locator("[data-email-note]").innerText(),
+      /shared by email/,
+    );
+    await emailDialog.locator(".email-dialog-close").click();
+
+    await page
+      .locator(".site-footer")
+      .getByRole("link", { name: "Email", exact: true })
+      .click();
+    await emailDialog.waitFor({ state: "visible" });
+    assert.equal(
+      await emailDialog.locator("[data-email-app]").getAttribute("href"),
+      "mailto:aidanchenn1@gmail.com",
+    );
+    await emailDialog.locator(".email-dialog-close").click();
+    result.checks.push(
+      "Contact address and footer Email open explicit email choices; résumé request is prefilled and privacy-preserving",
+    );
+
     for (const [label, path] of [
       ["Journal", "/research/"],
       ["Journey", "/journey/"],
@@ -85,7 +154,7 @@ const result = { browser: name, checks: [], errors: [] };
       await page.waitForURL(base + path);
       await page.waitForFunction(
         () =>
-          motionEvidence.names.includes("page-in") || motionEvidence.fallback,
+          motionEvidence.names.includes("river-in") || motionEvidence.fallback,
       );
       assert.equal(
         await page.locator('#primary-nav a[aria-current="page"]').textContent(),
@@ -94,7 +163,7 @@ const result = { browser: name, checks: [], errors: [] };
       assert.equal(await page.locator("h1").count(), 1);
       const evidence = await page.evaluate(() => motionEvidence);
       result.checks.push(
-        `${label}: ${evidence.native ? "native page-in/page-out transition" : "fallback entrance"} with normal navigation`,
+        `${label}: ${evidence.native ? "native river transition" : "fallback river entrance"} with normal navigation`,
       );
       await page.waitForFunction(
         () =>
@@ -102,7 +171,7 @@ const result = { browser: name, checks: [], errors: [] };
             .getAnimations()
             .some(
               (animation) =>
-                ["page-in", "page-out"].includes(animation.animationName) &&
+                ["river-in", "river-out"].includes(animation.animationName) &&
                 animation.playState === "running",
             ),
       );

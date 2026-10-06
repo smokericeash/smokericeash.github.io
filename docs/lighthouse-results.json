@@ -11,7 +11,7 @@
     "metrics": {
       "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "100 ms"
+      "TBT": "90 ms"
     },
     "warnings": []
   },
@@ -43,7 +43,7 @@
     "metrics": {
       "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "40 ms"
     },
     "warnings": []
   },
@@ -75,7 +75,7 @@
     "metrics": {
       "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "50 ms"
     },
     "warnings": []
   },
@@ -105,9 +105,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.5 s",
+      "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "50 ms"
     },
     "warnings": []
   },

@@ -1,4 +1,4 @@
 ---
 layout: default
 ---
-<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">THE COMPLETE RECORD</p><h1>The archive<span>.</span></h1><p>Every entry, in order. {{ site.posts.size }} moments of learning documented so far.</p></header>{% assign years = site.posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}{% for year in years %}<section class="archive-year"><h2>{{ year.name }}</h2>{% for post in year.items %}{% include post-row.html post=post %}{% endfor %}</section>{% endfor %}</div>
+<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">THE COMPLETE RECORD</p><h1>The archive<span>.</span></h1><p>Every entry, in order. Moments of learning documented so far.</p></header>{% assign years = site.posts | group_by_exp: 'post', 'post.date | date: "%Y"' %}{% for year in years %}<section class="archive-year"><h2>{{ year.name }}</h2>{% for post in year.items %}{% include post-row.html post=post %}{% endfor %}</section>{% endfor %}</div>
