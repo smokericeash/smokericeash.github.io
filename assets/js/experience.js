@@ -269,7 +269,7 @@
     });
   }
 
-  // Browsers without native document transitions receive the same fluid cue.
+  // Browsers without native document transitions receive the same calm cue.
   // Navigation itself remains immediate: no click interception or fake router.
   if (!('CSSViewTransitionRule' in window)) {
     addEventListener('pageshow', (event) => {
@@ -279,15 +279,24 @@
         document.querySelector('#main'),
         [
           {
-            clipPath: 'ellipse(75% 0% at 50% -5%)',
-            transform: 'translateY(22px)',
+            opacity: 0,
+            transform: 'translateY(10px)',
           },
           {
-            clipPath: 'ellipse(150% 160% at 50% 0%)',
+            offset: 0.2,
+            opacity: 0,
+            transform: 'translateY(10px)',
+          },
+          {
+            opacity: 1,
             transform: 'translateY(0)',
           },
         ],
-        { duration: 760, easing: 'cubic-bezier(.22,.68,.15,1)' },
+        {
+          duration: 520,
+          easing: 'cubic-bezier(.22,.68,.15,1)',
+          fill: 'backwards',
+        },
       );
     });
   }

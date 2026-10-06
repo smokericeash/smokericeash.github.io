@@ -20,6 +20,7 @@ const result = { browser: name, checks: [], errors: [] };
         native: false,
         fallback: false,
         names: [],
+        sequenced: false,
         reveals: 0,
       };
       const animate = Element.prototype.animate;
@@ -34,10 +35,25 @@ const result = { browser: name, checks: [], errors: [] };
         if (event.viewTransition)
           event.viewTransition.ready
             .then(() => {
-              window.motionEvidence.names = document
-                .getAnimations()
+              const animations = document.getAnimations();
+              window.motionEvidence.names = animations
                 .map((animation) => animation.animationName)
                 .filter(Boolean);
+              const incoming = animations.find(
+                (animation) => animation.animationName === "calm-in",
+              );
+              const outgoing = animations.find(
+                (animation) => animation.animationName === "calm-out",
+              );
+              const hold = incoming?.effect
+                ?.getKeyframes()
+                .filter((frame) => frame.opacity === "0")
+                .at(-1)?.computedOffset;
+              window.motionEvidence.sequenced =
+                !!incoming &&
+                !!outgoing &&
+                Number(outgoing.effect.getTiming().duration) <=
+                  Number(incoming.effect.getTiming().duration) * hold;
             })
             .catch(() => {});
       });
@@ -154,7 +170,7 @@ const result = { browser: name, checks: [], errors: [] };
       await page.waitForURL(base + path);
       await page.waitForFunction(
         () =>
-          motionEvidence.names.includes("river-in") || motionEvidence.fallback,
+          motionEvidence.names.includes("calm-in") || motionEvidence.fallback,
       );
       assert.equal(
         await page.locator('#primary-nav a[aria-current="page"]').textContent(),
@@ -162,8 +178,9 @@ const result = { browser: name, checks: [], errors: [] };
       );
       assert.equal(await page.locator("h1").count(), 1);
       const evidence = await page.evaluate(() => motionEvidence);
+      if (evidence.native) assert.equal(evidence.sequenced, true);
       result.checks.push(
-        `${label}: ${evidence.native ? "native river transition" : "fallback river entrance"} with normal navigation`,
+        `${label}: ${evidence.native ? "native sequenced fade transition" : "fallback fade entrance"} with normal navigation`,
       );
       await page.waitForFunction(
         () =>
@@ -171,7 +188,7 @@ const result = { browser: name, checks: [], errors: [] };
             .getAnimations()
             .some(
               (animation) =>
-                ["river-in", "river-out"].includes(animation.animationName) &&
+                ["calm-in", "calm-out"].includes(animation.animationName) &&
                 animation.playState === "running",
             ),
       );

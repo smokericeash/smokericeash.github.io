@@ -59,8 +59,10 @@ The editorial/motion suite passes 11 check groups in each engine:
 - The contact address and footer Email open email-app/Gmail/copy choices. The
   resume request prefills an email and explains that the file is shared privately.
 - Every Journal preview decodes and matches its article's original cover image.
-- Real native curved river transitions on all four destinations in Chrome and
-  WebKit; the equivalent incoming-page fallback is exercised in Firefox.
+- Real native sequenced fades on all four destinations in Chrome and WebKit:
+  the old snapshot clears in 140ms, and the incoming page remains hidden through
+  26% of its 560ms animation before easing in. The timing assertion prevents
+  readable old/new content from overlapping. Firefox exercises a calm fallback.
 - Back/forward navigation retains the correct pages and browser history.
 - Scrolling starts an actual alternating side/image-mask animation; it finishes
   without a hidden clip state, and revealed content does not animate again.
