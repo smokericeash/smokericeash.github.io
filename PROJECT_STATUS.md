@@ -19,7 +19,7 @@ Updated: October 5, 2026 (America/Los_Angeles).
 - “Request résumé” opens the same chooser with a prefilled subject/body. The dialog explains that the résumé is shared directly by email; no private document was added to the public site.
 - Removed the large duplicate footer name and its unused CSS. The footer retains only `© 2026 Aidan Chen` plus social and archive links.
 - Replaced the Archive's fixed post count with “Every entry, in order. Moments of learning documented so far.” The Home journal link also says “All entries,” so neither label needs manual count maintenance.
-- Strengthened cross-page motion with a 760ms curved top-to-bottom reveal and a restrained outgoing drift. Chrome/WebKit use native document transitions; Firefox uses the equivalent entrance fallback.
+- After visual feedback that the curved transition looked glitchy, replaced it with a sequenced fade. The old page clears in 140ms; the new page stays hidden through 26% of a 560ms animation, then eases in. Chrome/WebKit use native document transitions, while Firefox receives the calmer entrance fallback. The two readable pages no longer overlap.
 - Direct homepage visits introduce the two factual profile columns from opposite sides. Below-fold journal items alternate side/image-mask entrances once as they scroll into view. Content remains visible without JavaScript, and reduced-motion removes all of these effects.
 - Added regression coverage for both email entry points, the prefilled résumé request, focus restoration, single footer identity, count-free copy and the new transition names.
 - Reviewed the Home, contact, résumé and footer states in the local browser. The final preview has no console warnings or errors.
@@ -66,7 +66,7 @@ Updated: October 5, 2026 (America/Los_Angeles).
 - Six responsive widths: 360, 430, 768, 1920, 2560, 3440 CSS pixels; dark/light coverage.
 - Existing navigation, search, storage, theme, code-copy, no-JS and reduced-motion tests pass.
 - Timeline suite: 11 groups in Chrome, 10 each in Firefox/WebKit. Includes drag, year/step/range/keyboard controls, accessible values, endpoint visibility, no-JS, delayed image response, reading progress and Chrome native touch swipes.
-- Editorial/motion suite: 11 groups in each engine. Confirms all nine preview images match article covers, four navigation destinations, full-width timeline, contact/résumé behavior, footer/archive wording, actual scroll animation start/completion/non-repetition, native river transitions (Chrome/WebKit), fallback entrances (Firefox), history navigation and reduced-motion suppression.
+- Editorial/motion suite: 11 groups in each engine. Confirms all nine preview images match article covers, four navigation destinations, full-width timeline, contact/résumé behavior, footer/archive wording, actual scroll animation start/completion/non-repetition, sequenced native fades (Chrome/WebKit), fallback entrances (Firefox), history navigation and reduced-motion suppression. The test reads the live animation durations/keyframes and asserts the old page clears before the incoming fade begins.
 - Lighthouse: **99–100 performance; 100 accessibility, best practices and SEO** on Home, Journal, ITC article and Journey, mobile/desktop (eight runs). Mobile home performance is 99; the other seven are 100. CLS 0 throughout, mobile LCP 1.7s, TBT 0–90ms. These are local lab measurements, not live performance claims.
 - Desktop dark and mobile light Home/Journal reviewed visually; screenshots load original preview images before capture. Earlier article/About/social-image review remains relevant.
 - JavaScript syntax and Git whitespace checks pass.
@@ -79,7 +79,7 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Home is intentionally concise. Do not restore the old orbital graphic, field-notes panel, Work navigation, focus slogans, capability sections or duplicate content bands.
 - `_includes/post-preview.html` is the homepage preview; `_includes/post-row.html` is the shared illustrated list; `_includes/chronicle.html` is the shared timeline.
 - `_data/journey.yml` supplies optional short titles and summaries keyed by post URL. Timeline dates/order come from original post publication metadata. Milestones are evenly spaced for reading, not proportional to elapsed time. New posts appear automatically.
-- Motion and new presentation rules live in `assets/css/experience.css` and `assets/js/experience.js`. The curved page reveal and alternating side entrances are progressive enhancement; no framework/router, scroll interception, forced loading delays or looping animations.
+- Motion and new presentation rules live in `assets/css/experience.css` and `assets/js/experience.js`. The sequenced page fade and alternating side entrances are progressive enhancement; no framework/router, scroll interception, forced loading delays or looping animations.
 - Contact enhancement lives in `_includes/email-dialog.html` and `assets/js/contact.js`. Mailto links remain the no-JavaScript fallback. Resume delivery stays private until an actual public document is intentionally configured.
 - Full content is visible by default. Motion preferences cancel JS animations and disable CSS/native transitions. Initial above-fold content is not hidden for a reveal.
 - Preserve source content and public URLs even where a destination is no longer promoted in navigation.
@@ -106,10 +106,11 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `1e9e5b0` — verified editorial redesign and motion behavior handoff/evidence.
 - `0d1d833` — self-service post authoring guide, template and growing-journal tests.
 - `ed61f6b` — email/résumé chooser, footer/archive cleanup, curved page transitions, alternating scroll entrances and refreshed validation evidence.
+- `42a0785` — replaces the overlapping curved transition with a verified sequenced fade.
 
 ## Exact recommended next task
 
-**Review the email/résumé chooser, footer and curved transitions at `http://127.0.0.1:4173/`. The requested implementation is complete and verified; do not rebuild it. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
+**Review the calmer page fade among Home, Journal, Journey and About at `http://127.0.0.1:4173/`. The old and new page contents are now explicitly sequenced and do not remain readable together. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
 
 ## Reproducible local commands
 
