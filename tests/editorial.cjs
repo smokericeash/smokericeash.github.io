@@ -182,8 +182,13 @@ const result = { browser: name, checks: [], errors: [] };
         label,
       );
       assert.equal(await page.locator("h1").count(), 1);
-      if (label === "Work")
-        assert.equal(await page.locator("h1").textContent(), "Work.");
+      const expectedHeading = {
+        Home: "Aidan Chen",
+        Work: "Work",
+        Journey: "Journey",
+        About: "About me",
+      }[label];
+      assert.equal(await page.locator("h1").textContent(), expectedHeading);
       const evidence = await page.evaluate(() => motionEvidence);
       if (evidence.native) assert.equal(evidence.sequenced, true);
       result.checks.push(

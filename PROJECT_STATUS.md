@@ -4,7 +4,7 @@ Updated: October 7, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The redesign, self-service Markdown authoring workflow, contact refinements and latest timeline/navigation refinements are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. All three full browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The redesign, self-service Markdown authoring workflow, contact refinements and latest timeline/navigation refinements are implemented and locally verified.** The four main page headings have also been refined as requested. No implementation task is currently in progress and no local check is failing. The previously completed full browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -12,6 +12,13 @@ Updated: October 7, 2026 (America/Los_Angeles).
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## Completed October 7 heading refinement
+
+- Removed the trailing period from the Work and Journey main headings. Home already displayed “Aidan Chen” without a period; changed the About heading from “About Aidan.” to “About me”. No other page copy or visual styling changed.
+- Updated the editorial browser regression to assert the exact main heading on Home, Work, Journey and About.
+- Production Jekyll build, site integrity check (26 original files, nine post routes, 47 HTML pages, 1,598 references) and Chrome editorial/motion suite (11 check groups) pass. The local preview uses the rebuilt `_site` output.
+- No work remains in progress from this request. Next task: review these four headings in the local preview; proceed with the existing publication review only if the site is ready.
 
 ## Completed October 7 refinement
 
@@ -121,7 +128,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the free-scrolling timeline on Home and Journey, the Work tab and its softer post entrances, and the period-free standalone name at `http://127.0.0.1:4173/`. The requested refinements are implemented and verified; do not rebuild them. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
+**Review the four main headings (Aidan Chen, Work, Journey and About me) alongside the free-scrolling timelines and softened Work entrances at `http://127.0.0.1:4173/`. The requested refinements are implemented and verified; do not rebuild them. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
 
 ## Reproducible local commands
 
