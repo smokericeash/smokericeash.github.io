@@ -64,7 +64,7 @@ const result = { browser: name, checks: [], errors: [] };
     assert.deepEqual(await page.locator("#primary-nav a").allTextContents(), [
       "Home",
       "Work",
-      "Journey",
+      "The Ascent",
       "About",
     ]);
     assert.equal(await page.locator("#hero-title").textContent(), "Aidan Chen");
@@ -164,7 +164,7 @@ const result = { browser: name, checks: [], errors: [] };
 
     for (const [label, path] of [
       ["Work", "/research/"],
-      ["Journey", "/journey/"],
+      ["The Ascent", "/journey/"],
       ["About", "/about/"],
       ["Home", "/"],
     ]) {
@@ -185,7 +185,7 @@ const result = { browser: name, checks: [], errors: [] };
       const expectedHeading = {
         Home: "Aidan Chen",
         Work: "Work",
-        Journey: "Journey",
+        "The Ascent": "The Ascent",
         About: "About me",
       }[label];
       assert.equal(await page.locator("h1").textContent(), expectedHeading);
@@ -288,7 +288,7 @@ const result = { browser: name, checks: [], errors: [] };
     assert.equal(await page.evaluate(() => motionEvidence.reveals), 0);
     await page
       .locator("#primary-nav")
-      .getByRole("link", { name: "Journey", exact: true })
+      .getByRole("link", { name: "The Ascent", exact: true })
       .click();
     await page.waitForURL(base + "/journey/");
     assert.equal(

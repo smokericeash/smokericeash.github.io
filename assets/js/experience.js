@@ -23,6 +23,11 @@
     const next = chronicle.querySelector('[data-step="1"]');
     const years = [...chronicle.querySelectorAll('[data-year-jump]')];
     const status = chronicle.querySelector('[data-timeline-announcement]');
+    const map = chronicle.querySelector('.ascent-map');
+    const route = map?.querySelector('.ascent-route-base');
+    const travelled = map?.querySelector('.ascent-route-travel');
+    const climber = map?.querySelector('.ascent-climber');
+    const routeLength = route?.getTotalLength() || 0;
     let current = 0;
     let frame = 0;
     let announceTimer;
@@ -30,12 +35,35 @@
     let suppressClick = false;
     let scrollAnimation = 0;
     let destination = 0;
+    let lastRouteProgress = 0;
+
+    // The fixed-size route maps continuous native scroll progress to altitude.
+    // Keep the artwork decorative; the actual dated entries remain the record.
+    const syncRoute = () => {
+      if (!routeLength) return;
+      const maxScroll = Math.max(1, viewport.scrollWidth - viewport.clientWidth);
+      const progress = Math.max(0, Math.min(1, viewport.scrollLeft / maxScroll));
+      const distance = routeLength * progress;
+      const point = route.getPointAtLength(distance);
+      const ahead = route.getPointAtLength(Math.min(routeLength, distance + 4));
+      const behind = route.getPointAtLength(Math.max(0, distance - 4));
+      const slope = Math.atan2(ahead.y - behind.y, ahead.x - behind.x);
+      const tilt = Math.max(-11, Math.min(11, (slope * 180) / Math.PI * 0.3));
+      const facing = progress < lastRouteProgress - 0.001 ? -1 : 1;
+      travelled.style.clipPath = `inset(0 ${(1 - progress) * 100}% 0 0)`;
+      climber.style.left = `${point.x / 10}%`;
+      climber.style.top = `${point.y / 1.92}%`;
+      climber.style.transform = `translate(-50%, -100%) rotate(${tilt}deg) scaleX(${facing})`;
+      map.dataset.progress = progress.toFixed(3);
+      lastRouteProgress = progress;
+    };
 
     // Measure relative to the scroller, not the page. The trailing gutter lets
     // the last entry align to the same reading position as the first.
     const offset = (index) => entries[index].offsetLeft - entries[0].offsetLeft;
     const sync = () => {
       frame = 0;
+      syncRoute();
       const nearest = entries.reduce(
         (best, _, index) =>
           Math.abs(offset(index) - viewport.scrollLeft) <
@@ -131,6 +159,9 @@
       },
       { passive: true },
     );
+    addEventListener('resize', () => {
+      if (!frame) frame = requestAnimationFrame(sync);
+    });
     viewport.addEventListener('keydown', (event) => {
       if (event.target !== viewport) return;
       const keys = {
@@ -222,11 +253,11 @@
       animate(
         element,
         [
-          { transform: `translateX(${index ? 30 : -30}px)` },
+          { transform: `translateX(${index ? 14 : -14}px)` },
           { transform: 'translateX(0)' },
         ],
         {
-          duration: 720,
+          duration: 580,
           delay: 80 + index * 90,
           easing: 'cubic-bezier(.22,.68,.15,1)',
           fill: 'backwards',

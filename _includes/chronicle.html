@@ -8,8 +8,9 @@
       <button type="button" data-step="1" aria-label="Next milestone">→</button>
     </div>
   </div>
+  {% include ascent-route.html %}
   <div class="chronicle-years" hidden aria-label="Jump to a year">{% for year in years %}<button type="button" data-year-jump="{{ year.name }}">{{ year.name }}</button>{% endfor %}<span class="chronicle-hint">Drag to explore <span aria-hidden="true">↔</span></span></div>
-  <div class="chronicle-window" tabindex="0" role="region" aria-label="Milestone timeline. Scroll horizontally to explore; use left and right arrow keys when focused.">
+  <div class="chronicle-window" tabindex="0" role="region" aria-label="Ascent milestones. Scroll horizontally to explore; use left and right arrow keys when focused.">
     <ol class="chronicle-track">
       {% for post in milestones %}
       {% assign milestone = site.data.journey[post.url] %}
@@ -21,7 +22,7 @@
       {% endfor %}
     </ol>
   </div>
-  <div class="chronicle-scrubber" hidden><label><span class="sr-only">Timeline position</span><input type="range" min="0" max="{{ milestones.size | minus: 1 }}" step="1" value="0" aria-label="Timeline position"></label><span class="mono" data-position>01 / {{ milestones.size | prepend: '0' | slice: -2, 2 }}</span></div>
+  <div class="chronicle-scrubber" hidden><label><span class="sr-only">Ascent position</span><input type="range" min="0" max="{{ milestones.size | minus: 1 }}" step="1" value="0" aria-label="Ascent position"></label><span class="mono" data-position>01 / {{ milestones.size | prepend: '0' | slice: -2, 2 }}</span></div>
   <p class="chronicle-footnote">Every milestone connects to its original entry.</p>
   <p class="sr-only" role="status" aria-live="polite" data-timeline-announcement></p>
 </div>

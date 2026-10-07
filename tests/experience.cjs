@@ -54,6 +54,12 @@ const results = { browser: name, checks: [], errors: [] };
       assert.ok(postCount >= 9, "Original milestones remain available");
       const lastIndex = postCount - 1;
       const viewport = page.locator(".chronicle-window");
+      const map = page.locator(".ascent-map");
+      assert.equal(await map.getAttribute("aria-hidden"), "true");
+      assert.ok(Number(await map.getAttribute("data-progress")) < 0.01);
+      const untraveledRoute = await map.locator(".ascent-route-travel").evaluate(
+        (el) => getComputedStyle(el).clipPath,
+      );
       assert.equal(
         await viewport.evaluate(
           (element) => getComputedStyle(element).scrollSnapType,
@@ -95,6 +101,19 @@ const results = { browser: name, checks: [], errors: [] };
       await jumpToLatestYear();
       await page.locator(".chronicle input").fill(String(lastIndex));
       await select(lastIndex);
+      await page.waitForFunction(
+        () => Number(document.querySelector(".ascent-map").dataset.progress) > 0.98,
+      );
+      assert.ok(
+        (await map.locator(".ascent-climber").evaluate((el) => parseFloat(el.style.left))) > 95,
+      );
+      assert.notEqual(
+        await map.locator(".ascent-route-travel").evaluate(
+          (el) => getComputedStyle(el).clipPath,
+        ),
+        untraveledRoute,
+      );
+      results.checks.push(`${route}: climber and illuminated route follow scroll to the latest entry`);
       assert.equal(
         await page.getByRole("button", { name: "Next milestone" }).isDisabled(),
         true,
@@ -139,6 +158,11 @@ const results = { browser: name, checks: [], errors: [] };
       assert.ok(
         wheelPosition.left < wheelPosition.next - 40,
         `${route}: a small horizontal wheel gesture should not jump to the next post`,
+      );
+      const routeProgress = Number(await map.getAttribute("data-progress"));
+      assert.ok(routeProgress > 0 && routeProgress < 1);
+      assert.ok(
+        (await map.locator(".ascent-climber").evaluate((el) => parseFloat(el.style.left))) > 3.4,
       );
       await page.locator(".chronicle input").fill("0");
       await select(0);
