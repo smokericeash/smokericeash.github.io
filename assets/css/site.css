@@ -262,9 +262,6 @@ main:focus {
   font-weight: 650;
   white-space: nowrap;
 }
-.brand-period {
-  color: var(--accent);
-}
 .brand-mark {
   position: relative;
   font-size: 18px;

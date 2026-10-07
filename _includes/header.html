@@ -1,10 +1,10 @@
 <a class="skip-link" href="#main">Skip to content</a>
 <header class="site-header">
   <div class="shell header-inner">
-    <a class="brand" href="{{ '/' | relative_url }}"><span class="brand-mark" aria-hidden="true">a<span>c</span><i></i></span><span>Aidan Chen<span class="brand-period">.</span></span><span class="sr-only"> — home</span></a>
+    <a class="brand" href="{{ '/' | relative_url }}"><span class="brand-mark" aria-hidden="true">a<span>c</span><i></i></span><span>Aidan Chen</span><span class="sr-only"> — home</span></a>
     <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="primary-nav" hidden>Menu <span aria-hidden="true">＋</span></button>
     <nav id="primary-nav" class="primary-nav" aria-label="Primary">
-      {% assign nav_names = 'Home,Journal,Journey,About' | split: ',' %}{% assign nav_paths = '/,/research/,/journey/,/about/' | split: ',' %}
+      {% assign nav_names = 'Home,Work,Journey,About' | split: ',' %}{% assign nav_paths = '/,/research/,/journey/,/about/' | split: ',' %}
       {% for label in nav_names %}{% assign path = nav_paths[forloop.index0] %}<a tabindex="0" href="{{ path | relative_url }}" {% if page.url == path %}aria-current="page"{% endif %}>{{ label }}</a>{% endfor %}
     </nav>
     <label class="theme-control" hidden>{% include icon.html name='sun' %}<span class="sr-only">Appearance</span><select id="theme-select" aria-label="Appearance"><option value="system">System</option><option value="light">Light</option><option value="dark">Dark</option></select></label>

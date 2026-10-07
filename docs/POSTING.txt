@@ -86,9 +86,9 @@ Run:
   bundle exec jekyll build
   bundle exec ruby tests/verify_site.rb
 
-Your post appears automatically in Journal, the timeline on Home and Journey,
+Your post appears automatically in Work, the timeline on Home and Journey,
 its category/tag archives, and the feed. If it is one of the three newest posts,
-it also appears in Home's Recent posts section. Older entries stay in Journal.
+it also appears in Home's Recent posts section. Older entries stay in Work.
 
 Commit your post and image changes to your working branch, then use a reviewed
 pull request and the repository's GitHub Actions workflow. Saving locally alone

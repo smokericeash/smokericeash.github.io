@@ -28,6 +28,8 @@
     let announceTimer;
     let pointer = null;
     let suppressClick = false;
+    let scrollAnimation = 0;
+    let destination = 0;
 
     // Measure relative to the scroller, not the page. The trailing gutter lets
     // the last entry align to the same reading position as the first.
@@ -43,6 +45,7 @@
         0,
       );
       current = nearest;
+      if (!scrollAnimation) destination = current;
       entries.forEach((entry, index) =>
         entry.toggleAttribute('data-current', index === current),
       );
@@ -65,13 +68,40 @@
         status.textContent = entries[current].dataset.milestoneLabel;
       }, 180);
     };
-    const go = (index, instant = false) => {
-      const target = Math.max(0, Math.min(entries.length - 1, index));
-      viewport.scrollTo({
-        left: offset(target),
-        behavior: instant || motion.matches ? 'instant' : 'smooth',
-      });
+    const stopScroll = () => {
+      if (scrollAnimation) cancelAnimationFrame(scrollAnimation);
+      scrollAnimation = 0;
     };
+    const go = (index, instant = false) => {
+      destination = Math.max(0, Math.min(entries.length - 1, index));
+      const target = offset(destination);
+      stopScroll();
+      if (instant || motion.matches) {
+        viewport.scrollLeft = target;
+        sync();
+        return;
+      }
+      const start = viewport.scrollLeft;
+      const distance = target - start;
+      if (Math.abs(distance) < 1) return;
+      const duration = Math.min(640, Math.max(420, Math.abs(distance) * 0.6));
+      let startTime;
+      const step = (time) => {
+        if (startTime === undefined) startTime = time;
+        const progress = Math.min(1, (time - startTime) / duration);
+        const eased = 1 - Math.pow(1 - progress, 3);
+        viewport.scrollLeft = start + distance * eased;
+        if (progress < 1) scrollAnimation = requestAnimationFrame(step);
+        else {
+          scrollAnimation = 0;
+          sync();
+        }
+      };
+      scrollAnimation = requestAnimationFrame(step);
+    };
+    motion.addEventListener('change', () => {
+      if (motion.matches && scrollAnimation) go(destination, true);
+    });
     chronicle
       .querySelectorAll(
         '.chronicle-controls, .chronicle-years, .chronicle-scrubber',
@@ -80,8 +110,8 @@
         element.hidden = false;
       });
     chronicle.dataset.enhanced = 'true';
-    previous.addEventListener('click', () => go(current - 1));
-    next.addEventListener('click', () => go(current + 1));
+    previous.addEventListener('click', () => go(destination - 1));
+    next.addEventListener('click', () => go(destination + 1));
     years.forEach((button) =>
       button.addEventListener('click', () =>
         go(
@@ -92,6 +122,8 @@
       ),
     );
     range.addEventListener('input', () => go(Number(range.value), true));
+    viewport.addEventListener('wheel', stopScroll, { passive: true });
+    viewport.addEventListener('touchstart', stopScroll, { passive: true });
     viewport.addEventListener(
       'scroll',
       () => {
@@ -117,6 +149,7 @@
     // horizontal threshold, so ordinary clicks and vertical page scrolling work.
     viewport.addEventListener('pointerdown', (event) => {
       if (event.pointerType !== 'mouse' || event.button !== 0) return;
+      stopScroll();
       suppressClick = false;
       pointer = {
         id: event.pointerId,
@@ -152,7 +185,6 @@
         viewport.releasePointerCapture(event.pointerId);
       if (moved) {
         sync();
-        go(current);
       }
     };
     viewport.addEventListener('pointerup', endDrag);
@@ -203,8 +235,8 @@
     );
   }
 
-  // Elements below the fold enter from alternating sides once. The clipped
-  // image edge gives long journal pages a measured rhythm as the user scrolls.
+  // Elements below the fold enter once. Work rows use a shorter movement than
+  // the featured Home previews so a long list stays calm while scrolling.
   if ('IntersectionObserver' in window) {
     const observer = new IntersectionObserver(
       (entries) => {
@@ -222,6 +254,7 @@
           );
           const index = Number(element.dataset.revealIndex || 0);
           const direction = index % 2 ? 1 : -1;
+          const row = element.classList.contains('post-row');
           if (media) {
             animate(
               media,
@@ -229,16 +262,19 @@
                 {
                   clipPath:
                     direction < 0
-                      ? 'inset(0 100% 0 0 round 5px)'
-                      : 'inset(0 0 0 100% round 5px)',
-                  transform: `translateX(${direction * 20}px)`,
+                      ? `inset(0 ${row ? 20 : 100}% 0 0 round 5px)`
+                      : `inset(0 0 0 ${row ? 20 : 100}% round 5px)`,
+                  transform: `translateX(${direction * (row ? 8 : 20)}px)`,
                 },
                 {
                   clipPath: 'inset(0 0 0 0 round 5px)',
                   transform: 'translateX(0)',
                 },
               ],
-              { duration: 820, easing: 'cubic-bezier(.22,.68,.15,1)' },
+              {
+                duration: row ? 580 : 820,
+                easing: 'cubic-bezier(.22,.68,.15,1)',
+              },
             );
           }
           animate(
@@ -246,14 +282,14 @@
             [
               {
                 transform: media
-                  ? `translateX(${direction * -24}px)`
+                  ? `translateX(${direction * (row ? -12 : -24)}px)`
                   : 'translateX(-24px)',
               },
               { transform: 'translateX(0)' },
             ],
             {
-              duration: 760,
-              delay: media ? 90 : 0,
+              duration: row ? 560 : 760,
+              delay: media ? (row ? 35 : 90) : 0,
               easing: 'cubic-bezier(.22,.68,.15,1)',
               fill: 'backwards',
             },

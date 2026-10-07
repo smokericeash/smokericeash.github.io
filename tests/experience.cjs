@@ -53,8 +53,43 @@ const results = { browser: name, checks: [], errors: [] };
       postCount = await page.locator(".chronicle-entry").count();
       assert.ok(postCount >= 9, "Original milestones remain available");
       const lastIndex = postCount - 1;
+      const viewport = page.locator(".chronicle-window");
+      assert.equal(
+        await viewport.evaluate(
+          (element) => getComputedStyle(element).scrollSnapType,
+        ),
+        "none",
+      );
+      await viewport.evaluate((element) => {
+        window.timelineScrollTrace = [];
+        element.addEventListener(
+          "scroll",
+          () => window.timelineScrollTrace.push(element.scrollLeft),
+          { passive: true },
+        );
+      });
       await page.getByRole("button", { name: "Next milestone" }).click();
       await select(1);
+      await page.waitForFunction(() => {
+        const frame = document.querySelector(".chronicle-window");
+        const entries = frame.querySelectorAll(".chronicle-entry");
+        return (
+          Math.abs(
+            frame.scrollLeft - (entries[1].offsetLeft - entries[0].offsetLeft),
+          ) < 2
+        );
+      });
+      const glide = await page.evaluate(() => {
+        const entries = document.querySelectorAll(".chronicle-entry");
+        const target = entries[1].offsetLeft - entries[0].offsetLeft;
+        return window.timelineScrollTrace.some(
+          (position) => position > target * 0.2 && position < target * 0.8,
+        );
+      });
+      assert.ok(
+        glide,
+        `${route}: next control must glide through intermediate positions`,
+      );
       await page.getByRole("button", { name: "Previous milestone" }).click();
       await select(0);
       await jumpToLatestYear();
@@ -71,7 +106,6 @@ const results = { browser: name, checks: [], errors: [] };
           .last()
           .getAttribute("data-milestone-label"),
       );
-      const viewport = page.locator(".chronicle-window");
       await viewport.focus();
       await page.keyboard.press("Home");
       await select(0);
@@ -85,6 +119,32 @@ const results = { browser: name, checks: [], errors: [] };
 
       await page.locator(".chronicle input").fill("0");
       await select(0);
+      const wheelBounds = await viewport.boundingBox();
+      await page.mouse.move(
+        wheelBounds.x + Math.min(220, wheelBounds.width - 20),
+        wheelBounds.y + 100,
+      );
+      await page.mouse.wheel(130, 0);
+      await page.waitForFunction(
+        () => document.querySelector(".chronicle-window").scrollLeft > 20,
+      );
+      await page.waitForTimeout(250);
+      const wheelPosition = await viewport.evaluate((element) => {
+        const entries = element.querySelectorAll(".chronicle-entry");
+        return {
+          left: element.scrollLeft,
+          next: entries[1].offsetLeft - entries[0].offsetLeft,
+        };
+      });
+      assert.ok(
+        wheelPosition.left < wheelPosition.next - 40,
+        `${route}: a small horizontal wheel gesture should not jump to the next post`,
+      );
+      await page.locator(".chronicle input").fill("0");
+      await select(0);
+      results.checks.push(
+        `${route}: wheel scrolling remains continuous between milestones`,
+      );
       const bounds = await viewport.boundingBox();
       await page.mouse.move(
         bounds.x + Math.min(320, bounds.width - 25),

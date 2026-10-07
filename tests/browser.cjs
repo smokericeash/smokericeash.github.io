@@ -247,7 +247,7 @@ const report = {
     const staticPage = await noJS.newPage();
     await staticPage.goto(base);
     assert.equal(await staticPage.locator("#primary-nav").isVisible(), true);
-    assert.equal(await staticPage.locator("h1").textContent(), "Aidan Chen.");
+    assert.equal(await staticPage.locator("h1").textContent(), "Aidan Chen");
     await staticPage.goto(base + "/posts/MISSA-ITC-Competition/");
     assert.ok((await staticPage.locator(".toc a").count()) > 3);
     await noJS.close();

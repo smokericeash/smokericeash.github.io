@@ -1,6 +1,6 @@
-# Aidan Chen — portfolio and journal
+# Aidan Chen — portfolio and work
 
-A custom Jekyll portfolio: a factual introduction, illustrated journal entries, and an interactive timeline in a navy/indigo visual system with light and dark appearances. No premade theme, client framework, web-font dependency, analytics, or third-party runtime script.
+A custom Jekyll portfolio: a factual introduction, illustrated work entries, and an interactive timeline in a navy/indigo visual system with light and dark appearances. No premade theme, client framework, web-font dependency, analytics, or third-party runtime script.
 
 ## Local preview
 
@@ -22,7 +22,7 @@ Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='producti
 
 ## Add a post
 
-All posts live in `_posts/` as Markdown files. Copy [`docs/post-template.md`](docs/post-template.md) to `_posts/YYYY/YYYY-MM-DD-short-title.md`, edit the header and write below it. Home, Journal, Journey, archives and feeds update automatically at build time. No layout edits or manual timeline entries are needed.
+All posts live in `_posts/` as Markdown files. Copy [`docs/post-template.md`](docs/post-template.md) to `_posts/YYYY/YYYY-MM-DD-short-title.md`, edit the header and write below it. Home, Work, Journey, archives and feeds update automatically at build time. No layout edits or manual timeline entries are needed.
 
 See [`docs/POSTING.txt`](docs/POSTING.txt) for images, drafts, live preview and publication. New images go in `assets/img/`; run `python tools/optimize_images.py` to generate their responsive versions before building.
 
@@ -33,8 +33,8 @@ See [`docs/POSTING.txt`](docs/POSTING.txt) for images, drafts, live preview and 
 - `_data/profile.yml`: introduction, professional links, credentials and optional résumé URL. An empty résumé URL produces a clearly labeled email request.
 - `_data/work.yml`: sourced case-study summaries. The existing Work routes remain valid, but Work is no longer a primary navigation destination or homepage section.
 - `_data/journey.yml`: optional short titles and summaries keyed by original post URL. Timeline dates and order come from the posts themselves; new posts appear automatically with their title/description as a fallback.
-- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. Home contains a concise introduction, the three latest posts and a full-width timeline. Navigation is Home / Journal / Journey / About.
-- `_includes/post-preview.html`: homepage post highlights. `_includes/post-row.html`: illustrated Journal, taxonomy and related-entry rows. Both use each post's original image through responsive derivatives and optional summaries from `_data/journey.yml`.
+- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. Home contains a concise introduction, the three latest posts and a full-width timeline. Navigation is Home / Work / Journey / About.
+- `_includes/post-preview.html`: homepage post highlights. `_includes/post-row.html`: illustrated Work, taxonomy and related-entry rows. Both use each post's original image through responsive derivatives and optional summaries from `_data/journey.yml`.
 - `_includes/chronicle.html`: the timeline shared by Home and Journey.
 - `assets/css/experience.css` and `assets/js/experience.js`: timeline controls and restrained interaction details, separate from the base design.
 - `_plugins/portfolio.rb`: static taxonomy and work pages, descriptions, article TOC, image metadata, semantic article rendering.
@@ -63,7 +63,7 @@ npm run test:performance
 
 The browser and performance tests expect the built site at port 4173. On Windows with installed Chrome, set `$env:CHROME_CHANNEL='chrome'`. To test Firefox or WebKit, install their Playwright binaries and set `TEST_BROWSER=firefox` or `webkit`. `PLAYWRIGHT_BROWSERS_PATH` can point to a workspace-local `.browser-cache` directory.
 
-The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs the general browser, interaction and editorial/motion suites. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises timeline dragging, year/range/keyboard controls, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. `npm run test:editorial` verifies image-to-article correspondence, four navigation destinations, real page/scroll animations, back/forward history and reduced motion. Lighthouse checks home, journal, article and journey on mobile and desktop. Results are generated in ignored `test-results/`.
+The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs the general browser, interaction and editorial/motion suites. Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises free timeline scrolling, animated control jumps, year/range/keyboard controls, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. `npm run test:editorial` verifies image-to-article correspondence, four navigation destinations, real page/scroll animations, back/forward history and reduced motion. Lighthouse checks Home, Work, an article and Journey on mobile and desktop. Results are generated in ignored `test-results/`.
 
 ## Safe deployment
 

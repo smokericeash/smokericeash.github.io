@@ -63,10 +63,15 @@ const result = { browser: name, checks: [], errors: [] };
     await page.goto(base);
     assert.deepEqual(await page.locator("#primary-nav a").allTextContents(), [
       "Home",
-      "Journal",
+      "Work",
       "Journey",
       "About",
     ]);
+    assert.equal(await page.locator("#hero-title").textContent(), "Aidan Chen");
+    assert.equal(
+      await page.locator(".brand > span:nth-child(2)").textContent(),
+      "Aidan Chen",
+    );
     assert.equal(await page.locator(".post-preview").count(), 3);
     const postCount = await page.locator(".chronicle-entry").count();
     assert.ok(postCount >= 9, "Original milestones remain available");
@@ -158,7 +163,7 @@ const result = { browser: name, checks: [], errors: [] };
     );
 
     for (const [label, path] of [
-      ["Journal", "/research/"],
+      ["Work", "/research/"],
       ["Journey", "/journey/"],
       ["About", "/about/"],
       ["Home", "/"],
@@ -177,6 +182,8 @@ const result = { browser: name, checks: [], errors: [] };
         label,
       );
       assert.equal(await page.locator("h1").count(), 1);
+      if (label === "Work")
+        assert.equal(await page.locator("h1").textContent(), "Work.");
       const evidence = await page.evaluate(() => motionEvidence);
       if (evidence.native) assert.equal(evidence.sequenced, true);
       result.checks.push(
@@ -231,7 +238,7 @@ const result = { browser: name, checks: [], errors: [] };
       assert.equal(entry.imageHref, entry.href);
     }
     result.checks.push(
-      "All Journal previews decode and match their original article cover image and destination",
+      "All Work previews decode and match their original article cover image and destination",
     );
 
     const target = page.locator(".post-row:has(.post-thumbnail)").nth(4);
