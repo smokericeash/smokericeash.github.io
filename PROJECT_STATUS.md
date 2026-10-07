@@ -1,10 +1,10 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 5, 2026 (America/Los_Angeles).
+Updated: October 7, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The redesign, self-service Markdown authoring workflow, contact refinements and final motion pass are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. All three browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The redesign, self-service Markdown authoring workflow, contact refinements and latest timeline/navigation refinements are implemented and locally verified.** No implementation task is currently in progress and no local check is failing. All three full browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,14 +13,24 @@ Updated: October 5, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
+## Completed October 7 refinement
+
+- Home and Journey timelines now scroll freely by mouse drag, touch and horizontal wheel/trackpad input. Removed mandatory card snapping and the forced snap on mouse release.
+- Arrow, year and keyboard destinations ease through intermediate positions in 420–640ms. The range slider stays directly responsive, and reduced-motion navigation remains instant. Animation stops when a viewer begins direct scrolling or dragging.
+- Renamed the primary Journal tab and its page heading to **Work**. The original `/research/` URL remains stable; the older `/work/` case-study URL remains valid but is not the primary tab.
+- Removed the trailing period when “Aidan Chen” stands alone in the header and Home hero. Footer copyright and article bylines remain unchanged.
+- Reduced the Work list’s post entrance to a small side movement and partial image mask. Home previews retain their earlier treatment.
+- Added a browser check that records intermediate arrow positions and confirms a small wheel gesture stays between entries on both timeline pages. Updated name/navigation assertions and posting documentation.
+- Production build, source/route checks and the full Chrome, Firefox and WebKit suites pass. The local preview serves Home and Work with HTTP 200.
+
 ## Completed final refinement session
 
 - The visible contact address and every Email social link now keep a direct `mailto:aidanchenn1@gmail.com` fallback and, when JavaScript is available, open a compact chooser for the default email app, Gmail or copying the address.
 - “Request résumé” opens the same chooser with a prefilled subject/body. The dialog explains that the résumé is shared directly by email; no private document was added to the public site.
 - Removed the large duplicate footer name and its unused CSS. The footer retains only `© 2026 Aidan Chen` plus social and archive links.
-- Replaced the Archive's fixed post count with “Every entry, in order. Moments of learning documented so far.” The Home journal link also says “All entries,” so neither label needs manual count maintenance.
+- Replaced the Archive's fixed post count with “Every entry, in order. Moments of learning documented so far.” The Home link to Work also says “All entries,” so neither label needs manual count maintenance.
 - After visual feedback that the curved transition looked glitchy, replaced it with a sequenced fade. The old page clears in 140ms; the new page stays hidden through 26% of a 560ms animation, then eases in. Chrome/WebKit use native document transitions, while Firefox receives the calmer entrance fallback. The two readable pages no longer overlap.
-- Direct homepage visits introduce the two factual profile columns from opposite sides. Below-fold journal items alternate side/image-mask entrances once as they scroll into view. Content remains visible without JavaScript, and reduced-motion removes all of these effects.
+- Direct homepage visits introduce the two factual profile columns from opposite sides. Below-fold post items enter once as they scroll into view; Work list rows now use a smaller side movement and mask. Content remains visible without JavaScript, and reduced-motion removes these effects.
 - Added regression coverage for both email entry points, the prefilled résumé request, focus restoration, single footer identity, count-free copy and the new transition names.
 - Reviewed the Home, contact, résumé and footer states in the local browser. The final preview has no console warnings or errors.
 - Commit: `ed61f6b` — `feat: refine contact flows and page motion`.
@@ -38,11 +48,11 @@ Updated: October 5, 2026 (America/Los_Angeles).
 
 ## Completed editorial session
 
-- Removed Work from primary navigation. The four destinations are Home, Journal (`/research/`), Journey and About. Existing Work/case-study URLs remain valid for compatibility.
+- Primary navigation is Home, Work (`/research/`), Journey and About. The older Work/case-study URLs remain valid for compatibility.
 - Replaced the sprawling homepage with a factual introduction, the three latest original posts and a full-width timeline displaying all nine original entries.
 - Removed the field-notes hero, motivational headings, focus band, selected-work section and repeated capability/credential sections. Kept the established palette, typography, header and light/dark system.
-- Added each post's actual original image as a responsive preview on Home and Journal; shared post rows also improve taxonomy and related-entry views. Images use existing WebP derivatives and keep the full image visible.
-- Replaced the contact slogan with “Have a question, a project, or a perspective to share? I'd like to hear it.” Simplified Journey, Journal, About and footer copy.
+- Added each post's actual original image as a responsive preview on Home and Work; shared post rows also improve taxonomy and related-entry views. Images use existing WebP derivatives and keep the full image visible.
+- Replaced the contact slogan with “Have a question, a project, or a perspective to share? I'd like to hear it.” Simplified Journey, Work, About and footer copy.
 - Added one-time image-mask reveals with staggered text movement and a short line draw as sections enter the viewport. Homepage images move a few pixels with native scroll timelines where supported.
 - Added native document transitions between pages, with a stable header and brief content movement. Firefox receives a short incoming-page fallback. Links, history and scrolling remain native.
 - Preserved reduced-motion behavior, no-JS readability, touch/keyboard/drag timeline controls and article reading progress. No persistent hidden reveal classes or text-opacity scroll animations.
@@ -65,10 +75,10 @@ Updated: October 5, 2026 (America/Los_Angeles).
 - Chrome 153, Playwright Firefox 155 and WebKit 26.6: **282 route checks, 396 responsive checks, 78 axe scans**, zero reported violations or browser/network errors.
 - Six responsive widths: 360, 430, 768, 1920, 2560, 3440 CSS pixels; dark/light coverage.
 - Existing navigation, search, storage, theme, code-copy, no-JS and reduced-motion tests pass.
-- Timeline suite: 11 groups in Chrome, 10 each in Firefox/WebKit. Includes drag, year/step/range/keyboard controls, accessible values, endpoint visibility, no-JS, delayed image response, reading progress and Chrome native touch swipes.
+- Timeline suite: 13 groups in Chrome, 12 each in Firefox/WebKit. Includes free wheel/drag scrolling, measured arrow movement, year/step/range/keyboard controls, accessible values, endpoint visibility, no-JS, delayed image response, reading progress and Chrome native touch swipes.
 - Editorial/motion suite: 11 groups in each engine. Confirms all nine preview images match article covers, four navigation destinations, full-width timeline, contact/résumé behavior, footer/archive wording, actual scroll animation start/completion/non-repetition, sequenced native fades (Chrome/WebKit), fallback entrances (Firefox), history navigation and reduced-motion suppression. The test reads the live animation durations/keyframes and asserts the old page clears before the incoming fade begins.
-- Lighthouse: **99–100 performance; 100 accessibility, best practices and SEO** on Home, Journal, ITC article and Journey, mobile/desktop (eight runs). Mobile home performance is 99; the other seven are 100. CLS 0 throughout, mobile LCP 1.7s, TBT 0–90ms. These are local lab measurements, not live performance claims.
-- Desktop dark and mobile light Home/Journal reviewed visually; screenshots load original preview images before capture. Earlier article/About/social-image review remains relevant.
+- Lighthouse on October 5: **99–100 performance; 100 accessibility, best practices and SEO** on Home, the then-Journal `/research/` page, ITC article and Journey, mobile/desktop (eight runs). Mobile home performance was 99; the other seven were 100. CLS 0 throughout, mobile LCP 1.7s, TBT 0–90ms. These are prior local lab measurements, not a new run or live performance claims.
+- Earlier desktop dark and mobile light Home/post-list visual review remains relevant. The October 7 changes were verified through live routes and browser interaction tests; in-app visual inspection was unavailable because its helper failed.
 - JavaScript syntax and Git whitespace checks pass.
 
 Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-results.json`, `docs/editorial-results.json`, `docs/lighthouse-results.json`. Full reports and screenshots are in ignored `test-results/`.
@@ -76,10 +86,10 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 ## Important decisions
 
 - This is a personal, informative portfolio. Use actual posts and outcomes; avoid motivational slogans, sales language, invented research, jobs, credentials or metrics.
-- Home is intentionally concise. Do not restore the old orbital graphic, field-notes panel, Work navigation, focus slogans, capability sections or duplicate content bands.
+- Home is intentionally concise. Do not restore the old orbital graphic, field-notes panel, focus slogans, capability sections or duplicate content bands.
 - `_includes/post-preview.html` is the homepage preview; `_includes/post-row.html` is the shared illustrated list; `_includes/chronicle.html` is the shared timeline.
 - `_data/journey.yml` supplies optional short titles and summaries keyed by post URL. Timeline dates/order come from original post publication metadata. Milestones are evenly spaced for reading, not proportional to elapsed time. New posts appear automatically.
-- Motion and new presentation rules live in `assets/css/experience.css` and `assets/js/experience.js`. The sequenced page fade and alternating side entrances are progressive enhancement; no framework/router, scroll interception, forced loading delays or looping animations.
+- Motion and new presentation rules live in `assets/css/experience.css` and `assets/js/experience.js`. The sequenced page fade and restrained side entrances are progressive enhancement; no framework/router, forced loading delays or looping animations. The timeline uses native direct scrolling and a small requestAnimationFrame animation only for deliberate control jumps.
 - Contact enhancement lives in `_includes/email-dialog.html` and `assets/js/contact.js`. Mailto links remain the no-JavaScript fallback. Resume delivery stays private until an actual public document is intentionally configured.
 - Full content is visible by default. Motion preferences cancel JS animations and disable CSS/native transitions. Initial above-fold content is not hidden for a reveal.
 - Preserve source content and public URLs even where a destination is no longer promoted in navigation.
@@ -107,10 +117,11 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `0d1d833` — self-service post authoring guide, template and growing-journal tests.
 - `ed61f6b` — email/résumé chooser, footer/archive cleanup, curved page transitions, alternating scroll entrances and refreshed validation evidence.
 - `42a0785` — replaces the overlapping curved transition with a verified sequenced fade.
+- `4422f71` — free timeline scrolling, animated control jumps, Work navigation, period-free standalone name and calmer post reveals.
 
 ## Exact recommended next task
 
-**Review the calmer page fade among Home, Journal, Journey and About at `http://127.0.0.1:4173/`. The old and new page contents are now explicitly sequenced and do not remain readable together. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
+**Review the free-scrolling timeline on Home and Journey, the Work tab and its softer post entrances, and the period-free standalone name at `http://127.0.0.1:4173/`. The requested refinements are implemented and verified; do not rebuild them. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
 
 ## Reproducible local commands
 
