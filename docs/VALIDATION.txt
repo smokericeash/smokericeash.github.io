@@ -6,7 +6,37 @@ RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
 pushed, merged or deployed. The original source checkout is unchanged.
 
-OCTOBER 11 VERTICAL EXPEDITION
+OCTOBER 11 ASCENT VISUAL AND INTERACTION REFINEMENT
+- About credentials render on separate lines with a measured gap.
+- Home retains its previously approved horizontal preview and compact climber.
+- Desktop post panels use native CSS scroll snapping; a wheel event was tested
+  settling a panel at the snap position. Mobile uses proximity snapping so
+  tall article previews remain scrollable. The mountain camera remains smooth.
+- The dedicated climber uses joint-calculated hands/boots rather than CSS
+  rotations. Browser checks compare reaching, pulling, stepping and pushing
+  at two intermediate route positions; reduced motion keeps a static pose.
+- Original Everest-inspired art is stored in assets/img with responsive WebP
+  versions in assets/media. The 640px mobile version is 91 KB. The
+  illustrated mountain is not a topographic claim; source/prompt are in
+  docs/ASCENT_ART.md. Pacific day/night sun or moon changes locally, with no
+  external call. Desktop dark, night, mobile light and About screenshots
+  were inspected.
+- Production build: 47 pages, nine original post routes, 26 preserved source
+  files, 1,684 validated local references and anchors.
+- Complete Chrome/Firefox/WebKit suites pass: 94 route checks, 132 responsive
+  pages, 22 broad axe scans, six general interactions, 10 dedicated expedition
+  groups, 11 editorial groups and 10 Chrome / 9 Firefox / 9 WebKit Home
+  experience groups. No reported browser errors or axe violations.
+- The temporary content fixture still passes additions, removal, same-date
+  posts, date/title edits, exclusion and a 20-entry growth case. All fixture
+  files were removed and the normal build was restored.
+- Final local Lighthouse: Home 98, Work 99, article 99, Ascent 95 mobile
+  performance; all four 100 desktop. Accessibility, best practices and SEO
+  score 100 throughout. Ascent mobile LCP 2.9 s, CLS 0, TBT 0. These are lab
+  measurements, not live field performance.
+- Updated evidence: docs/{browser,experience,editorial,expedition,lighthouse}-results.json.
+
+EARLIER OCTOBER 11 VERTICAL EXPEDITION BASELINE
 - Home remains the compact horizontal nine-post preview, with BASE CAMP and
   SUMMIT AWAITS labels from post dates and an equipped SVG climber.
 - /journey/ uses native vertical scroll, a sticky modular SVG mountain,
@@ -19,14 +49,14 @@ OCTOBER 11 VERTICAL EXPEDITION
   reordering, exclusion, removal and 20 extra entries. Fixtures were deleted
   and the normal production build restored.
 - Production build: 47 HTML pages, nine original post routes, 26 source files
-  unchanged, 1,683 local references and anchors valid.
+  unchanged, 1,683 local references and anchors valid at that stage.
 - Chrome, Firefox and WebKit: 94 route checks, 132 responsive page checks,
   22 broad axe scans, six general interaction groups, 11 editorial groups,
   8 new expedition groups, and 10 Chrome / 9 Firefox / 9 WebKit Home
   experience groups. Zero reported browser errors or axe violations.
 - Desktop dark and mobile light screenshots visually inspected. No horizontal
   overflow at 360, 430, 768, 1440 or 1920 CSS pixels.
-- Current Lighthouse local lab results: Home, Work, article and Ascent each
+- Earlier Lighthouse local lab results: Home, Work, article and Ascent each
   score 99 mobile / 100 desktop performance, with 100 accessibility, best
   practices and SEO. The Ascent mobile LCP is 2.0 s; CLS and TBT are 0.
   These are local lab values, not live field measurements.
@@ -47,7 +77,7 @@ BUILD AND PRESERVATION
   four tabs (including the original biography), and twelve original images.
 - Exact raw hashes match on this Windows checkout. CI also accepts only Git's
   CRLF-to-LF conversion in text files; image bytes are always checked exactly.
-- 1,683 internal links, anchors, assets and srcset references resolve.
+- 1,684 internal links, anchors, assets and srcset references resolve.
 - Every page has one h1, title, description, canonical, and Open Graph image.
 - Atom feed and sitemap parse correctly; no localhost URLs in production XML.
 - A /preview baseurl build passes the same link/metadata checks.

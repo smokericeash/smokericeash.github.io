@@ -3,7 +3,7 @@
     "page": "home",
     "device": "mobile",
     "scores": {
-      "performance": 99,
+      "performance": 98,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
@@ -11,7 +11,7 @@
     "metrics": {
       "LCP": "1.9\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0\u00c2\u00a0ms"
+      "TBT": "120\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -41,9 +41,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.8\u00c2\u00a0s",
+      "LCP": "1.9\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0\u00c2\u00a0ms"
+      "TBT": "100\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -99,13 +99,13 @@
     "page": "journey",
     "device": "mobile",
     "scores": {
-      "performance": 99,
+      "performance": 95,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "2.0\u00c2\u00a0s",
+      "LCP": "2.9\u00c2\u00a0s",
       "CLS": "0",
       "TBT": "0\u00c2\u00a0ms"
     },
@@ -121,7 +121,7 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.4\u00c2\u00a0s",
+      "LCP": "0.8\u00c2\u00a0s",
       "CLS": "0",
       "TBT": "0\u00c2\u00a0ms"
     },

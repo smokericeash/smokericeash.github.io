@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The new vertical Ascent expedition and requested credential changes are implemented and locally verified on `codex/portfolio-v2`.** The self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The full current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The refined vertical Ascent and About credential spacing are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,21 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 vertical expedition and credential update — latest handoff
+## October 11 Ascent motion and visual refinement — latest handoff
+
+- Separated the About sidebar's Network+ and CRTO credential links into distinct rows with a measured gap. Both existing destinations remain intact.
+- Preserved the approved Home Ascent preview by moving its original small SVG mountaineer into `_includes/mountaineer-home.html`. The larger, dedicated `/journey/` climber was rebuilt independently with a hooded puffer jacket, helmet, pack, harness, rope, ice axe, gloves and crampon boots.
+- Added an original Everest-inspired, illustrated mountain scene behind the scroll-driven route. Responsive WebP sources reduce the scene from 279 KB on desktop to 91 KB on small screens. The layered ice, snow, rock, atmospheric distance and contact shadow improve depth while retaining legible post panels. The image is an illustration, not a geographic/topographic claim; its exact built-in imagegen prompt and asset provenance are in `docs/ASCENT_ART.md`.
+- Desktop post sections now settle at CSS scroll-snap points instead of leaving posts between reading positions. The mountain/camera/route continue moving smoothly between checkpoints. Mobile uses proximity snapping to keep tall posts readable; reduced-motion turns snapping and moving limbs off.
+- Replaced lateral limb rotations with scroll-progress-driven joint positions: one hand reaches while the other pulls, and the boots alternate stepping and pushing. The pose reverses when scrolling upward and rests at checkpoints. The ending copy, **The route goes on**, remains intact.
+- The scene chooses a restrained sun or moon using `America/Los_Angeles` local time (day is 06:00–18:59), refreshing every ten minutes. No weather API or location permission is used. Day/night treatments were visually inspected; the main site's chosen light/dark theme remains independent.
+- Production Jekyll build, source and article integrity checks pass: 26 inventoried originals unchanged, nine preserved post routes, 47 HTML pages and 1,684 valid local references. The Markdown growth fixture still passes after adding, editing, excluding and removing posts, including 20 extra entries; all fixtures were removed.
+- Complete Chrome, Firefox and WebKit suites pass. Per engine: 94 route checks, 132 responsive pages, 22 broad axe scans, six general interaction groups, 11 editorial groups and 10 Ascent groups; Home experience groups: 10 Chrome, nine Firefox, nine WebKit. New checks measure credential spacing, actual wheel-snap placement, day/night state, moving arm and boot geometry, responsive art, reduced motion and no-JavaScript access. Reviewed About, Home, desktop daytime/nighttime and mobile screenshots.
+- Fresh local Lighthouse results across eight mobile/desktop pages: Home 98/100, Work 99/100, article 99/100, Ascent 95/100 performance (mobile/desktop); accessibility, best practices and SEO 100 throughout. Ascent mobile LCP is 2.9 s, CLS and TBT 0. The image initially reduced mobile performance to 87; responsive artwork restored it to 95. These are local lab results, not field performance guarantees. Evidence is in `docs/VALIDATION.txt` and `docs/*-results.json`.
+- Current work in progress: none after this handoff is committed. Known limits: no actual iOS/Safari hardware or manual screen-reader review; remote Linux CI and actual custom-domain settings remain unverified. The supplied CRTO certificate URL is linked but its individual record was not independently authenticated by local tests.
+- Exact next task: review the refined `/journey/` page in the local preview, including wheel and reverse scrolling, the final panel, and a real mobile device if available; review the separate credential links on About. If Aidan approves the design for publication, push only `codex/portfolio-v2` and open a review PR for Linux CI, then verify actual custom-domain settings before any production merge. Do not push or merge directly into `main`.
+
+## Earlier October 11 vertical expedition and credential update
 
 - Removed the single CompTIA Network+ credential callout from Home. About now lists both the existing Network+ link and CRTO · Zero Point Security with Aidan's supplied certificate URL. The Network+ post remains in the chronological record.
 - Home keeps its compact horizontal timeline and original post cards. Its end labels now say **BASE CAMP** and **SUMMIT AWAITS**, with years derived from the first and last eligible posts. Added restrained snow/rock detail and replaced the stick figure with an original equipped SVG mountaineer.
@@ -107,7 +121,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - GitHub Actions build/check/review artifacts, with deploy permissions restricted to main/master only after validation. Ruby 3.4 / Jekyll 4.4.1; locked Windows/Linux dependencies.
 - Delayed article cover sizing fixed in the previous iteration, with regression coverage retained.
 
-## Tests performed on this implementation
+## Earlier baseline tests performed on this implementation
 
 - Current production and `/preview` baseurl builds pass: **47 HTML pages, nine original post routes, 26 preserved-file hashes, 1,645 internal references**, metadata and XML checks.
 - Nine article-rendering/taxonomy fixture checks pass.
@@ -142,7 +156,7 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- No requested implementation work remains. Visual review and publication checks are the next step.
+- No currently requested implementation work remains. Final visual review and publication checks are the next step.
 - Currently in progress: none.
 
 ## Logical commits
@@ -158,10 +172,12 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `42a0785` — replaces the overlapping curved transition with a verified sequenced fade.
 - `4422f71` — free timeline scrolling, animated control jumps, Work navigation, period-free standalone name and calmer post reveals.
 - `66ef075` — vertical Ascent expedition, shared post eligibility, geared climber, CRTO/About refinement and dedicated browser/content fixtures.
+- `4ef52b6` — responsive Everest-inspired scene, rebuilt climber rig, desktop post snapping, Pacific day/night state, About credential spacing and regression checks.
+- This handoff and refreshed validation evidence are recorded in the following documentation commit.
 
 ## Exact recommended next task
 
-**Review Home and the new vertical `/journey/` expedition at `http://127.0.0.1:4173/` in dark and light modes, including a complete downward/upward climb and a real mobile device if available. Fix any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
+**Review the refined `/journey/` expedition at `http://127.0.0.1:4173/journey/`: wheel through the snapped post panels in both directions, inspect the hand/boot movement and Pacific day/night scene, and verify a real mobile device if available. Check the separated credentials on `/about/`. Fix any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
 
 ## Reproducible local commands
 
