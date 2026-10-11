@@ -16,7 +16,7 @@ try {
     ["journal", "/research/"],
     ["article", "/posts/MISSA-ITC-Competition/"],
     ["journey", "/journey/"],
-  ]) {
+  ].filter(([name]) => !process.env.PERFORMANCE_PAGE || process.env.PERFORMANCE_PAGE === name)) {
     for (const desktop of [false, true]) {
       const device = desktop ? "desktop" : "mobile";
       const result = await lighthouse(`http://127.0.0.1:4173${route}`, {

@@ -1,11 +1,18 @@
 {% assign milestones = site.posts | where_exp: 'post', 'post.ascent != false' | reverse %}
 <section class="expedition" data-expedition aria-label="The Ascent expedition">
   <div class="expedition-visual" aria-hidden="true">
+    <picture class="expedition-picture">
+      <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-everest-illustration-640.webp' | relative_url }}" type="image/webp">
+      <source media="(max-width: 1000px)" srcset="{{ '/assets/media/ascent-everest-illustration-800.webp' | relative_url }}" type="image/webp">
+      <img class="expedition-backdrop" src="{{ '/assets/media/ascent-everest-illustration.webp' | relative_url }}" alt="" width="1086" height="1448" decoding="async" loading="eager" fetchpriority="high">
+    </picture>
+    <span class="expedition-celestial"></span>
     <svg class="expedition-art" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" focusable="false">
       <defs>
         <linearGradient id="expedition-sky" x2="0" y2="1"><stop offset="0" stop-color="#7794a4"/><stop offset=".48" stop-color="#315268"/><stop offset="1" stop-color="#102633"/></linearGradient>
         <linearGradient id="expedition-rock" x2="1" y2="1"><stop offset="0" stop-color="#839ca5"/><stop offset=".35" stop-color="#496b7c"/><stop offset="1" stop-color="#173548"/></linearGradient>
         <linearGradient id="expedition-ice" x2="0" y2="1"><stop offset="0" stop-color="#ecf8fa"/><stop offset="1" stop-color="#8db9c9"/></linearGradient>
+        <filter id="expedition-contact-blur"><feGaussianBlur stdDeviation="3"/></filter>
       </defs>
       <rect class="expedition-sky" width="600" height="800" />
       <g data-expedition-world>
@@ -13,6 +20,7 @@
         <g data-expedition-terrain></g>
         <path class="expedition-route" data-expedition-route />
         <path class="expedition-route-done" data-expedition-route-done />
+        <ellipse class="expedition-contact-shadow" data-expedition-contact rx="17" ry="5" filter="url(#expedition-contact-blur)" />
         <g class="expedition-climber" data-expedition-climber>{% include mountaineer.html %}</g>
       </g>
     </svg>

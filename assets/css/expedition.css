@@ -1,5 +1,10 @@
 .expedition-page { padding-bottom: clamp(28px, 5vw, 64px); }
 .expedition-page .page-heading { max-width: 900px; padding-bottom: 0; }
+@media (min-width: 681px) and (min-height: 700px) {
+  html:has(.expedition) { scroll-behavior: auto; scroll-snap-type: y mandatory; scroll-padding-top: 84px; }
+  .expedition-page, .expedition-prologue, .expedition-checkpoint, .expedition-continuation,
+  html:has(.expedition) .site-footer { scroll-snap-align: center; scroll-snap-stop: always; }
+}
 .expedition {
   --expedition-sky: #142b3a;
   position: relative;
@@ -16,28 +21,52 @@
   align-self: start;
   overflow: hidden;
   isolation: isolate;
-  background: radial-gradient(ellipse at 30% 20%, #4f7586 0, #1f4053 41%, #102531 100%);
+  background: #122d3b;
   border-right: 1px solid var(--line);
 }
-.expedition-art { display: block; width: 100%; height: 100%; }
-.expedition-distance { fill: #9cb9c5; opacity: .38; }
-.expedition-distance-shadow { fill: #29495c; opacity: .72; }
-.expedition-rock { fill: url(#expedition-rock); stroke: #90aeb9; stroke-opacity: .35; stroke-width: 2; }
-.expedition-rock-shadow { fill: #123043; opacity: .72; }
-.expedition-snow { fill: url(#expedition-ice); opacity: .49; }
-.expedition-ice { fill: none; stroke: #c5eaf0; stroke-width: 2; opacity: .55; }
-.expedition-ledge { fill: none; stroke: #d4eced; stroke-width: 2; opacity: .47; }
-.expedition-snowfall { fill: #edf8f9; opacity: .55; }
+.expedition-picture {
+  position: absolute; inset: 0; display: block; width: 100%; height: 140%;
+  transform: translate3d(0, -28.57%, 0); will-change: transform;
+}
+.expedition-backdrop { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; filter: saturate(.86) contrast(1.03); }
+.expedition-visual[data-pacific-sky='night'] .expedition-backdrop {
+  filter: brightness(.39) saturate(.7) contrast(1.12) hue-rotate(9deg);
+}
+.expedition-visual[data-pacific-sky='night']::before {
+  content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
+  background: linear-gradient(180deg, #0a1c345e, #091b2999);
+}
+.expedition-celestial {
+  position: absolute; z-index: 2; top: 15%; right: 14%; width: 29px; height: 29px;
+  border-radius: 50%; pointer-events: none;
+  background: #fff5db; box-shadow: 0 0 25px 9px #fff7dc88, 0 0 75px 32px #eaf5e944;
+}
+.expedition-visual[data-pacific-sky='night'] .expedition-celestial {
+  background: #dceaf1; box-shadow: 0 0 15px 6px #dceaff55, 0 0 48px 17px #9ac3df23;
+}
+.expedition-visual[data-pacific-sky='night'] .expedition-celestial::after {
+  content: ''; position: absolute; inset: -3px -5px 2px 7px; border-radius: 50%; background: #183046;
+}
+.expedition-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; z-index: 3; }
+.expedition-sky { opacity: 0; }
+.expedition-distance { fill: #9cb9c5; opacity: .035; }
+.expedition-distance-shadow { fill: #29495c; opacity: .045; }
+.expedition-rock { fill: url(#expedition-rock); stroke: #ecfaff; stroke-opacity: .06; stroke-width: 2; opacity: .08; }
+.expedition-snow { fill: url(#expedition-ice); opacity: .1; }
+.expedition-ice { fill: none; stroke: #e1faff; stroke-width: 2; opacity: .2; }
+.expedition-ledge { fill: none; stroke: #e8f8f7; stroke-width: 2; opacity: .16; }
+.expedition-snowfall { fill: #edf8f9; opacity: .65; }
 .expedition-route, .expedition-route-done {
-  fill: none; stroke: #e1e9db; stroke-width: 2.4; stroke-dasharray: 4 9; opacity: .58;
+  fill: none; stroke: #16374b; stroke-width: 2.4; stroke-dasharray: 4 9; opacity: .66;
   vector-effect: non-scaling-stroke;
 }
-.expedition-route-done { stroke: #e8f6f6; stroke-width: 3.3; stroke-dasharray: none; opacity: .87; }
-.expedition-climber { filter: drop-shadow(0 3px 5px #071b25ab); }
-.expedition-climber .mountaineer-jacket, .expedition-climber .mountaineer-sleeve { fill: #65a4b5; }
+.expedition-route-done { stroke: #e8f6f6; stroke-width: 3.3; stroke-dasharray: none; opacity: .9; filter: drop-shadow(0 1px 2px #0d273c); }
+.expedition-contact-shadow { fill: #071e2c; opacity: .43; }
+.expedition-climber { filter: drop-shadow(0 5px 7px #071b25d9); }
+.expedition-climber .mountaineer-jacket-shade { opacity: .8; }
 .expedition-vignette {
-  position: absolute; inset: 0; pointer-events: none;
-  background: linear-gradient(90deg, #0a1e2d3c, transparent 40%, #08172124), linear-gradient(0deg, #071a2b8c, transparent 25%, transparent 76%, #09223969);
+  position: absolute; inset: 0; z-index: 4; pointer-events: none;
+  background: linear-gradient(90deg, #0a1e2d43, transparent 35%, #08172124), linear-gradient(0deg, #071a2b9c, transparent 30%, transparent 70%, #0922397a);
 }
 .expedition-vignette::after {
   content: ''; position: absolute; inset: -10%;
@@ -46,13 +75,13 @@
 }
 @keyframes expedition-atmosphere { to { transform: translate3d(4%, -3%, 0); opacity: .55; } }
 .expedition-hud {
-  position: absolute; top: 24px; left: 26px; right: 26px;
+  position: absolute; z-index: 5; top: 24px; left: 26px; right: 26px;
   display: flex; justify-content: space-between; gap: 20px;
   color: #e9f6f8; font: 600 11px/1.5 var(--sans);
   letter-spacing: .16em; text-transform: uppercase; text-shadow: 0 1px 8px #081c28;
 }
 .expedition-direction {
-  position: absolute; bottom: 18px; left: 26px; margin: 0;
+  position: absolute; z-index: 5; bottom: 18px; left: 26px; margin: 0;
   color: #d7e7ec; font: 600 10px/1.5 var(--sans);
   letter-spacing: .14em; text-transform: uppercase;
 }
@@ -96,13 +125,15 @@
 .expedition-continuation h2 { font-size: clamp(32px, 3.8vw, 54px); margin: 8px 0 12px; }
 .expedition-continuation > p:not(.eyebrow) { color: var(--muted); font-size: 18px; }
 .expedition-continuation .text-link { margin-top: 32px; }
-.expedition[data-enhanced] .expedition-panel { transition: opacity 400ms ease, transform 500ms cubic-bezier(.22,.68,.15,1); }
-.expedition[data-enhanced] .expedition-checkpoint:not([data-near]) .expedition-panel { transform: translateY(10px); }
+.expedition-checkpoint::before { transition: width 260ms ease; }
+.expedition-checkpoint[data-near]::before { width: 31px; }
 @media (max-width: 900px) {
   .expedition { grid-template-columns: minmax(0, 46%) minmax(0, 54%); }
   .expedition-prologue, .expedition-continuation, .expedition-checkpoint { padding: 32px; }
 }
 @media (max-width: 680px) {
+  html:has(.expedition) { scroll-behavior: auto; scroll-snap-type: y proximity; scroll-padding-top: calc(69px + min(46svh, 370px)); }
+  .expedition-prologue, .expedition-checkpoint, .expedition-continuation { scroll-snap-align: start; }
   .expedition { display: block; }
   .expedition-visual {
     top: 69px; height: min(46svh, 370px); min-height: 250px;
@@ -117,9 +148,9 @@
   .expedition-image { max-height: 190px; }
 }
 @media (prefers-reduced-motion: reduce) {
+  html:has(.expedition) { scroll-snap-type: none; }
   .expedition-vignette::after { animation: none; }
-  .expedition[data-enhanced] .expedition-panel { transition: none; }
-  .expedition[data-enhanced] .expedition-checkpoint:not([data-near]) .expedition-panel { opacity: 1; transform: none; }
+  .expedition-checkpoint::before { transition: none; }
 }
 @media print {
   .expedition { display: block; }

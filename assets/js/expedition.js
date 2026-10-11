@@ -7,14 +7,25 @@
   const prologue = root.querySelector('.expedition-prologue');
   const continuation = root.querySelector('.expedition-continuation');
   const svg = root.querySelector('.expedition-art');
+  const visual = root.querySelector('.expedition-visual');
+  const backdrop = root.querySelector('.expedition-picture');
   const terrain = root.querySelector('[data-expedition-terrain]');
   const distant = root.querySelector('[data-expedition-distance]');
   const route = root.querySelector('[data-expedition-route]');
   const completed = root.querySelector('[data-expedition-route-done]');
+  const contact = root.querySelector('[data-expedition-contact]');
   const climber = root.querySelector('[data-expedition-climber]');
   const zone = root.querySelector('[data-expedition-zone]');
   const position = root.querySelector('[data-expedition-position]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
+  const pacificSky = () => {
+    const hour = Number(new Intl.DateTimeFormat('en-US', {
+      timeZone: 'America/Los_Angeles', hour: 'numeric', hourCycle: 'h23',
+    }).format(new Date()));
+    visual.dataset.pacificSky = hour >= 6 && hour < 19 ? 'day' : 'night';
+  };
+  pacificSky();
+  setInterval(pacificSky, 10 * 60 * 1000);
   const svgNS = 'http://www.w3.org/2000/svg';
   const count = cards.length;
   const worldHeight = (count + 2) * 500;
@@ -107,7 +118,45 @@
   let current = 0;
   let frame = 0;
   let lastStage = -1;
-  let previousTarget = 0;
+  const rig = {
+    armFront: climber.querySelector('.mountaineer-arm-front'),
+    armBack: climber.querySelector('.mountaineer-arm-back'),
+    legFront: climber.querySelector('.mountaineer-leg-front'),
+    legBack: climber.querySelector('.mountaineer-leg-back'),
+  };
+  const joint = (sx, sy, hx, hy, upper, lower, side) => {
+    const dx = hx - sx;
+    const dy = hy - sy;
+    const length = Math.max(1, Math.hypot(dx, dy));
+    const reach = Math.min(length, upper + lower - .1);
+    const along = (upper * upper - lower * lower + reach * reach) / (2 * reach);
+    const outward = Math.sqrt(Math.max(0, upper * upper - along * along));
+    return [
+      sx + dx / length * along - dy / length * outward * side,
+      sy + dy / length * along + dx / length * outward * side,
+    ];
+  };
+  const drawArm = (part, sx, sy, hx, hy, side) => {
+    const [ex, ey] = joint(sx, sy, hx, hy, 20, 20, side);
+    part.querySelector('.mountaineer-sleeve').setAttribute(
+      'd', `M${sx} ${sy} L${ex.toFixed(2)} ${ey.toFixed(2)} L${hx.toFixed(2)} ${hy.toFixed(2)}`,
+    );
+    const glove = part.querySelector('.mountaineer-glove');
+    glove.setAttribute('cx', hx.toFixed(2));
+    glove.setAttribute('cy', hy.toFixed(2));
+  };
+  const drawLeg = (part, sx, sy, fx, fy, side) => {
+    const [kx, ky] = joint(sx, sy, fx, fy, 17, 17, side);
+    part.querySelector('.mountaineer-pants').setAttribute(
+      'd', `M${sx} ${sy} L${kx.toFixed(2)} ${ky.toFixed(2)} L${fx.toFixed(2)} ${fy.toFixed(2)}`,
+    );
+    part.querySelector('.mountaineer-boot').setAttribute(
+      'd', `M${(fx - 5).toFixed(2)} ${(fy - 3).toFixed(2)} L${(fx + 4).toFixed(2)} ${(fy - 3).toFixed(2)} L${(fx + 8).toFixed(2)} ${(fy + 3).toFixed(2)} L${(fx - 6).toFixed(2)} ${(fy + 4).toFixed(2)}Z`,
+    );
+    part.querySelector('.mountaineer-crampon').setAttribute(
+      'd', `M${(fx - 3).toFixed(2)} ${(fy + 3).toFixed(2)} l-1 4 M${(fx + 5).toFixed(2)} ${(fy + 2).toFixed(2)} l1 4`,
+    );
+  };
   const center = (element) => {
     const rect = element.getBoundingClientRect();
     return rect.top + scrollY + rect.height / 2;
@@ -133,21 +182,27 @@
     current = motion.matches ? target : current + (target - current) * .19;
     if (Math.abs(target - current) < .002) current = target;
     const fraction = current / stages;
+    backdrop.style.transform = `translate3d(0, ${(-28.57 * (1 - fraction)).toFixed(2)}%, 0)`;
     const point = route.getPointAtLength(totalLength * fraction);
     const ahead = route.getPointAtLength(Math.min(totalLength, totalLength * fraction + 12));
     const behind = route.getPointAtLength(Math.max(0, totalLength * fraction - 12));
     const tangent = Math.atan2(behind.x - ahead.x, behind.y - ahead.y);
     const camera = Math.max(0, Math.min(worldHeight - 800, point.y - 410));
     svg.setAttribute('viewBox', `0 ${camera.toFixed(2)} 600 800`);
-    climber.setAttribute('transform', `translate(${point.x.toFixed(2)} ${point.y.toFixed(2)}) rotate(${(tangent * 180 / Math.PI * .2).toFixed(2)}) scale(1.55)`);
+    contact.setAttribute('cx', (point.x + 6).toFixed(2));
+    contact.setAttribute('cy', (point.y + 3).toFixed(2));
     completed.style.strokeDashoffset = String(totalLength * (1 - fraction));
     const distanceFromStop = Math.abs(current - Math.round(current));
     const effort = motion.matches ? 0 : Math.min(1, distanceFromStop * 4);
-    const stride = Math.sin(current * Math.PI * 4.4) * effort;
-    climber.querySelector('.mountaineer-arm-front').style.transform = `rotate(${(-22 * stride).toFixed(1)}deg)`;
-    climber.querySelector('.mountaineer-arm-back').style.transform = `rotate(${(21 * stride).toFixed(1)}deg)`;
-    climber.querySelector('.mountaineer-leg-front').style.transform = `rotate(${(19 * stride).toFixed(1)}deg)`;
-    climber.querySelector('.mountaineer-leg-back').style.transform = `rotate(${(-18 * stride).toFixed(1)}deg)`;
+    const phase = current * Math.PI * 2 * 1.15;
+    const frontReach = (1 - Math.cos(phase)) / 2;
+    const backReach = 1 - frontReach;
+    const sway = Math.sin(phase) * effort;
+    climber.setAttribute('transform', `translate(${(point.x + sway * 1.4).toFixed(2)} ${(point.y - Math.abs(sway) * 1.4).toFixed(2)}) rotate(${(12 + tangent * 180 / Math.PI * .12 + sway * 1.4).toFixed(2)}) scale(1.8)`);
+    drawArm(rig.armFront, 10, -48, 20 + sway * 2, -74 + (.5 - frontReach) * 20 * effort, 1);
+    drawArm(rig.armBack, -10, -48, -20 - sway * 2, -46 - backReach * 20 * effort, -1);
+    drawLeg(rig.legFront, 5, -24, 16 + sway * 3, -6 + (backReach - .5) * 10 * effort, 1);
+    drawLeg(rig.legBack, -5, -24, -12 - sway * 3, 2 - frontReach * 9 * effort, -1);
     const region = Math.min(4, Math.floor(fraction * 5));
     zone.textContent = stageNames[region];
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
@@ -156,7 +211,6 @@
       cards.forEach((card, index) => card.toggleAttribute('data-near', index + 1 === nearest));
       lastStage = nearest;
     }
-    previousTarget = target;
     if (Math.abs(target - current) > .002 && !motion.matches) frame = requestAnimationFrame(render);
   };
   const requestSync = () => {
