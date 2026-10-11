@@ -2,10 +2,12 @@
   "chromium": {
     "browser": "chromium",
     "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
       "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/: wheel scrolling remains continuous between milestones",
       "/: mouse drag advances timeline without activating an entry",
       "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: climber and illuminated route follow scroll to the latest entry",
       "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/journey/: wheel scrolling remains continuous between milestones",
       "/journey/: mouse drag advances timeline without activating an entry",
@@ -22,10 +24,12 @@
   "firefox": {
     "browser": "firefox",
     "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
       "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/: wheel scrolling remains continuous between milestones",
       "/: mouse drag advances timeline without activating an entry",
       "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: climber and illuminated route follow scroll to the latest entry",
       "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/journey/: wheel scrolling remains continuous between milestones",
       "/journey/: mouse drag advances timeline without activating an entry",
@@ -41,10 +45,12 @@
   "webkit": {
     "browser": "webkit",
     "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
       "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/: wheel scrolling remains continuous between milestones",
       "/: mouse drag advances timeline without activating an entry",
       "/: final milestone fully reachable at all six responsive widths",
+      "/journey/: climber and illuminated route follow scroll to the latest entry",
       "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
       "/journey/: wheel scrolling remains continuous between milestones",
       "/journey/: mouse drag advances timeline without activating an entry",

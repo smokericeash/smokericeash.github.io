@@ -1,10 +1,10 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 7, 2026 (America/Los_Angeles).
+Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The redesign, self-service Markdown authoring workflow, contact refinements and latest timeline/navigation refinements are implemented and locally verified.** The four main page headings have also been refined as requested. No implementation task is currently in progress and no local check is failing. The previously completed full browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The Ascent visual redesign is implemented and locally verified on `codex/portfolio-v2`.** The self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No implementation task is currently in progress and no local check is failing. The full current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -12,6 +12,26 @@ Updated: October 7, 2026 (America/Los_Angeles).
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 11 continuation and current handoff
+
+- Confirmed `4911f14` contains the complete Ascent implementation. The only work left uncommitted from the previous session was its validation evidence and handoff documentation; this continuation records and commits those files. No implementation changes are in progress.
+- Rebuilt the normal production site and reran preserved-content, metadata, feed, route and article checks: 26 inventoried source files unchanged, nine original post routes, 47 HTML pages, 1,645 internal references, nine article/taxonomy contracts.
+- Reran the complete Chrome, Firefox and WebKit suites on October 11. Per engine: 94 route checks, 132 responsive page checks, 22 broad axe scans, six general interaction groups, 11 editorial/motion groups, and 15 Chrome / 14 Firefox / 14 WebKit experience groups. No browser errors or reported accessibility violations.
+- Verified the post-authoring promise against the Ascent design with one temporary 2027 Markdown post in an isolated `--future` build: it appeared on Home, Work, The Ascent and its own route; the Ascent record grew to ten entries and the latest-year label changed to 2027. The isolated build passed preservation and link checks with 50 HTML pages and 1,712 references. Removed the fixture source afterward; the normal preview still contains only the original nine posts.
+- Restarted the production `_site` preview at `http://127.0.0.1:4173/` in a persistent terminal session; Home, Work, The Ascent and About returned HTTP 200.
+- Remaining: user design review, optional real-device and screen-reader review, Linux GitHub Actions after a branch-only push, and actual custom-domain verification before production publication. No source change is required for the tested posting workflow. Exact next task: review the live local design, then open a review PR from `codex/portfolio-v2` when ready; do not push or merge directly into `main`.
+
+## Completed October 7 Ascent redesign
+
+- Took typography, color temperature, negative space and restraint from the supplied screenshot, without copying its layout or imagery. Added `assets/css/ascent.css` as a scoped design layer: near-charcoal/midnight surfaces, glacier-blue accents, icy white text, snow/overcast light mode, tracked lightweight display headings and more editorial article typography. Uses a local/system font stack; no web-font request or new dependency.
+- Renamed the visible Journey tab and page to **The Ascent** while preserving the established `/journey/` URL and `_data/journey.yml` authoring fallback. Home links to the same route.
+- Added a lightweight decorative ridge and a small original SVG climber over the existing nine-entry timeline. Continuous native horizontal scroll drives the climber along a rising curve and reveals the travelled route. The dated post cards, year jumps, range scrubber, arrow/keyboard controls, touch swipe, direct drag and no-JS fallback remain the real navigation.
+- Kept mountain visuals quiet: a faint homepage ridge and low-density drift only within the route. Mobile disables drift; reduced motion disables it and keeps milestone jumps immediate. The map is hidden from assistive technology; post titles and dates remain available in semantic HTML.
+- Corrected a transient light-theme contrast issue by removing background-color interpolation. Corrected premature illumination ahead of the climber by clipping the travelled route to actual scroll progress. Softened the existing first-visit Home entrance to avoid cropped heading letters.
+- Production and `/preview` baseurl builds, preserved-content checks (26 source files, nine original routes, 47 pages, 1,645 references), nine article/taxonomy checks and complete Chrome/Firefox/WebKit browser suites pass. Each engine checked 94 routes, 132 responsive pages, 22 broad axe scans and the focused timeline/accessibility checks. Visual review covered desktop dark Home/Ascent/article and light mobile Home/Ascent with no horizontal overflow.
+- Fresh local Lighthouse results: performance **98–100**, accessibility/best practices/SEO **100** on eight mobile/desktop runs across Home, Work, article and Ascent; CLS 0 throughout. Reports in `docs/VALIDATION.txt` and `docs/*-results.json`.
+- Known limits: GitHub Linux CI, actual Safari/iOS hardware, manual screen-reader review and unknown custom-domain settings are still unverified. Current recommended next task: review the new design in the local preview, then perform branch-only remote CI if approved for publication.
 
 ## Completed October 7 heading refinement
 
@@ -77,14 +97,14 @@ Updated: October 7, 2026 (America/Los_Angeles).
 
 ## Tests performed on this implementation
 
-- Production and `/preview` baseurl builds pass: **47 HTML pages, nine original post routes, 26 preserved-file hashes, 1,598 internal references**, metadata and XML checks.
+- Current production and `/preview` baseurl builds pass: **47 HTML pages, nine original post routes, 26 preserved-file hashes, 1,645 internal references**, metadata and XML checks.
 - Nine article-rendering/taxonomy fixture checks pass.
 - Chrome 153, Playwright Firefox 155 and WebKit 26.6: **282 route checks, 396 responsive checks, 78 axe scans**, zero reported violations or browser/network errors.
 - Six responsive widths: 360, 430, 768, 1920, 2560, 3440 CSS pixels; dark/light coverage.
 - Existing navigation, search, storage, theme, code-copy, no-JS and reduced-motion tests pass.
 - Timeline suite: 13 groups in Chrome, 12 each in Firefox/WebKit. Includes free wheel/drag scrolling, measured arrow movement, year/step/range/keyboard controls, accessible values, endpoint visibility, no-JS, delayed image response, reading progress and Chrome native touch swipes.
 - Editorial/motion suite: 11 groups in each engine. Confirms all nine preview images match article covers, four navigation destinations, full-width timeline, contact/résumé behavior, footer/archive wording, actual scroll animation start/completion/non-repetition, sequenced native fades (Chrome/WebKit), fallback entrances (Firefox), history navigation and reduced-motion suppression. The test reads the live animation durations/keyframes and asserts the old page clears before the incoming fade begins.
-- Lighthouse on October 5: **99–100 performance; 100 accessibility, best practices and SEO** on Home, the then-Journal `/research/` page, ITC article and Journey, mobile/desktop (eight runs). Mobile home performance was 99; the other seven were 100. CLS 0 throughout, mobile LCP 1.7s, TBT 0–90ms. These are prior local lab measurements, not a new run or live performance claims.
+- Lighthouse on October 7: **98–100 performance; 100 accessibility, best practices and SEO** on Home, Work, ITC article and The Ascent, mobile/desktop (eight local lab runs). CLS 0 throughout, mobile LCP 1.7–1.9s and TBT 0–120ms. These are local lab measurements, not live field performance claims.
 - Earlier desktop dark and mobile light Home/post-list visual review remains relevant. The October 7 changes were verified through live routes and browser interaction tests; in-app visual inspection was unavailable because its helper failed.
 - JavaScript syntax and Git whitespace checks pass.
 
@@ -128,7 +148,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the four main headings (Aidan Chen, Work, Journey and About me) alongside the free-scrolling timelines and softened Work entrances at `http://127.0.0.1:4173/`. The requested refinements are implemented and verified; do not rebuild them. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
+**Review the Ascent design at `http://127.0.0.1:4173/` in both dark and light modes, especially the article typography and the climber's movement on Home and `/journey/`. The requested redesign is implemented and locally verified; do not rebuild it. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
 
 ## Reproducible local commands
 

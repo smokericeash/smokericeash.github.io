@@ -3,15 +3,15 @@
     "page": "home",
     "device": "mobile",
     "scores": {
-      "performance": 99,
+      "performance": 98,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.7 s",
+      "LCP": "1.8 s",
       "CLS": "0",
-      "TBT": "90 ms"
+      "TBT": "120 ms"
     },
     "warnings": []
   },
@@ -35,15 +35,15 @@
     "page": "journal",
     "device": "mobile",
     "scores": {
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.7 s",
+      "LCP": "1.9 s",
       "CLS": "0",
-      "TBT": "40 ms"
+      "TBT": "0 ms"
     },
     "warnings": []
   },
@@ -67,15 +67,15 @@
     "page": "article",
     "device": "mobile",
     "scores": {
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.7 s",
+      "LCP": "1.8 s",
       "CLS": "0",
-      "TBT": "50 ms"
+      "TBT": "0 ms"
     },
     "warnings": []
   },
@@ -107,7 +107,7 @@
     "metrics": {
       "LCP": "1.7 s",
       "CLS": "0",
-      "TBT": "50 ms"
+      "TBT": "0 ms"
     },
     "warnings": []
   },

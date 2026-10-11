@@ -1,10 +1,19 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Validated October 7, 2026 (America/Los_Angeles). Lighthouse scores below are
-from the October 5 local run; the current build passed all browser/build checks.
+Build and browser suites revalidated October 11, 2026 (America/Los_Angeles).
+Lighthouse measurements below are from the October 7 Ascent build; no source
+changes occurred between that run and this verification.
 
 RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
 pushed, merged or deployed. The original source checkout is unchanged.
+
+OCTOBER 11 POST-AUTHORING CHECK
+- One temporary 2027 Markdown post was added only for an isolated --future build.
+- It appeared automatically on Home, Work, The Ascent and its article route;
+  The Ascent grew to ten entries and its latest-year label updated to 2027.
+- The isolated build passed preservation/links: 50 pages, ten post routes,
+  26 preserved original files and 1,712 references.
+- The temporary source was removed. Normal production remains at nine posts.
 
 BUILD AND PRESERVATION
 - Clean JEKYLL_ENV=production build succeeds with Ruby 3.4 / Jekyll 4.4.1.
@@ -13,7 +22,7 @@ BUILD AND PRESERVATION
   four tabs (including the original biography), and twelve original images.
 - Exact raw hashes match on this Windows checkout. CI also accepts only Git's
   CRLF-to-LF conversion in text files; image bytes are always checked exactly.
-- 1,598 internal links, anchors, assets and srcset references resolve.
+- 1,645 internal links, anchors, assets and srcset references resolve.
 - Every page has one h1, title, description, canonical, and Open Graph image.
 - Atom feed and sitemap parse correctly; no localhost URLs in production XML.
 - A /preview baseurl build passes the same link/metadata checks.
@@ -44,7 +53,9 @@ The new interaction suite also passes in all three engines:
   stay between entries; arrows and year jumps animate through intermediate
   positions. Range scrubbing remains direct and reduced motion is instant.
 - All nine original entries, meaningful accessible values and endpoint states.
-- Last milestone fully visible at all six widths on both Home and Journey.
+- Last milestone fully visible at all six widths on both Home and The Ascent.
+- The decorative climber follows continuous scroll to the final entry, and the
+  travelled route reveals behind it. It has no focusable or announced content.
 - Four additional axe scans per engine across both pages and both themes.
 - No-JS scrollable timeline and keyboard-accessible article links.
 - Reduced motion disables decorative animation and smooth navigation.
@@ -57,7 +68,7 @@ Totals including focused scans: 78 axe scans; zero reported violations.
 Machine-readable evidence: docs/experience-results.json.
 
 The editorial/motion suite passes 11 check groups in each engine:
-- Home / Work / Journey / About navigation. Work retains the /research/ URL;
+- Home / Work / The Ascent / About navigation. Work retains the /research/ URL;
   the old /work/ case-study URL remains reachable for compatibility.
 - The standalone Aidan Chen name has no trailing period in header or Home.
 - Concise factual home, three image previews and a full-width nine-entry timeline.
@@ -76,33 +87,33 @@ The editorial/motion suite passes 11 check groups in each engine:
 - Reduced motion disables page and scroll animations while links keep working.
 Machine-readable evidence: docs/editorial-results.json.
 
-Earlier visual review covered desktop dark/light, phone layouts, article layout,
-About at 360px, the social image, and the illustrated post list. The October 7
-changes were verified through live routes and browser interaction tests.
+Visual review covered the new desktop dark Home, The Ascent and article views,
+plus light mobile Home and The Ascent at 390px. No horizontal overflow was found.
+Earlier reviews covered About, the social image and the illustrated post list.
 Screenshots are available in ignored test-results/. The About overflow, journal
 heading hierarchy and delayed-control layout movement found in earlier passes
 were fixed and retested. Navigation explicitly exposes normal tabindex=0 links
 to WebKit's keyboard traversal without changing their document order.
 
-LIGHTHOUSE 13.5 — FINAL LOCAL RUN
+LIGHTHOUSE 13.5 — ASCENT LOCAL RUN
 Page       Device    Performance  Accessibility  Best practices  SEO
-Home       Mobile        99            100             100      100
+Home       Mobile        98            100             100      100
 Home       Desktop      100            100             100      100
-Work*      Mobile       100            100             100      100
-Work*      Desktop      100            100             100      100
-ITC post   Mobile       100            100             100      100
+Work       Mobile        99            100             100      100
+Work       Desktop      100            100             100      100
+ITC post   Mobile        99            100             100      100
 ITC post   Desktop      100            100             100      100
-Journey    Mobile       100            100             100      100
-Journey    Desktop      100            100             100      100
+The Ascent Mobile      100            100             100      100
+The Ascent Desktop     100            100             100      100
 
-Mobile simulated LCP: 1.7 seconds. Desktop LCP: 0.4 seconds.
-CLS: 0 for all eight runs. TBT: 0–90ms. No run warnings.
-*The page was labelled Journal when Lighthouse ran on October 5; its URL and
-image assets are unchanged. These are local lab results, not live field data.
+Mobile simulated LCP: 1.7–1.9 seconds. Desktop LCP: 0.4 seconds.
+CLS: 0 for all eight runs. TBT: 0–120ms. No run warnings.
+The runner's legacy JSON labels “journal” and “journey” refer to /research/
+and /journey/. These are local lab results, not live field data.
 Machine-readable summary: docs/lighthouse-results.json.
 Full HTML and JSON reports: test-results/lighthouse-*.html / *.json.
 Approximate transferable source sizes (gzip, hosting compression dependent):
-CSS 10.4KiB; shared JS 5.8KiB; home HTML 5.1KiB. No external runtime scripts/fonts.
+CSS 13.5KiB; shared JS 6.8KiB; home HTML 5.6KiB. No external runtime scripts/fonts.
 
 MIGRATION AND EXTERNAL LINKS
 - Isolated browser fixture verifies sw.min.js retires the old registration.
@@ -150,6 +161,6 @@ POST AUTHORING FOLLOW-UP
 - All three browser suites pass in Chrome, Firefox and WebKit on that build,
   including new-year navigation, the new endpoint, image/text-only previews,
   description fallback, category/search filtering and no-JS access.
-- Fixture sources removed; normal production build passes with nine posts,
-  47 HTML pages and 1,598 references. Existing rendered posts remain unchanged.
+- Fixture sources removed; the current production build passes with nine posts,
+  47 HTML pages and 1,645 references. Original post content remains unchanged.
 - Evidence: docs/authoring-results.json. No sample posts were published.
