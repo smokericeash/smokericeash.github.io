@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The Ascent visual redesign is implemented and locally verified on `codex/portfolio-v2`.** The self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No implementation task is currently in progress and no local check is failing. The full current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The new vertical Ascent expedition and requested credential changes are implemented and locally verified on `codex/portfolio-v2`.** The self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The full current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,19 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 continuation and current handoff
+## October 11 vertical expedition and credential update — latest handoff
+
+- Removed the single CompTIA Network+ credential callout from Home. About now lists both the existing Network+ link and CRTO · Zero Point Security with Aidan's supplied certificate URL. The Network+ post remains in the chronological record.
+- Home keeps its compact horizontal timeline and original post cards. Its end labels now say **BASE CAMP** and **SUMMIT AWAITS**, with years derived from the first and last eligible posts. Added restrained snow/rock detail and replaced the stick figure with an original equipped SVG mountaineer.
+- Dedicated `/journey/` is now a distinct vertical expedition: native page scroll drives a sticky, layered SVG mountain, camera position, route trace and alternating arm/leg movement. Each real post becomes a semantic, image-backed checkpoint and links to its unchanged article. The final panel says **The ascent continues** without claiming a summit was reached.
+- Both views select the same `site.posts`, ordered by publication date, using optional `_data/journey.yml` summaries. Posts join by default; `ascent: false` in front matter omits ordinary posts from both views. Scene modules and route length derive from the number of rendered checkpoints. Updated `docs/POSTING.txt`, template and README.
+- Testing: production Jekyll build and source-integrity checks pass (26 originals unchanged, nine preserved post routes, 47 HTML pages, 1,683 links/anchors/assets). The new fixture test verified additions, same-date entries, edits, reordering, exclusion, removal and 20 extra entries, then deleted every fixture and rebuilt the normal site.
+- Complete Chrome, Firefox and WebKit browser suites pass. Per engine: 94 route checks, 132 responsive pages, 22 broad axe scans, six general interaction groups, 11 editorial/motion groups and eight dedicated expedition groups. Home experience groups: 10 Chrome, nine Firefox, nine WebKit. The new checks cover downward/upward scroll, scroll-synchronized limb pose, mobile widths, light/dark contrast, reduced motion and no-JavaScript access. Desktop dark and mobile light screenshots were visually inspected.
+- Fresh local Lighthouse results: **99 mobile / 100 desktop performance** on Home, Work, article and Ascent; **100 accessibility, best practices and SEO** throughout. The Ascent mobile LCP is 2.0 s; CLS/TBT 0. Reports: `docs/*-results.json` and `docs/VALIDATION.txt`.
+- Current work in progress: none. Known limitations: no real Safari/iOS device or manual screen-reader review; GitHub Linux CI, actual custom-domain settings, and Aidan's final visual review remain outstanding. The user-supplied CRTO verification page was linked as given; its individual record was not independently confirmed by the local test.
+- Exact next task: review Home and `/journey/` in the local preview at `http://127.0.0.1:4173/`, including a full scroll through the expedition in both themes and on a real mobile device if available. If the visual direction is approved, push only `codex/portfolio-v2` and open a review PR to run Linux CI; verify the actual custom-domain setup before any production merge. Do not push or merge directly into `main`.
+
+## Earlier October 11 handoff (before the vertical expedition)
 
 - Confirmed `4911f14` contains the complete Ascent implementation. The only work left uncommitted from the previous session was its validation evidence and handoff documentation; this continuation records and commits those files. No implementation changes are in progress.
 - Rebuilt the normal production site and reran preserved-content, metadata, feed, route and article checks: 26 inventoried source files unchanged, nine original post routes, 47 HTML pages, 1,645 internal references, nine article/taxonomy contracts.
@@ -114,8 +126,8 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 
 - This is a personal, informative portfolio. Use actual posts and outcomes; avoid motivational slogans, sales language, invented research, jobs, credentials or metrics.
 - Home is intentionally concise. Do not restore the old orbital graphic, field-notes panel, focus slogans, capability sections or duplicate content bands.
-- `_includes/post-preview.html` is the homepage preview; `_includes/post-row.html` is the shared illustrated list; `_includes/chronicle.html` is the shared timeline.
-- `_data/journey.yml` supplies optional short titles and summaries keyed by post URL. Timeline dates/order come from original post publication metadata. Milestones are evenly spaced for reading, not proportional to elapsed time. New posts appear automatically.
+- `_includes/post-preview.html` is the homepage preview; `_includes/post-row.html` is the shared illustrated list. `_includes/chronicle.html` powers only the Home preview; `_includes/expedition.html` powers the dedicated vertical page.
+- `_data/journey.yml` supplies optional short titles and summaries keyed by post URL. Both views read the same original post metadata; `ascent: false` excludes a post from both. The route's distance is narrative, not literal elapsed time or altitude.
 - Motion and new presentation rules live in `assets/css/experience.css` and `assets/js/experience.js`. The sequenced page fade and restrained side entrances are progressive enhancement; no framework/router, forced loading delays or looping animations. The timeline uses native direct scrolling and a small requestAnimationFrame animation only for deliberate control jumps.
 - Contact enhancement lives in `_includes/email-dialog.html` and `assets/js/contact.js`. Mailto links remain the no-JavaScript fallback. Resume delivery stays private until an actual public document is intentionally configured.
 - Full content is visible by default. Motion preferences cancel JS animations and disable CSS/native transitions. Initial above-fold content is not hidden for a reveal.
@@ -130,7 +142,7 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- No requested implementation work remains. Review and publication checks are the next step.
+- No requested implementation work remains. Visual review and publication checks are the next step.
 - Currently in progress: none.
 
 ## Logical commits
@@ -145,10 +157,11 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `ed61f6b` — email/résumé chooser, footer/archive cleanup, curved page transitions, alternating scroll entrances and refreshed validation evidence.
 - `42a0785` — replaces the overlapping curved transition with a verified sequenced fade.
 - `4422f71` — free timeline scrolling, animated control jumps, Work navigation, period-free standalone name and calmer post reveals.
+- `66ef075` — vertical Ascent expedition, shared post eligibility, geared climber, CRTO/About refinement and dedicated browser/content fixtures.
 
 ## Exact recommended next task
 
-**Review the Ascent design at `http://127.0.0.1:4173/` in both dark and light modes, especially the article typography and the climber's movement on Home and `/journey/`. The requested redesign is implemented and locally verified; do not rebuild it. Once the design is approved for publication, push only `codex/portfolio-v2` and open a review PR so GitHub Actions can verify the Linux build. Verify actual custom-domain settings before a production merge, and configure a résumé URL only if Aidan intentionally wants a public download. Never push or merge directly into main.**
+**Review Home and the new vertical `/journey/` expedition at `http://127.0.0.1:4173/` in dark and light modes, including a complete downward/upward climb and a real mobile device if available. Fix any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
 
 ## Reproducible local commands
 

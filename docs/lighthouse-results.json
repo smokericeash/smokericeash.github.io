@@ -3,15 +3,15 @@
     "page": "home",
     "device": "mobile",
     "scores": {
-      "performance": 98,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.8 s",
+      "LCP": "1.9\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "120 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -25,9 +25,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.4 s",
+      "LCP": "0.4\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -41,9 +41,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.9 s",
+      "LCP": "1.8\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -57,9 +57,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.4 s",
+      "LCP": "0.4\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -73,9 +73,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.8 s",
+      "LCP": "1.8\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -89,9 +89,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.4 s",
+      "LCP": "0.4\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -99,15 +99,15 @@
     "page": "journey",
     "device": "mobile",
     "scores": {
-      "performance": 100,
+      "performance": 99,
       "accessibility": 100,
       "best-practices": 100,
       "seo": 100
     },
     "metrics": {
-      "LCP": "1.7 s",
+      "LCP": "2.0\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   },
@@ -121,9 +121,9 @@
       "seo": 100
     },
     "metrics": {
-      "LCP": "0.4 s",
+      "LCP": "0.4\u00c2\u00a0s",
       "CLS": "0",
-      "TBT": "0 ms"
+      "TBT": "0\u00c2\u00a0ms"
     },
     "warnings": []
   }

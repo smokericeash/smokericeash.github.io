@@ -1,11 +1,36 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Build and browser suites revalidated October 11, 2026 (America/Los_Angeles).
-Lighthouse measurements below are from the October 7 Ascent build; no source
-changes occurred between that run and this verification.
+Build, browser suites, and Lighthouse measured October 11, 2026
+(America/Los_Angeles) after the vertical expedition implementation.
 
 RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
 pushed, merged or deployed. The original source checkout is unchanged.
+
+OCTOBER 11 VERTICAL EXPEDITION
+- Home remains the compact horizontal nine-post preview, with BASE CAMP and
+  SUMMIT AWAITS labels from post dates and an equipped SVG climber.
+- /journey/ uses native vertical scroll, a sticky modular SVG mountain,
+  scroll-synchronized limb poses, nine semantic image-backed checkpoints and
+  a continuing route. Scrolling upward reverses the camera.
+- About displays Network+ and the user-provided CRTO certificate link.
+  Removed the single Network+ callout from Home.
+- Both views read the same eligible posts; ascent: false excludes a post.
+  Temporary fixtures proved addition, same-date entries, date/title edits,
+  reordering, exclusion, removal and 20 extra entries. Fixtures were deleted
+  and the normal production build restored.
+- Production build: 47 HTML pages, nine original post routes, 26 source files
+  unchanged, 1,683 local references and anchors valid.
+- Chrome, Firefox and WebKit: 94 route checks, 132 responsive page checks,
+  22 broad axe scans, six general interaction groups, 11 editorial groups,
+  8 new expedition groups, and 10 Chrome / 9 Firefox / 9 WebKit Home
+  experience groups. Zero reported browser errors or axe violations.
+- Desktop dark and mobile light screenshots visually inspected. No horizontal
+  overflow at 360, 430, 768, 1440 or 1920 CSS pixels.
+- Current Lighthouse local lab results: Home, Work, article and Ascent each
+  score 99 mobile / 100 desktop performance, with 100 accessibility, best
+  practices and SEO. The Ascent mobile LCP is 2.0 s; CLS and TBT are 0.
+  These are local lab values, not live field measurements.
+- Evidence: docs/{browser,experience,editorial,expedition,lighthouse}-results.json.
 
 OCTOBER 11 POST-AUTHORING CHECK
 - One temporary 2027 Markdown post was added only for an isolated --future build.
@@ -22,7 +47,7 @@ BUILD AND PRESERVATION
   four tabs (including the original biography), and twelve original images.
 - Exact raw hashes match on this Windows checkout. CI also accepts only Git's
   CRLF-to-LF conversion in text files; image bytes are always checked exactly.
-- 1,645 internal links, anchors, assets and srcset references resolve.
+- 1,683 internal links, anchors, assets and srcset references resolve.
 - Every page has one h1, title, description, canonical, and Open Graph image.
 - Atom feed and sitemap parse correctly; no localhost URLs in production XML.
 - A /preview baseurl build passes the same link/metadata checks.
