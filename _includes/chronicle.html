@@ -1,4 +1,4 @@
-{% assign milestones = site.posts | reverse %}
+{% assign milestones = site.posts | where_exp: 'post', 'post.ascent != false' | reverse %}
 {% assign years = milestones | group_by_exp: 'post', 'post.date | date: "%Y"' %}
 <div class="chronicle" data-chronicle>
   <div class="chronicle-header">

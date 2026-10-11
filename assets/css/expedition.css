@@ -1,0 +1,128 @@
+.expedition-page { padding-bottom: clamp(28px, 5vw, 64px); }
+.expedition-page .page-heading { max-width: 900px; padding-bottom: 0; }
+.expedition {
+  --expedition-sky: #142b3a;
+  position: relative;
+  display: grid;
+  grid-template-columns: minmax(0, 57%) minmax(0, 43%);
+  border-block: 1px solid var(--line);
+  background: var(--bg);
+}
+.expedition-visual {
+  position: sticky;
+  top: 84px;
+  height: calc(100svh - 84px);
+  min-height: 520px;
+  align-self: start;
+  overflow: hidden;
+  isolation: isolate;
+  background: radial-gradient(ellipse at 30% 20%, #4f7586 0, #1f4053 41%, #102531 100%);
+  border-right: 1px solid var(--line);
+}
+.expedition-art { display: block; width: 100%; height: 100%; }
+.expedition-distance { fill: #9cb9c5; opacity: .38; }
+.expedition-distance-shadow { fill: #29495c; opacity: .72; }
+.expedition-rock { fill: url(#expedition-rock); stroke: #90aeb9; stroke-opacity: .35; stroke-width: 2; }
+.expedition-rock-shadow { fill: #123043; opacity: .72; }
+.expedition-snow { fill: url(#expedition-ice); opacity: .49; }
+.expedition-ice { fill: none; stroke: #c5eaf0; stroke-width: 2; opacity: .55; }
+.expedition-ledge { fill: none; stroke: #d4eced; stroke-width: 2; opacity: .47; }
+.expedition-snowfall { fill: #edf8f9; opacity: .55; }
+.expedition-route, .expedition-route-done {
+  fill: none; stroke: #e1e9db; stroke-width: 2.4; stroke-dasharray: 4 9; opacity: .58;
+  vector-effect: non-scaling-stroke;
+}
+.expedition-route-done { stroke: #e8f6f6; stroke-width: 3.3; stroke-dasharray: none; opacity: .87; }
+.expedition-climber { filter: drop-shadow(0 3px 5px #071b25ab); }
+.expedition-climber .mountaineer-jacket, .expedition-climber .mountaineer-sleeve { fill: #65a4b5; }
+.expedition-vignette {
+  position: absolute; inset: 0; pointer-events: none;
+  background: linear-gradient(90deg, #0a1e2d3c, transparent 40%, #08172124), linear-gradient(0deg, #071a2b8c, transparent 25%, transparent 76%, #09223969);
+}
+.expedition-vignette::after {
+  content: ''; position: absolute; inset: -10%;
+  background: radial-gradient(ellipse at 25% 70%, #d7f0f52b, transparent 50%);
+  animation: expedition-atmosphere 18s ease-in-out infinite alternate;
+}
+@keyframes expedition-atmosphere { to { transform: translate3d(4%, -3%, 0); opacity: .55; } }
+.expedition-hud {
+  position: absolute; top: 24px; left: 26px; right: 26px;
+  display: flex; justify-content: space-between; gap: 20px;
+  color: #e9f6f8; font: 600 11px/1.5 var(--sans);
+  letter-spacing: .16em; text-transform: uppercase; text-shadow: 0 1px 8px #081c28;
+}
+.expedition-direction {
+  position: absolute; bottom: 18px; left: 26px; margin: 0;
+  color: #d7e7ec; font: 600 10px/1.5 var(--sans);
+  letter-spacing: .14em; text-transform: uppercase;
+}
+.expedition-story { position: relative; min-width: 0; }
+.expedition-prologue, .expedition-continuation, .expedition-checkpoint {
+  min-height: clamp(580px, 84svh, 920px);
+  display: flex; flex-direction: column; justify-content: center;
+  padding: clamp(32px, 5.4vw, 84px);
+}
+.expedition-prologue { gap: 13px; }
+.expedition-prologue > p:not(.eyebrow) {
+  max-width: 23ch; font: 350 clamp(25px, 3vw, 42px)/1.32 var(--display);
+  letter-spacing: .015em; margin: 0;
+}
+.expedition-checkpoints { list-style: none; margin: 0; padding: 0; }
+.expedition-checkpoint { position: relative; border-top: 1px solid var(--line); }
+.expedition-checkpoint::before {
+  content: ''; position: absolute; left: 0; top: 50%; width: 18px; height: 1px;
+  background: var(--accent);
+}
+.expedition-panel { max-width: 570px; }
+.expedition-index { color: var(--accent); font: 600 10px/1.5 var(--sans); letter-spacing: .2em; }
+.expedition-index span { color: var(--muted); padding-inline: 9px; }
+.expedition-image {
+  display: block; overflow: hidden; margin-block: 27px; aspect-ratio: 1.85;
+  border: 1px solid var(--line); border-radius: 3px; background: var(--surface-2);
+}
+.expedition-image img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.expedition-panel .post-meta { display: flex; flex-wrap: wrap; gap: 7px 16px; margin: 22px 0 14px; }
+.expedition-panel h2 {
+  font-size: clamp(27px, 3vw, 43px); font-weight: 390; line-height: 1.2;
+  letter-spacing: .02em; text-transform: none; margin: 0 0 17px;
+}
+.expedition-panel h2 a { color: var(--text); text-decoration: none; }
+.expedition-panel h2 a:hover { color: var(--accent); }
+.expedition-panel > p:not(.expedition-index, .post-meta) {
+  color: var(--muted); font-size: clamp(15px, 1.2vw, 17px); line-height: 1.7; max-width: 52ch;
+}
+.expedition-panel .text-link { display: inline-block; margin-top: 16px; }
+.expedition-continuation { border-top: 1px solid var(--line); }
+.expedition-continuation h2 { font-size: clamp(32px, 3.8vw, 54px); margin: 8px 0 12px; }
+.expedition-continuation > p:not(.eyebrow) { color: var(--muted); font-size: 18px; }
+.expedition-continuation .text-link { margin-top: 32px; }
+.expedition[data-enhanced] .expedition-panel { transition: opacity 400ms ease, transform 500ms cubic-bezier(.22,.68,.15,1); }
+.expedition[data-enhanced] .expedition-checkpoint:not([data-near]) .expedition-panel { transform: translateY(10px); }
+@media (max-width: 900px) {
+  .expedition { grid-template-columns: minmax(0, 46%) minmax(0, 54%); }
+  .expedition-prologue, .expedition-continuation, .expedition-checkpoint { padding: 32px; }
+}
+@media (max-width: 680px) {
+  .expedition { display: block; }
+  .expedition-visual {
+    top: 69px; height: min(46svh, 370px); min-height: 250px;
+    border-right: 0; border-bottom: 1px solid var(--line); z-index: 1;
+  }
+  .expedition-hud { top: 14px; left: 18px; right: 18px; font-size: 9px; }
+  .expedition-direction { bottom: 12px; left: 18px; }
+  .expedition-prologue, .expedition-continuation, .expedition-checkpoint {
+    min-height: max(420px, 66svh); padding: 32px clamp(20px, 6vw, 36px);
+  }
+  .expedition-checkpoint::before { display: none; }
+  .expedition-image { max-height: 190px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .expedition-vignette::after { animation: none; }
+  .expedition[data-enhanced] .expedition-panel { transition: none; }
+  .expedition[data-enhanced] .expedition-checkpoint:not([data-near]) .expedition-panel { opacity: 1; transform: none; }
+}
+@media print {
+  .expedition { display: block; }
+  .expedition-visual { display: none; }
+  .expedition-prologue, .expedition-continuation, .expedition-checkpoint { min-height: 0; padding: 18px 0; break-inside: avoid; }
+}

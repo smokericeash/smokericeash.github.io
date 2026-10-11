@@ -138,6 +138,8 @@ h1, h2, h3 {
 .ascent-map-art { position: absolute; inset: 0; width: 100%; height: 100%; }
 .ascent-ridge-far { fill: var(--ridge-far); }
 .ascent-ridge-near { fill: var(--ridge-near); opacity: 0.68; }
+.ascent-snow { fill: #e7f4f6; opacity: .82; }
+.ascent-rock-detail { fill: none; stroke: var(--route-muted); stroke-width: .85; opacity: .55; }
 .ascent-contour, .ascent-route-base, .ascent-route-travel {
   fill: none;
   vector-effect: non-scaling-stroke;
@@ -149,15 +151,25 @@ h1, h2, h3 {
 .ascent-climber {
   position: absolute;
   display: block;
-  width: 20px;
-  height: 27px;
+  width: 29px;
+  height: 42px;
   color: var(--text);
   transform: translate(-50%, -100%);
   transform-origin: 50% 100%;
 }
 .ascent-climber svg { width: 100%; height: 100%; overflow: visible; }
-.ascent-climber circle { fill: var(--text); }
-.ascent-climber path { fill: none; stroke: var(--text); stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.mountaineer-rope, .mountaineer-jacket-seam, .mountaineer-harness, .mountaineer-visor {
+  fill: none; stroke: #dcecf1; stroke-width: 1.4; stroke-linecap: round;
+}
+.mountaineer-rope { stroke: #d3a879; stroke-width: 1.8; }
+.mountaineer-pack { fill: #253f4d; stroke: #b7d5e1; stroke-width: 1.4; }
+.mountaineer-pants { fill: #243c4a; stroke: #adc6d0; stroke-width: 1.1; }
+.mountaineer-boot, .mountaineer-glove { fill: #182933; stroke: #b5cbd2; stroke-width: 1.1; }
+.mountaineer-sleeve, .mountaineer-jacket { fill: #4c8297; stroke: #dcecf1; stroke-width: 1.2; }
+.mountaineer-face { fill: #bfc4bd; stroke: #e5ebeb; stroke-width: 1.1; }
+.mountaineer-helmet { fill: #edf4f5; stroke: #376278; stroke-width: 1.4; }
+.mountaineer-arm, .mountaineer-leg { transform-box: fill-box; transform-origin: center 18%; }
+.credential-list { display: flex; flex-direction: column; gap: 9px; }
 .ascent-map-labels {
   position: absolute;
   inset: auto 14px 9px;

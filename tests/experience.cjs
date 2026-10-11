@@ -46,7 +46,7 @@ const results = { browser: name, checks: [], errors: [] };
         1,
       );
     };
-    for (const route of ["/", "/journey/"]) {
+    for (const route of ["/"]) {
       await page.goto(base + route);
       const timeline = page.locator(".chronicle");
       await timeline.scrollIntoViewIfNeeded();
@@ -264,7 +264,7 @@ const results = { browser: name, checks: [], errors: [] };
     );
 
     await page.emulateMedia({ reducedMotion: "reduce" });
-    await page.goto(base + "/journey/");
+    await page.goto(base + "/");
     await jumpToLatestYear();
     assert.equal(
       await page
@@ -338,7 +338,7 @@ const results = { browser: name, checks: [], errors: [] };
       viewport: { width: 360, height: 800 },
     });
     const staticPage = await staticContext.newPage();
-    await staticPage.goto(base + "/journey/");
+    await staticPage.goto(base + "/");
     assert.equal(
       await staticPage.locator(".chronicle-entry").count(),
       postCount,
@@ -366,7 +366,7 @@ const results = { browser: name, checks: [], errors: [] };
         hasTouch: true,
       });
       const touchPage = await touchContext.newPage();
-      await touchPage.goto(base + "/journey/");
+      await touchPage.goto(base + "/");
       await touchPage.locator(".chronicle-window").scrollIntoViewIfNeeded();
       const box = await touchPage.locator(".chronicle-window").boundingBox();
       const session = await touchContext.newCDPSession(touchPage);
@@ -389,7 +389,7 @@ const results = { browser: name, checks: [], errors: [] };
       await touchPage.waitForFunction(
         () => document.querySelector(".chronicle-window").scrollLeft > 100,
       );
-      assert.ok(touchPage.url().endsWith("/journey/"));
+      assert.ok(new URL(touchPage.url()).pathname === "/");
       await touchContext.close();
       results.checks.push(
         "Native mobile touch swipe scrolls the timeline without following links",

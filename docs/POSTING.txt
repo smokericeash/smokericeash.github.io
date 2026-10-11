@@ -28,6 +28,7 @@ Keep the opening and closing --- markers. Inside them:
   categories: [Competition] or [Certification], [Projects], etc.
   tags: [linux, networking, cybersecurity]
   description: one or two factual sentences for previews and search metadata
+  ascent: optional; set to false to omit this post from both Ascent views
   image: optional path to a cover image
   alt: describe the cover when you supply one
 
@@ -41,7 +42,11 @@ An explicit description is recommended. Without it, the first paragraph is used.
 For a text-only post, leave the template's image/alt lines commented out. It will
 still appear normally, without an empty image box. Cover images are recommended
 for illustrated previews. Do not add the post to _data/journey.yml: that file
-only contains optional editorial overrides for existing entries.
+only contains optional editorial overrides for existing entries. Published
+posts appear in the horizontal Home preview and vertical /journey/ expedition
+by default. Set ascent: false only for an ordinary post that should remain in
+Work but not become a climbing checkpoint. Both Ascent views, the date range
+and the route update at the next site build.
 
 3. ADD IMAGES (ONLY WHEN NEEDED)
 

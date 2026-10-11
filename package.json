@@ -5,7 +5,8 @@
   "description": "Custom Jekyll portfolio and technical journal for Aidan Chen",
   "scripts": {
     "test:site": "bundle exec ruby tests/verify_site.rb",
-    "test": "node tests/browser.cjs && node tests/experience.cjs && node tests/editorial.cjs",
+    "test": "node tests/browser.cjs && node tests/experience.cjs && node tests/editorial.cjs && node tests/expedition.cjs",
+    "test:expedition": "node tests/expedition.cjs",
     "test:experience": "node tests/experience.cjs",
     "test:editorial": "node tests/editorial.cjs",
     "test:performance": "node tests/performance.mjs"

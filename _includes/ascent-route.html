@@ -2,10 +2,12 @@
   <svg class="ascent-map-art" viewBox="0 0 1000 192" preserveAspectRatio="none" focusable="false">
     <path class="ascent-ridge ascent-ridge-far" d="M0 157 L86 143 150 149 239 105 320 125 405 82 503 111 613 63 694 79 771 38 851 62 937 17 1000 35 V192 H0Z" />
     <path class="ascent-ridge ascent-ridge-near" d="M0 173 L106 160 187 168 273 139 350 150 453 109 533 130 636 100 719 116 809 72 893 88 956 53 1000 66 V192 H0Z" />
+    <path class="ascent-snow" d="M589 70 613 63 637 69 615 66 606 72ZM746 49 771 38 801 47 773 43 763 50ZM906 28 937 17 970 27 939 22 930 31ZM786 79 809 72 833 77 808 75Z" />
+    <path class="ascent-rock-detail" d="M692 81 705 95 721 93 M851 63 862 76 882 77 M942 31 948 53 963 58 M605 78 615 91 631 92" />
     <path class="ascent-contour" d="M0 170 C175 165 270 144 412 135 S670 110 786 83 924 66 1000 64" />
     <path class="ascent-route-base" d="M34 157 C120 159 175 146 250 140 S390 135 473 119 600 107 659 97 807 70 966 38" />
     <path class="ascent-route-travel" d="M34 157 C120 159 175 146 250 140 S390 135 473 119 600 107 659 97 807 70 966 38" />
   </svg>
-  <span class="ascent-climber" style="left:3.4%;top:81.8%"><svg viewBox="-8 -23 16 24" focusable="false"><circle cx="0" cy="-18" r="3" /><path d="M0 -14 L-1 -7 M-1 -11 L-6 -8 M-1 -11 L5 -8 M-1 -7 L-5 0 M-1 -7 L5 0" /></svg></span>
-  <div class="ascent-map-labels"><span>FIRST ENTRY · {{ milestones.first.date | date: '%Y' }}</span><span>LATEST ENTRY · {{ milestones.last.date | date: '%Y' }}</span></div>
+  <span class="ascent-climber" style="left:3.4%;top:81.8%"><svg viewBox="-29 -77 58 84" focusable="false">{% include mountaineer.html %}</svg></span>
+  <div class="ascent-map-labels"><span>BASE CAMP · {{ milestones.first.date | date: '%Y' }}</span><span>SUMMIT AWAITS · {{ milestones.last.date | date: '%Y' }}</span></div>
 </div>
