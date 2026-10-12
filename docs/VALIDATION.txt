@@ -1,12 +1,41 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
 Build, browser suites, and Lighthouse measured October 11, 2026
-(America/Los_Angeles) after the full-color Ascent refinement.
+(America/Los_Angeles) after the continuous Ascent rig and integrated introduction.
 
 RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
 pushed, merged or deployed. The original source checkout is unchanged.
 
-OCTOBER 11 LATEST FULL-COLOR ASCENT REFINEMENT
+OCTOBER 11 CONTINUOUS CLIMB AND INTEGRATED INTRODUCTION — LATEST
+- Removed the sun/moon ornament; retained subtle Pacific-time mountain lighting.
+- Replaced four-image pose swapping with seven SVG layers cut from one original
+  full-color climber image. Shoulder, elbow, hip and knee transforms follow
+  scroll continuously. Reduced-motion holds one complete pose, and no-JS still
+  shows the figure and every linked post. Three unused pose WebPs were removed.
+- Faster body response and a slower camera make upward travel perceptible;
+  the climber was visually inspected at first, middle, last and between posts.
+  Expensive full-figure drop shadows were removed.
+- Removed the inherited 70vh title gap. An indigo-overlaid Everest image behind
+  the heading fades into the first scene without a hard border; desktop/mobile
+  and light/dark screenshots were reviewed for legibility and continuity.
+- The focused Chrome wheel check recorded 189 distinct arm transforms during an
+  850 ms gesture after final tuning. Headless Firefox/WebKit delivered fewer
+  samples under this Windows harness; the code updates every rendering frame,
+  but no cross-device minimum frame rate is claimed.
+- Full Chrome/Firefox/WebKit suites pass: per engine 94 route checks, 132
+  responsive checks, 22 broad axe scans, six general interactions, 11
+  editorial/motion groups and 10 Ascent groups; Home experience checks: 10
+  Chrome, nine Firefox, nine WebKit. No reported browser errors/axe violations.
+- Post-growth fixture passes and removes all temporary entries. Production
+  build: 26 original files unchanged, nine routes, 47 pages, 1,688 local
+  references/anchors/assets, valid metadata/XML and nine article contracts.
+- Final local Lighthouse mobile performance: Home 98, Work 99, article 99,
+  Ascent 95. Desktop: 100, 100, 100, 99. All runs score 100 in accessibility,
+  best practices and SEO. Ascent mobile LCP 2.7 s, CLS 0, TBT 110 ms.
+  These are local lab scores, not live field results.
+- Evidence: docs/{browser,experience,editorial,expedition,lighthouse}-results.json.
+
+EARLIER OCTOBER 11 FOUR-FRAME ASCENT REFINEMENT (SUPERSEDED)
 - About Network+ and CRTO use a literal line break and measured spacing;
   changed CSS/JS URLs are versioned to avoid stale cached presentation.
 - Home retains its previously approved horizontal preview and compact climber.

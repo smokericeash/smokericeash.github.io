@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The new full-color vertical Ascent scene, eased post navigation and About credential line break are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The integrated Ascent introduction and continuously articulated full-color climber are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,18 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 full-color Ascent refinement — latest handoff
+## October 11 integrated Ascent and continuous climb — latest handoff
+
+- Removed the explicit sun/moon ornament. Local Pacific-time day/night lighting still subtly adjusts the mountain scene without location permission or a network request.
+- Removed the four-image pose swap. One approved orange mountaineer image now supplies seven clipped SVG layers: torso, back arm, shoulder/forearm, front leg, thigh and shin. Shoulder, elbow, hip and knee transforms update continuously with scroll rather than switching raster frames; reduced motion holds a static, complete pose. The unused three WebP pose derivatives were removed, while the original four-panel source sheet remains for provenance.
+- The climber responds faster to scroll than the camera, so a gesture visibly raises the body along the wall before the camera catches up. Repositioned the figure beside the wall's icy holds and lower foothold; inspected first, middle, last and in-between checkpoints. Removed expensive full-figure drop shadows. The climber remains decorative, while every real post is semantic and linked.
+- Removed the title section's inherited 70vh minimum. The Everest art now extends behind the title under a dark indigo overlay and fades toward the expedition scene; removed its abrupt top border. Desktop and mobile screenshots in both light and dark site themes were reviewed. The introductory text stays legible.
+- Baseline checks passed before edits. Final normal production build and preservation checks pass: 26 original files unchanged, nine post routes, 47 HTML pages, 1,688 local references, XML/metadata and nine article contracts. The growth fixture passes addition, exclusion, edits, reordering and removal; it left no temporary posts.
+- Complete Chrome, Firefox and WebKit suites pass: per engine, 94 route checks, 132 responsive checks, 22 axe scans, six general interaction groups, 11 editorial groups and 10 Ascent groups; Home experience has 10 Chrome / nine Firefox / nine WebKit groups. A Chrome wheel test observed 189 distinct arm transforms within an 850 ms sample after tuning, demonstrating continuous rather than four-frame motion. Headless Firefox/WebKit deliver fewer samples in this sandbox; this is not a guaranteed hardware frame rate.
+- Final eight-run local Lighthouse sweep: Home/Work/article/Ascent mobile performance **98 / 99 / 99 / 95**, desktop **100 / 100 / 100 / 99**. Accessibility, best practices and SEO score 100 throughout. Ascent mobile LCP 2.7 s, CLS 0 and TBT 110 ms. These are lab measurements, not field performance guarantees.
+- Current work in progress: none. Remaining: Aidan's visual review of the new entrance and climb on the local preview, actual device frame pacing and screen-reader review where available, remote Linux CI after a branch-only push, and custom-domain verification before publication. No push, merge or deployment has occurred.
+
+## Earlier October 11 full-color Ascent refinement — superseded by the continuous rig
 
 - User rejected the preceding black geometric climber, flat mountain contact and abrupt snap. Replaced the dedicated `/journey/` figure with four transparent illustrated full-body poses: orange down parka, navy trousers, helmet, goggles, pack, harness/rope, tools, gloves and crampon boots. Poses alternate reaching/pulling and stepping; the first frame is available without JavaScript. The approved small Home climber remains untouched.
 - Composited a separate original close ice-and-rock wall over the Everest panorama. The climber travels along the near wall rather than appearing to float over the distant mountain; wall and panorama move at different rates for depth. Source files and exact built-in imagegen prompts are in `docs/ASCENT_ART.md`. The imagery is illustrative and not a topographic claim.
@@ -186,11 +197,12 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `66ef075` — vertical Ascent expedition, shared post eligibility, geared climber, CRTO/About refinement and dedicated browser/content fixtures.
 - `4ef52b6` — earlier Everest-inspired scene, geometric climber and desktop post snapping, since replaced by the latest refinement.
 - `cffd097` — full-color mountaineer and foreground wall, elapsed-time camera easing, softened wheel settling, structural credential break, responsive art and focused regressions.
+- `6f3e1c8` — continuous articulated climber, closer contact with the ice wall, removed sun/moon and unused pose files, integrated Everest introduction and browser regressions.
 - This handoff and refreshed validation evidence are recorded in the following documentation commit.
 
 ## Exact recommended next task
 
-**Review the latest `/journey/` expedition at `http://127.0.0.1:4173/journey/`: wheel slowly and quickly in both directions, inspect the orange climber's wall contact and four poses, view the final panel and both day/night states, and try a real mobile device if available. Check the separate credential lines at `/about/`. Address any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
+**Review the new `/journey/` entrance and continuous climb at `http://127.0.0.1:4173/journey/`: check the title-to-mountain transition, scroll slowly and quickly through several checkpoints in both directions, inspect hand/boot contact and the final panel, and assess smoothness on a real mobile device if available. Address any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
 
 ## Reproducible local commands
 
