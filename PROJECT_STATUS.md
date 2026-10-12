@@ -4,7 +4,7 @@ Updated: October 12, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent's climber follows an almost vertical route, without torso rotation. Both legs are now continuous painted shapes rather than thigh/shin cutouts, so the knees cannot split during a step.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent now uses 12 complete, separately illustrated black-and-white climber poses. No limb cutouts, joint rotation, or limb scaling remain.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,15 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 12 continuous leg artwork — latest handoff
+## October 12 full-body frame animation — latest handoff
+
+- Completed: replaced the cutout SVG rig with a 12-pose scroll-driven sequence based on the approved black-and-white alpine climber. Three original transparent sprite sheets are retained under `assets/img/`; the reproducible `npm run build:climber-frames` script splits them into optimized 400 × 533 WebPs under `assets/media/`. The page preloads these assets, displays one intact full-body drawing per phase, and keeps the established route, camera, ice wall, post layout and site design. Bumped the Ascent script cache version. No arm or leg is independently rotated, stretched or detached.
+- Design/technical decision: a two-pose crossfade produced visible ghost limbs during visual inspection, so the site switches whole illustrated frames instead. This is 12 distinct frames per entry on a continuously animated scroll/camera path, not a 30 fps video or biomechanical simulation. Reduced-motion uses one pose. The generated drawings preserve the prior rear three-quarter view and unbranded black-and-white technical outfit.
+- Testing: production Jekyll build, source/site integrity (26 originals unchanged, nine post routes, 47 pages and 1,688 local references), nine article contracts, and the complete Chrome suite passed: 94 routes, 132 responsive pages, 22 axe scans, six general interaction groups, 10 experience groups, 11 editorial groups and 10 Ascent groups. The focused Ascent test confirms all 12 frame assets decode, a single intact image is rendered, multiple poses appear during wheel travel, reduced-motion stays static, and the route/camera remains monotonic. Desktop and mobile screenshots were inspected; there were no ghost limbs in the final screenshots. The source-sheet extraction command reproduced all 12 frames; JavaScript syntax and Git whitespace checks passed. Local Lighthouse: Ascent performance 96 mobile / 98 desktop, accessibility/best practices/SEO 100 on both, CLS 0. Other tested routes scored 98–100 performance.
+- Currently in progress: none after the commit. Known issues: the twelve illustrated frames are discrete and can still appear stepped under very slow scroll; hand and crampon contact is an illustration rather than physically solved animation. Real-device perceived motion and wall contact still need review. Firefox/WebKit test executables are unavailable; remote Linux CI and custom-domain settings remain unverified. No push, merge or deployment.
+- **Exact recommended next task:** review `/journey/` at `http://127.0.0.1:4173/journey/` through a slow and fast scroll in both directions, specifically judging frame continuity and ice-wall contact. If truly video-like motion is still desired, commission or create a coherent hand-animated 20–30+ frame sequence or short transparent video from a consistent character rig; do not return to raster limb hinges or blended mismatched poses. Then restore Firefox/WebKit runners and run branch-only Linux CI before any production merge.
+
+## October 12 continuous leg artwork — superseded solution
 
 - Completed: removed separate thigh/shin image layers, two textured knee patches and both dark bridge paths after Aidan showed that the leg still opened and the right knee bent unnaturally. Each leg is now a single clipped portion of the original painted climber, moved by a restrained vertical deformation anchored near the hip. This preserves the original knee shape and trouser texture throughout the scroll motion. Arms, mountain scene, route, scroll pacing, site content and page design remain as before. Bumped the Ascent script cache version to expose the new motion in open browser tabs.
 - Design/technical decision: a single static painted pose cannot support a convincing large two-bone knee bend without real mesh skinning or newly illustrated animation frames. The current leg step is smaller but visually continuous. It is a deliberate quality tradeoff, not a claim of motion-captured biomechanics.
@@ -216,8 +224,8 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- No currently requested implementation work remains after the new full-color Ascent scene. Final visual review and publication checks are the next step.
-- Currently in progress: none.
+- The October 12 full-body frame revision above is the current implementation. Final visual review and publication checks remain.
+- Currently in progress: none after the October 12 full-body frame commit.
 
 ## Logical commits
 
@@ -239,7 +247,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the new `/journey/` entrance and continuous climb at `http://127.0.0.1:4173/journey/`: check the title-to-mountain transition, scroll slowly and quickly through several checkpoints in both directions, inspect hand/boot contact and the final panel, and assess smoothness on a real mobile device if available. Address any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
+**Review the new 12-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` in slow and fast scrolls, both directions, especially frame continuity and hand/boot contact. If a truly video-like result is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
 
 ## Reproducible local commands
 

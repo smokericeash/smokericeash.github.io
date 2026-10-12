@@ -9,7 +9,8 @@
     "test:expedition": "node tests/expedition.cjs",
     "test:experience": "node tests/experience.cjs",
     "test:editorial": "node tests/editorial.cjs",
-    "test:performance": "node tests/performance.mjs"
+    "test:performance": "node tests/performance.mjs",
+    "build:climber-frames": "node scripts/build_climber_frames.cjs"
   },
   "devDependencies": {
     "@axe-core/playwright": "^4.13.0",
