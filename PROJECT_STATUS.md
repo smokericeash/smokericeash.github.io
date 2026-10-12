@@ -4,7 +4,7 @@ Updated: October 12, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent now uses 16 newly drawn, complete black-and-white mountaineer poses.** Each image contains the whole body and gear; the old hinge-based artwork and six previous pose sources are no longer used. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent uses 16 complete black-and-white mountaineer poses, now all viewed from the same right-facing rear-three-quarter angle.** Each image contains the whole body and gear, including both legs and boots; the old hinge-based artwork is no longer used. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,16 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 12 complete-frame redraw — latest handoff
+## October 12 right-facing pose correction — latest handoff
+
+- Completed: replaced the three middle/end sprite sheets that had turned the character to a straight-back view or hidden a leg. All 16 shipped whole-body frames now use the same right-facing rear-three-quarter view as the user's third reference screenshot, with blue goggle profile visible, two separately drawn legs/boots and two ice tools directed at the wall to the right. Regenerated the WebPs, inspected a 16-pose contact sheet and a rendered `/journey/` desktop scene, and bumped the site assets to `ascent-12`. No background, page layout, content, routes or other site component changed.
+- Currently in progress: none after this correction is committed; real-device review remains before production.
+- Design/technical decisions: retain individually drawn complete frames and the existing registered image/camera architecture. Do not rotate the character toward the viewer during handovers. No separate hinged or scaled body parts are shipped.
+- Testing performed: baseline Chrome Ascent test passed before editing. A first post-edit test caught an overextended support leg; that source sheet was redrawn and regenerated. Reviewed all 16 exported figures in a contact sheet and inspected frames 01, 06, 09 and 14 over the actual `/journey/` wall in Chrome. Production Jekyll build, all 16 frame decoding and leg/boot checks, full Chrome suite (94 routes, 132 responsive pages, 22 axe scans, six general groups, 10 experience groups, 11 editorial groups and 10 Ascent groups), source/content integrity (26 original files, nine post routes, 47 HTML pages, 1,688 local references), JavaScript syntax and Git whitespace checks all passed.
+- Known issues and limits: independent generated drawings still step discretely at very slow scroll speeds. The right-facing composition makes the bent near leg dominate the illustrated cycle; the opposite-side foot action is less distinct than an accurately animated two-sided climb. The tools are shown in right-facing side profile, but their exact contact points are illustrative. Real-device motion review, Firefox/WebKit runners, branch-only Linux CI and custom-domain verification remain outstanding. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the revised right-facing Ascent with slow and fast scrolling on a real desktop and phone. If the climbing gait still needs fully alternating leg action without a viewpoint change, create a purpose-animated full-body sequence from one consistent 3D character model, render each complete pose, and replace the current sprite sources; keep the approved site design and whole-frame playback. Then run cross-browser and branch-only CI before production.
+
+## October 12 complete-frame redraw — earlier handoff, superseded where noted above
 
 - Completed: replaced the previous six mixed pose sources with four fresh transparent 2 × 2 sheets containing 16 individually drawn **whole climbers**. Curated the step and handover order, aligned frames by the goggle position at export, removed a stray crop fragment, regenerated all 400 × 533 WebPs and removed the unused seventeenth frame. The runtime still displays one whole image at a time; there are no separate arm/leg/body pieces, joint rotations, or limb scaling. Ice tools read in side profile toward the wall. The Everest background, route, posts, page layouts, navigation and other site elements were not changed. Bumped Ascent asset/script URLs to `ascent-11`.
 - Currently in progress: none in the code. A real-device motion judgment remains before calling the animation production-ready.

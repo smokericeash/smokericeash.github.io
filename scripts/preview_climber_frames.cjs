@@ -23,6 +23,24 @@ const path = require('node:path');
     fs.mkdirSync(path.dirname(target), { recursive: true });
     await page.screenshot({ path: target, fullPage: true });
     console.log(target);
+    if (process.env.PREVIEW_URL) {
+      const scene = await browser.newPage({ viewport: { width: 1440, height: 900 } });
+      await scene.goto(`${process.env.PREVIEW_URL.replace(/\/$/, '')}/journey/`);
+      await scene.locator('.expedition-checkpoint').nth(4).evaluate(element =>
+        element.scrollIntoView({ block: 'center', behavior: 'instant' }));
+      await scene.waitForTimeout(250);
+      for (const index of [1, 6, 9, 14]) {
+        const number = String(index).padStart(2, '0');
+        await scene.locator('[data-climber-frame-primary]').evaluate((element, number) => {
+          element.setAttribute('href', element.getAttribute('href')
+            .replace(/ascent-climber-frame-\d+\.webp/, `ascent-climber-frame-${number}.webp`));
+        }, number);
+        await scene.waitForTimeout(120);
+        const imageTarget = path.join(root, 'test-results', `climber-scene-${number}.png`);
+        await scene.locator('.expedition-visual').screenshot({ path: imageTarget });
+        console.log(imageTarget);
+      }
+    }
   } finally {
     await browser.close();
   }

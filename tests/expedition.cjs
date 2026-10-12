@@ -42,7 +42,7 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Climber must be one complete pose, with no hinged body parts');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-11$/);
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-12$/);
     for (let index = 1; index <= 16; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
@@ -71,18 +71,26 @@ const output = { browser: browserName, checks: [] };
           xs.sort((a, b) => a - b);
           return xs[Math.floor(xs.length / 2)];
         };
-        return { hip: center(210, 70), lowerLeg: center(400, 90) };
+        const rgba = context.getImageData(0, 300, image.width, image.height - 300).data;
+        const bootXs = [];
+        for (let i = 0; i < rgba.length; i += 4) {
+          const [red, green, blue, alpha] = rgba.subarray(i, i + 4);
+          if (alpha > 160 && red > 100 && green > 35 && green < 160 &&
+              blue < 105 && red > green * 1.25) bootXs.push(Math.floor(i / 4) % image.width);
+        }
+        bootXs.sort((a, b) => a - b);
+        return { hip: center(210, 70), lowerLeg: center(400, 90),
+          orangeSpan: bootXs[Math.floor(bootXs.length * .9)] - bootXs[Math.floor(bootXs.length * .1)],
+          orangeCount: bootXs.length };
       };
       return Promise.all(Array.from({ length: 16 }, (_, index) => sample(index + 1)));
     });
     for (const [index, pose] of footholds.entries()) {
       assert.ok(Math.abs(pose.lowerLeg - pose.hip) < 60,
         `Pose ${index + 1} must keep the supporting leg beneath the hip: ${JSON.stringify(pose)}`);
+      assert.ok(pose.orangeSpan > 95 && pose.orangeCount > 150,
+        `Pose ${index + 1} must show two separated crampon boots: ${JSON.stringify(pose)}`);
     }
-    assert.ok(footholds[0].lowerLeg - footholds[0].hip < -20 &&
-      footholds[8].lowerLeg - footholds[8].hip > 35 &&
-      Math.abs(footholds[15].lowerLeg - footholds[15].hip) < 25,
-    'The planted supporting leg must change sides and return under the body');
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
     assert.equal(await page.locator('[data-climber-front-arm], [data-climber-back-arm], [data-climber-front-leg], [data-climber-back-leg], [data-climber-front-shin], [data-climber-back-shin]').count(), 0);
