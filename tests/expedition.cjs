@@ -41,7 +41,7 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber image').count(), 9);
+    assert.equal(await page.locator('.expedition-climber image').count(), 11);
     assert.deepEqual(await page.locator('.expedition-climber image').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('href')))]), ['/assets/media/ascent-climber-alpine.webp']);
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
@@ -99,12 +99,16 @@ const output = { browser: browserName, checks: [] };
     assert.ok(settled < 250, `Post did not settle near a reading position: ${settled}`);
     output.checks.push(`Desktop wheel eases between entries with ${continuousPoses} distinct climbing poses in an 850ms sample`);
     const positions = [];
+    const lateralPositions = [];
     for (const index of [0, Math.floor(homeCount / 2), homeCount - 1]) {
       await checkpoints.nth(index).scrollIntoViewIfNeeded();
       await page.waitForTimeout(850);
       positions.push(Number((await page.locator('.expedition-art').getAttribute('viewBox')).split(' ')[1]));
+      lateralPositions.push(await page.locator('.expedition-climber').evaluate(el => new DOMPoint(0, 0).matrixTransform(el.getScreenCTM()).x));
     }
     assert.ok(positions[0] > positions[1] && positions[1] > positions[2], `Camera did not climb: ${positions}`);
+    assert.ok(Math.max(...lateralPositions) - Math.min(...lateralPositions) < 24,
+      `Climber should ascend almost straight up without lateral shimmy: ${lateralPositions}`);
     await checkpoints.first().scrollIntoViewIfNeeded();
     await page.waitForTimeout(850);
     const reversed = Number((await page.locator('.expedition-art').getAttribute('viewBox')).split(' ')[1]);
@@ -172,7 +176,7 @@ const output = { browser: browserName, checks: [] };
     assert.ok(leftLead.contacts.backHand.y < rightLead.contacts.backHand.y - 55, 'Left tool reaches high next');
     assert.ok(leftLead.contacts.frontFoot.y < rightLead.contacts.frontFoot.y - 55, 'Opposite right crampon steps with the left tool');
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
-    output.checks.push('Two linked tool/crampon pairs travel mostly vertically with continuous bends and wall parallax');
+    output.checks.push('Two linked tool/crampon pairs travel vertically with limited body sway and wall parallax');
 
     await page.locator('.expedition-continuation').scrollIntoViewIfNeeded();
     assert.equal(await page.getByRole('heading', { name: 'The ascent continues' }).count(), 1);

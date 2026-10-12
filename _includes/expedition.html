@@ -19,9 +19,11 @@
         <clipPath id="climber-back-forearm"><path d="M107 69 91 78 72 61 58 16 74 0 106 0 116 35Z"/></clipPath>
         <clipPath id="climber-back-thigh"><path d="M139 180 196 185 182 229 150 281 104 297 96 266 113 226Z"/></clipPath>
         <clipPath id="climber-back-shin"><path d="M102 261 157 267 145 331 126 408 54 408 65 345Z"/></clipPath>
+        <clipPath id="climber-back-knee"><ellipse cx="127" cy="271" rx="22" ry="25"/></clipPath>
         <clipPath id="climber-torso"><path d="M130 47 196 60 223 100 227 167 213 219 159 234 116 215 100 170 104 104Z"/></clipPath>
         <clipPath id="climber-front-leg"><path d="M184 168 256 170 305 190 306 243 275 262 225 235 181 229Z"/></clipPath>
         <clipPath id="climber-front-shin"><path d="M251 218 306 208 306 288 262 307 206 303 211 262Z"/></clipPath>
+        <clipPath id="climber-front-knee"><ellipse cx="266" cy="225" rx="23" ry="22"/></clipPath>
         <clipPath id="climber-upper-arm"><path d="M183 84 227 67 255 49 274 69 258 92 221 116 190 121 173 107Z"/></clipPath>
         <clipPath id="climber-forearm"><path d="M236 78 258 45 269 14 286 0 306 0V60L278 90 258 99Z"/></clipPath>
       </defs>
@@ -32,18 +34,22 @@
         <g class="expedition-climber" data-expedition-climber>
           <svg x="-54" y="-106" width="88" height="117" viewBox="0 0 306 408" overflow="visible">
             {% assign climber_art = '/assets/media/ascent-climber-alpine.webp' | relative_url %}
+            <path data-climber-back-knee-bridge fill="none" stroke="#22272e" stroke-width="21" stroke-linecap="round" stroke-linejoin="round" />
             <g data-climber-back-thigh>
               <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-thigh)" />
               <g data-climber-back-shin><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-shin)" /></g>
+              <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-knee)" />
             </g>
             <g data-climber-back-arm>
               <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-arm)" />
               <g data-climber-back-forearm><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-forearm)" /></g>
             </g>
             <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-torso)" />
+            <path data-climber-front-knee-bridge fill="none" stroke="#24282e" stroke-width="22" stroke-linecap="round" stroke-linejoin="round" />
             <g data-climber-front-leg>
               <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-front-leg)" />
               <g data-climber-front-shin><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-front-shin)" /></g>
+              <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-front-knee)" />
             </g>
             <g data-climber-front-arm>
               <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-upper-arm)" />

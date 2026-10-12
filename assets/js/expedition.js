@@ -30,8 +30,8 @@
   const limbGeometry = [
     { upper: limbs.frontArm, lower: limbs.forearm, root: [193, 99], joint: [250, 71], tip: [284, 20] },
     { upper: limbs.backArm, lower: limbs.backForearm, root: [141, 94], joint: [108, 57], tip: [80, 20] },
-    { upper: limbs.frontLeg, lower: limbs.frontShin, root: [199, 190], joint: [266, 225], tip: [251, 282] },
-    { upper: limbs.backThigh, lower: limbs.backShin, root: [157, 204], joint: [127, 271], tip: [100, 383], bend: -1 },
+    { upper: limbs.frontLeg, lower: limbs.frontShin, bridge: climber.querySelector('[data-climber-front-knee-bridge]'), bridgeOffsetX: -11, root: [199, 190], joint: [266, 225], tip: [251, 282] },
+    { upper: limbs.backThigh, lower: limbs.backShin, bridge: climber.querySelector('[data-climber-back-knee-bridge]'), root: [157, 204], joint: [127, 271], tip: [100, 383], bend: -1 },
   ].map(limb => {
     const [sx, sy] = limb.root;
     const [ex, ey] = limb.joint;
@@ -67,6 +67,14 @@
     const lowerAngle = Math.atan2(ty - jointY, tx - jointX) - limb.lowerBase - upperAngle;
     limb.upper.setAttribute('transform', `rotate(${degrees(upperAngle).toFixed(2)} ${sx} ${sy})`);
     limb.lower.setAttribute('transform', `rotate(${degrees(lowerAngle).toFixed(2)} ${ex} ${ey})`);
+    if (limb.bridge) {
+      const startX = jointX + (sx - jointX) * .23;
+      const startY = jointY + (sy - jointY) * .23;
+      const endX = jointX + (tx - jointX) * .23;
+      const endY = jointY + (ty - jointY) * .23;
+      const bridgeX = limb.bridgeOffsetX || 0;
+      limb.bridge.setAttribute('d', `M${(startX + bridgeX).toFixed(2)} ${startY.toFixed(2)}L${(jointX + bridgeX).toFixed(2)} ${jointY.toFixed(2)}L${(endX + bridgeX).toFixed(2)} ${endY.toFixed(2)}`);
+    }
   };
   const ease = value => value * value * (3 - 2 * value);
   const clamp01 = value => Math.max(0, Math.min(1, value));
@@ -85,13 +93,13 @@
   const stages = count + 1;
   // Route geometry grows from the real number of posts, with no hand-maintained milestones.
   const routePoints = Array.from({ length: count + 2 }, (_, index) => ({
-    x: 328 + Math.sin(index * 1.65) * 51 + Math.cos(index * .7) * 19,
+    x: 340 + Math.sin(index * 1.65) * 5,
     y: worldHeight - 300 - index * 500,
   }));
   const d = routePoints.map((point, index) => {
     if (!index) return `M${point.x} ${point.y}`;
     const previous = routePoints[index - 1];
-    return `C${previous.x - 32} ${previous.y - 192} ${point.x + 27} ${point.y + 190} ${point.x} ${point.y}`;
+    return `C${previous.x} ${previous.y - 192} ${point.x} ${point.y + 190} ${point.x} ${point.y}`;
   }).join(' ');
   route.setAttribute('d', d);
   completed.setAttribute('d', d);
@@ -136,9 +144,6 @@
     backdrop.style.transform = `translate3d(0, ${(-10.71 * (1 - fraction)).toFixed(2)}%, 0)`;
     wall.style.transform = `translate3d(0, ${(-18.03 * (1 - fraction)).toFixed(2)}%, 0)`;
     const point = route.getPointAtLength(totalLength * fraction);
-    const ahead = route.getPointAtLength(Math.min(totalLength, totalLength * fraction + 12));
-    const behind = route.getPointAtLength(Math.max(0, totalLength * fraction - 12));
-    const tangent = Math.atan2(behind.x - ahead.x, behind.y - ahead.y);
     // The camera and climber share one progress value. A delayed camera made
     // the climber appear to fall back after the wheel stopped. The intended
     // screen height steadily rises throughout the route, without a loop reset.
@@ -166,7 +171,7 @@
     placeLimb(limbGeometry[1], 72 + 8 * backReach, 105 - 85 * backReach);
     placeLimb(limbGeometry[2], 251 + 9 * frontStep, 330 - 85 * frontStep);
     placeLimb(limbGeometry[3], 100 + 18 * backStep, 380 - 70 * backStep);
-    climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) rotate(${(tangent * 180 / Math.PI * .025).toFixed(2)}) scale(1.65)`);
+    climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);
     if (nearest !== lastStage) {
