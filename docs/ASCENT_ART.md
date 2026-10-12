@@ -1,13 +1,13 @@
 # Ascent scene art
 
-The mountain backdrop, close ice wall and four climbing poses are original generated illustrations, not photographs or claims of topographic accuracy. They evoke Everest and the surrounding Himalaya. The route, camera, parallax, pose timing and day/night treatment remain editable SVG/CSS/JavaScript. All art was generated with the built-in imagegen tool, not a fallback CLI.
+The mountain backdrop, close ice wall and source climber sheet are original generated illustrations, not photographs or claims of topographic accuracy. They evoke Everest and the surrounding Himalaya. The route, camera, parallax, articulated limb timing and day/night lighting remain editable SVG/CSS/JavaScript. All source art was generated with the built-in imagegen tool, not a fallback CLI.
 
 - Generation mode: built-in imagegen tool, `stylized-concept` use case for the background and transparent assets for the wall/climber.
 - Original: `assets/img/ascent-everest-illustration.png` (1086 × 1448).
 - Optimized background sources: `assets/media/ascent-everest-illustration.webp` (1086 px), `ascent-everest-illustration-800.webp`, `ascent-everest-illustration-640.webp`, and `ascent-everest-illustration-640.avif`.
 - The mobile AVIF source is deliberately smaller to keep the large scene from delaying first paint. The site serves responsive formats from `<picture>`; no external image service is used.
 - Foreground source: `assets/img/ascent-icewall-illustration.png`; responsive alpha WebP: `assets/media/ascent-icewall-800.webp` and `ascent-icewall-480.webp`, with `ascent-icewall-480.avif` on supported mobile browsers.
-- Climber source: `assets/img/ascent-climber-frames.png`; four transparent animation frames: `assets/media/ascent-climber-01.webp` through `ascent-climber-04.webp`. The four equal source panels were cropped and resized with Pillow; stray edge pixels from adjacent panels were cleared. The first pose loads immediately; later poses are deferred until after load or the first wheel input. Scroll progress chooses among the consistent full-body poses.
+- Climber source: `assets/img/ascent-climber-frames.png`; the first transparent pose is optimized as `assets/media/ascent-climber-01.webp`. The four-panel source sheet remains available for art provenance, but the website no longer swaps frames. Seven SVG cutouts of the same pose share that one WebP texture. Shoulder, elbow, hip and knee groups rotate continuously with scroll, with a separate slower camera follow. Reduced-motion holds the joint positions still. No new raster art was generated for this rig refinement.
 
 Background prompt:
 

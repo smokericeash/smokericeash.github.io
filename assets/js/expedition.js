@@ -14,7 +14,14 @@
   const completed = root.querySelector('[data-expedition-route-done]');
   const contact = root.querySelector('[data-expedition-contact]');
   const climber = root.querySelector('[data-expedition-climber]');
-  const climbFrames = [...climber.querySelectorAll('[data-expedition-frame]')];
+  const limbs = {
+    frontArm: climber.querySelector('[data-climber-front-arm]'),
+    forearm: climber.querySelector('[data-climber-forearm]'),
+    backArm: climber.querySelector('[data-climber-back-arm]'),
+    frontLeg: climber.querySelector('[data-climber-front-leg]'),
+    backThigh: climber.querySelector('[data-climber-back-thigh]'),
+    backShin: climber.querySelector('[data-climber-back-shin]'),
+  };
   const zone = root.querySelector('[data-expedition-zone]');
   const position = root.querySelector('[data-expedition-position]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
@@ -50,6 +57,7 @@
   let anchors = [];
   let target = 0;
   let current = 0;
+  let cameraCurrent = 0;
   let frame = 0;
   let renderTime = 0;
   let lastStage = -1;
@@ -77,8 +85,11 @@
     target = getTarget();
     const elapsed = renderTime ? Math.max(0, time - renderTime) : 16;
     renderTime = time;
-    current = motion.matches ? target : current + (target - current) * (1 - Math.exp(-elapsed / 110));
+    current = motion.matches ? target : current + (target - current) * (1 - Math.exp(-elapsed / 80));
     if (Math.abs(target - current) < .002) current = target;
+    cameraCurrent = motion.matches ? current : cameraCurrent + (current - cameraCurrent) * (1 - Math.exp(-elapsed / 265));
+    cameraCurrent = Math.max(current - .34, Math.min(current + .34, cameraCurrent));
+    if (Math.abs(current - cameraCurrent) < .002) cameraCurrent = current;
     const fraction = current / stages;
     backdrop.style.transform = `translate3d(0, ${(-10.71 * (1 - fraction)).toFixed(2)}%, 0)`;
     wall.style.transform = `translate3d(0, ${(-18.03 * (1 - fraction)).toFixed(2)}%, 0)`;
@@ -86,17 +97,26 @@
     const ahead = route.getPointAtLength(Math.min(totalLength, totalLength * fraction + 12));
     const behind = route.getPointAtLength(Math.max(0, totalLength * fraction - 12));
     const tangent = Math.atan2(behind.x - ahead.x, behind.y - ahead.y);
-    const camera = Math.max(0, Math.min(worldHeight - 800, point.y - 410));
+    const cameraPoint = route.getPointAtLength(totalLength * cameraCurrent / stages);
+    const camera = Math.max(0, Math.min(worldHeight - 800, cameraPoint.y - 410));
     svg.setAttribute('viewBox', `0 ${camera.toFixed(2)} 600 800`);
     contact.setAttribute('cx', (point.x + 23).toFixed(2));
-    contact.setAttribute('cy', (point.y + 4).toFixed(2));
+    contact.setAttribute('cy', (point.y + 69).toFixed(2));
     completed.style.strokeDashoffset = String(totalLength * (1 - fraction));
-    const step = motion.matches ? 0 : current * 2;
-    const frameIndex = Math.round(step) % climbFrames.length;
-    const visibleFrame = climbFrames[frameIndex].hasAttribute('href') ? frameIndex : 0;
-    climbFrames.forEach((image, index) => { image.style.opacity = index === visibleFrame ? '1' : '0'; });
-    const rise = motion.matches ? 0 : Math.sin(current * Math.PI * 4) * 1.5;
-    climber.setAttribute('transform', `translate(${point.x.toFixed(2)} ${(point.y + rise).toFixed(2)}) rotate(${(tangent * 180 / Math.PI * .045).toFixed(2)}) scale(1.65)`);
+    // Each raster limb is cut from the same illustration. Continuous joint
+    // transforms keep the painted texture intact without swapping whole poses.
+    const phase = motion.matches ? 0 : current * Math.PI * 4;
+    const reach = Math.sin(phase);
+    const pull = Math.cos(phase);
+    const stance = motion.matches ? 0 : (1 - pull) / 2;
+    limbs.frontArm.setAttribute('transform', `rotate(${(-3 - 5 * reach).toFixed(2)} 183 103)`);
+    limbs.forearm.setAttribute('transform', `rotate(${(-3 * pull - 7 * reach).toFixed(2)} 236 81)`);
+    limbs.backArm.setAttribute('transform', `rotate(${(3 + 5 * reach).toFixed(2)} 102 122)`);
+    limbs.frontLeg.setAttribute('transform', `rotate(${(-3 - 9 * Math.max(0, reach)).toFixed(2)} 174 181)`);
+    limbs.backThigh.setAttribute('transform', `rotate(${(-30 + 6 * Math.min(0, reach)).toFixed(2)} 137 188)`);
+    limbs.backShin.setAttribute('transform', `rotate(${(-9 - 11 * Math.max(0, reach)).toFixed(2)} 103 271)`);
+    const lift = motion.matches ? 0 : -4.5 * stance;
+    climber.setAttribute('transform', `translate(${(point.x + 11).toFixed(2)} ${(point.y + 65 + lift).toFixed(2)}) rotate(${(tangent * 180 / Math.PI * .025).toFixed(2)}) scale(1.65)`);
     const region = Math.min(4, Math.floor(fraction * 5));
     zone.textContent = stageNames[region];
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
@@ -105,24 +125,12 @@
       cards.forEach((card, index) => card.toggleAttribute('data-near', index + 1 === nearest));
       lastStage = nearest;
     }
-    if (Math.abs(target - current) > .002 && !motion.matches) frame = requestAnimationFrame(render);
+    if ((Math.abs(target - current) > .002 || Math.abs(current - cameraCurrent) > .002) && !motion.matches) frame = requestAnimationFrame(render);
     else renderTime = 0;
   };
   const requestSync = () => {
     if (!frame) frame = requestAnimationFrame(render);
   };
-  let loadingFrames = false;
-  const loadClimbingFrames = () => {
-    if (loadingFrames) return;
-    loadingFrames = true;
-    climbFrames.slice(1).forEach(image => {
-      const source = image.dataset.frameSrc;
-      const preload = new Image();
-      preload.onload = () => { image.setAttribute('href', source); requestSync(); };
-      preload.src = source;
-    });
-  };
-  addEventListener('load', () => setTimeout(loadClimbingFrames, 700), { once: true });
   // Native wheel deltas arrive as instant jumps on desktop. Ease the actual page
   // position, then gently finish at a nearby checkpoint after input pauses.
   // Touch, keyboard, scrollbar dragging and reduced-motion users keep native scroll.
@@ -154,7 +162,6 @@
     if (!desktop.matches || motion.matches || event.ctrlKey || Math.abs(event.deltaX) > Math.abs(event.deltaY) ||
         event.target.closest('input, select, textarea, [contenteditable="true"], dialog')) return;
     event.preventDefault();
-    loadClimbingFrames();
     if (!settleTimer) wheelStart = scrollY;
     const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
     scrollTarget = clampScroll(scrollTarget + delta * 1.2);

@@ -40,10 +40,10 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber-frame').count(), 4);
-    for (const frame of await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => image.getAttribute('href') || image.dataset.frameSrc))) {
-      assert.equal((await page.request.get(base + frame)).status(), 200, `${frame} must load`);
-    }
+    assert.equal(await page.locator('.expedition-climber image').count(), 7);
+    assert.deepEqual(await page.locator('.expedition-climber image').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('href')))]), ['/assets/media/ascent-climber-01.webp']);
+    assert.equal(await page.locator('.expedition-celestial').count(), 0);
+    for (const part of ['front-arm', 'forearm', 'back-arm', 'front-leg', 'back-thigh', 'back-shin']) assert.equal(await page.locator(`[data-climber-${part}]`).count(), 1);
     assert.equal(await page.locator('.expedition-visual').getAttribute('aria-hidden'), 'true');
     assert.equal(await page.locator('.expedition-panel h2 a').count(), homeCount);
     assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollSnapType), 'none');
@@ -65,9 +65,11 @@ const output = { browser: browserName, checks: [] };
     const beforeWheel = await page.evaluate(() => scrollY);
     await page.evaluate(() => {
       window.__wheelPositions = [];
+      window.__armPositions = [];
       const begun = performance.now();
       const sample = () => {
         window.__wheelPositions.push(Math.round(scrollY));
+        window.__armPositions.push(document.querySelector('[data-climber-front-arm]').getAttribute('transform'));
         if (performance.now() - begun < 850) requestAnimationFrame(sample);
       };
       requestAnimationFrame(sample);
@@ -77,6 +79,8 @@ const output = { browser: browserName, checks: [] };
     await page.waitForTimeout(1600);
     const intermediatePositions = await page.evaluate(() => new Set(window.__wheelPositions).size);
     assert.ok(intermediatePositions >= (browserName === 'firefox' ? 4 : 7), `Wheel should ease through intermediate positions: ${intermediatePositions}`);
+    const continuousPoses = await page.evaluate(() => new Set(window.__armPositions).size);
+    assert.ok(continuousPoses >= (browserName === 'chromium' ? 24 : 4), `Climbing joints should animate continuously, not swap four images: ${continuousPoses}`);
     const settled = await page.evaluate(() => {
       const target = 84 + (innerHeight - 84) / 2;
       const panels = [...document.querySelectorAll('.expedition-checkpoint')];
@@ -85,7 +89,7 @@ const output = { browser: browserName, checks: [] };
     assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeWheel) > 100, 'Wheel must reach another post');
     assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeWheel) < 950, 'Wheel should not leap over several entries');
     assert.ok(settled < 250, `Post did not settle near a reading position: ${settled}`);
-    output.checks.push('Desktop wheel navigation eases through intermediate positions and settles near one entry');
+    output.checks.push(`Desktop wheel eases between entries with ${continuousPoses} distinct climbing poses in an 850ms sample`);
     const positions = [];
     for (const index of [0, Math.floor(homeCount / 2), homeCount - 1]) {
       await checkpoints.nth(index).scrollIntoViewIfNeeded();
@@ -106,8 +110,8 @@ const output = { browser: browserName, checks: [] };
       await page.evaluate(({ firstY, nextY, fraction }) => scrollTo(0, firstY + (nextY - firstY) * fraction - innerHeight * .52), { firstY, nextY, fraction });
       await page.waitForTimeout(850);
       return page.locator('.expedition-climber').evaluate(el => ({
-        pose: [...el.querySelectorAll('.expedition-climber-frame')].findIndex(image => Number(getComputedStyle(image).opacity) > .9),
-        frames: [...el.querySelectorAll('.expedition-climber-frame')].map(image => ({ loaded: image.hasAttribute('href'), opacity: getComputedStyle(image).opacity })),
+        frontArm: el.querySelector('[data-climber-front-arm]').getAttribute('transform'),
+        backLeg: el.querySelector('[data-climber-back-shin]').getAttribute('transform'),
         transform: el.getAttribute('transform'),
         wall: document.querySelector('.expedition-wall-picture').style.transform,
         scroll: scrollY,
@@ -116,12 +120,13 @@ const output = { browser: browserName, checks: [] };
     };
     const reaching = await samplePose(.1);
     const pulling = await samplePose(.9);
-    assert.notEqual(reaching.pose, pulling.pose, `Realistic climber frames must change with ascent: ${JSON.stringify({ reaching, pulling })}`);
+    assert.notEqual(reaching.frontArm, pulling.frontArm, `Arm must move continuously with ascent: ${JSON.stringify({ reaching, pulling })}`);
+    assert.notEqual(reaching.backLeg, pulling.backLeg, 'Supporting leg must move with the climbing cycle');
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
     assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');
     assert.ok(parseFloat(await page.locator('.expedition-route-done').evaluate(el => el.style.strokeDashoffset)) > 0);
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
-    output.checks.push('Full-body climbing poses, physical wall travel and parallax respond continuously to progress');
+    output.checks.push('Rigged limbs, physical wall travel and parallax respond continuously to progress');
 
     await page.locator('.expedition-continuation').scrollIntoViewIfNeeded();
     assert.equal(await page.getByRole('heading', { name: 'The ascent continues' }).count(), 1);
@@ -163,10 +168,10 @@ const output = { browser: browserName, checks: [] };
     await page.reload();
     await checkpoints.last().scrollIntoViewIfNeeded();
     assert.equal(await page.locator('.expedition-panel').first().evaluate(el => getComputedStyle(el).transitionDuration), '0s');
-    const stillPose = await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => getComputedStyle(image).opacity));
+    const stillPose = await page.locator('[data-climber-front-arm]').getAttribute('transform');
     await checkpoints.first().scrollIntoViewIfNeeded();
-    assert.deepEqual(await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => getComputedStyle(image).opacity)), stillPose);
-    output.checks.push('Reduced motion keeps entries available and holds one static climbing pose');
+    assert.equal(await page.locator('[data-climber-front-arm]').getAttribute('transform'), stillPose);
+    output.checks.push('Reduced motion keeps entries available and holds one static climbing rig');
     const lastDestination = await page.locator('.expedition-panel h2 a').last().getAttribute('href');
     await context.close();
 

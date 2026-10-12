@@ -12,18 +12,36 @@
       <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-icewall-480.webp' | relative_url }}" type="image/webp">
       <img class="expedition-wall" src="{{ '/assets/media/ascent-icewall-800.webp' | relative_url }}" alt="" width="800" height="1067" decoding="async" loading="eager" fetchpriority="low">
     </picture>
-    <span class="expedition-celestial"></span>
     <svg class="expedition-art" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" focusable="false">
-      <defs><filter id="expedition-contact-blur"><feGaussianBlur stdDeviation="3"/></filter></defs>
+      <defs>
+        <filter id="expedition-contact-blur"><feGaussianBlur stdDeviation="3"/></filter>
+        <clipPath id="climber-back-arm"><path d="M87 88H133L139 121 108 164 105 224 49 257 44 179 69 131Z"/></clipPath>
+        <clipPath id="climber-back-thigh"><path d="M114 160H175L165 222 141 268 129 295 75 296 83 247 90 224Z"/></clipPath>
+        <clipPath id="climber-back-shin"><path d="M82 252 145 253 132 330 120 407H38V348L70 286Z"/></clipPath>
+        <clipPath id="climber-torso"><path d="M124 18H188L204 74 220 143 211 204 171 221 113 205 88 155 92 61Z"/></clipPath>
+        <clipPath id="climber-front-leg"><path d="M155 147 234 141 281 169 285 291 191 300 181 230 149 205Z"/></clipPath>
+        <clipPath id="climber-upper-arm"><path d="M160 90 204 77 246 61 260 102 235 126 196 148 158 133Z"/></clipPath>
+        <clipPath id="climber-forearm"><path d="M221 53 269 19 306 0V73L269 96 235 126 214 104Z"/></clipPath>
+      </defs>
       <g data-expedition-world>
         <path class="expedition-route" data-expedition-route transform="translate(-58 0)" />
         <path class="expedition-route-done" data-expedition-route-done transform="translate(-58 0)" />
         <ellipse class="expedition-contact-shadow" data-expedition-contact rx="17" ry="5" filter="url(#expedition-contact-blur)" />
         <g class="expedition-climber" data-expedition-climber>
-          {% for frame in (1..4) %}
-          {% assign frame_id = frame | prepend: '0' | slice: -2, 2 %}
-          <image class="expedition-climber-frame" data-expedition-frame="{{ forloop.index0 }}" {% if forloop.first %}href{% else %}data-frame-src{% endif %}="{{ '/assets/media/ascent-climber-' | append: frame_id | append: '.webp' | relative_url }}" x="-54" y="-106" width="88" height="117" preserveAspectRatio="xMidYMid meet"{% unless forloop.first %} opacity="0"{% endunless %} />
-          {% endfor %}
+          <svg x="-54" y="-106" width="88" height="117" viewBox="0 0 306 408" overflow="visible">
+            {% assign climber_art = '/assets/media/ascent-climber-01.webp' | relative_url %}
+            <g data-climber-back-thigh>
+              <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-thigh)" />
+              <g data-climber-back-shin><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-shin)" /></g>
+            </g>
+            <g data-climber-back-arm><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-back-arm)" /></g>
+            <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-torso)" />
+            <g data-climber-front-leg><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-front-leg)" /></g>
+            <g data-climber-front-arm>
+              <image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-upper-arm)" />
+              <g data-climber-forearm><image href="{{ climber_art }}" width="306" height="408" clip-path="url(#climber-forearm)" /></g>
+            </g>
+          </svg>
         </g>
       </g>
     </svg>
