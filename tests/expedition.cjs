@@ -41,11 +41,13 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber image').count(), 11);
+    assert.equal(await page.locator('.expedition-climber image').count(), 7);
     assert.deepEqual(await page.locator('.expedition-climber image').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('href')))]), ['/assets/media/ascent-climber-alpine.webp']);
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
-    for (const part of ['front-arm', 'forearm', 'back-arm', 'back-forearm', 'front-leg', 'front-shin', 'back-thigh', 'back-shin']) assert.equal(await page.locator(`[data-climber-${part}]`).count(), 1);
+    for (const part of ['front-arm', 'forearm', 'back-arm', 'back-forearm', 'front-leg', 'back-leg']) assert.equal(await page.locator(`[data-climber-${part}]`).count(), 1);
+    for (const part of ['front-leg', 'back-leg']) assert.equal(await page.locator(`[data-climber-${part}] image`).count(), 1, 'Each painted leg must remain one continuous piece');
+    assert.equal(await page.locator('[data-climber-front-shin], [data-climber-back-shin]').count(), 0);
     assert.equal(await page.locator('.expedition-visual').getAttribute('aria-hidden'), 'true');
     assert.equal(await page.locator('.expedition-panel h2 a').count(), homeCount);
     assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollSnapType), 'none');
@@ -125,7 +127,7 @@ const output = { browser: browserName, checks: [] };
         frontArm: el.querySelector('[data-climber-front-arm]').getAttribute('transform'),
         backArm: el.querySelector('[data-climber-back-arm]').getAttribute('transform'),
         frontLeg: el.querySelector('[data-climber-front-leg]').getAttribute('transform'),
-        backLeg: el.querySelector('[data-climber-back-shin]').getAttribute('transform'),
+        backLeg: el.querySelector('[data-climber-back-leg]').getAttribute('transform'),
         transform: el.getAttribute('transform'),
         wall: document.querySelector('.expedition-wall-picture').style.transform,
         scroll: scrollY,
@@ -145,8 +147,8 @@ const output = { browser: browserName, checks: [] };
           return {
             frontHand: point('[data-climber-forearm]', 284, 20),
             backHand: point('[data-climber-back-forearm]', 80, 20),
-            frontFoot: point('[data-climber-front-shin]', 251, 282),
-            backFoot: point('[data-climber-back-shin]', 100, 383),
+            frontFoot: point('[data-climber-front-leg]', 251, 282),
+            backFoot: point('[data-climber-back-leg]', 100, 383),
           };
         })(),
       }));
@@ -155,7 +157,7 @@ const output = { browser: browserName, checks: [] };
     const pulling = await samplePose(.9);
     assert.notEqual(reaching.frontArm, pulling.frontArm, `Arm must move continuously with ascent: ${JSON.stringify({ reaching, pulling })}`);
     assert.notEqual(reaching.backArm, pulling.backArm, 'Other arm must reach on its own joint');
-    assert.notEqual(reaching.frontLeg, pulling.frontLeg, 'Other leg must step on its own joint');
+    assert.notEqual(reaching.frontLeg, pulling.frontLeg, 'Other leg must make a continuous vertical step');
     assert.ok(reaching.handOrder * pulling.handOrder < 0, `Raised hands should alternate: ${reaching.handOrder}, ${pulling.handOrder}`);
     assert.notEqual(reaching.backLeg, pulling.backLeg, 'Supporting leg must move with the climbing cycle');
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
@@ -169,14 +171,14 @@ const output = { browser: browserName, checks: [] };
     });
     for (const key of ['frontHand', 'backHand', 'frontFoot', 'backFoot']) {
       const { dx, dy } = path(key);
-      assert.ok(dy > dx * 1.7 && dy > 35, `${key} should travel mostly up/down: ${JSON.stringify({ dx, dy })}`);
+      assert.ok(dy > dx * 1.7 && dy > (key.includes('Foot') ? 19 : 35), `${key} should travel mostly up/down: ${JSON.stringify({ dx, dy })}`);
     }
     assert.ok(rightLead.contacts.frontHand.y < leftLead.contacts.frontHand.y - 60, 'Right tool reaches high first');
-    assert.ok(rightLead.contacts.backFoot.y < leftLead.contacts.backFoot.y - 45, 'Opposite left crampon steps with the right tool');
+    assert.ok(rightLead.contacts.backFoot.y < leftLead.contacts.backFoot.y - 23, 'Opposite left crampon steps with the right tool');
     assert.ok(leftLead.contacts.backHand.y < rightLead.contacts.backHand.y - 55, 'Left tool reaches high next');
-    assert.ok(leftLead.contacts.frontFoot.y < rightLead.contacts.frontFoot.y - 55, 'Opposite right crampon steps with the left tool');
+    assert.ok(leftLead.contacts.frontFoot.y < rightLead.contacts.frontFoot.y - 18, 'Opposite right crampon steps with the left tool');
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
-    output.checks.push('Two linked tool/crampon pairs travel vertically with limited body sway and wall parallax');
+    output.checks.push('Alternating tools and two continuous painted legs travel vertically with limited body sway and wall parallax');
 
     await page.locator('.expedition-continuation').scrollIntoViewIfNeeded();
     assert.equal(await page.getByRole('heading', { name: 'The ascent continues' }).count(), 1);

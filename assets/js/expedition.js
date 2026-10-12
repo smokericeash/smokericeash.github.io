@@ -20,18 +20,14 @@
     backArm: climber.querySelector('[data-climber-back-arm]'),
     backForearm: climber.querySelector('[data-climber-back-forearm]'),
     frontLeg: climber.querySelector('[data-climber-front-leg]'),
-    frontShin: climber.querySelector('[data-climber-front-shin]'),
-    backThigh: climber.querySelector('[data-climber-back-thigh]'),
-    backShin: climber.querySelector('[data-climber-back-shin]'),
+    backLeg: climber.querySelector('[data-climber-back-leg]'),
   };
   // Joint coordinates follow the transparent climber painting's 306 x 408
-  // source grid. Solving the elbow/knee between its root and target preserves
-  // segment lengths as a hand reaches or a crampon steps vertically.
+  // source grid. Arms use two-bone targets; each leg stays one unbroken piece
+  // of the painting so its knee can never open like a hinged cutout.
   const limbGeometry = [
     { upper: limbs.frontArm, lower: limbs.forearm, root: [193, 99], joint: [250, 71], tip: [284, 20] },
     { upper: limbs.backArm, lower: limbs.backForearm, root: [141, 94], joint: [108, 57], tip: [80, 20] },
-    { upper: limbs.frontLeg, lower: limbs.frontShin, bridge: climber.querySelector('[data-climber-front-knee-bridge]'), bridgeOffsetX: -11, root: [199, 190], joint: [266, 225], tip: [251, 282] },
-    { upper: limbs.backThigh, lower: limbs.backShin, bridge: climber.querySelector('[data-climber-back-knee-bridge]'), root: [157, 204], joint: [127, 271], tip: [100, 383], bend: -1 },
   ].map(limb => {
     const [sx, sy] = limb.root;
     const [ex, ey] = limb.joint;
@@ -67,14 +63,12 @@
     const lowerAngle = Math.atan2(ty - jointY, tx - jointX) - limb.lowerBase - upperAngle;
     limb.upper.setAttribute('transform', `rotate(${degrees(upperAngle).toFixed(2)} ${sx} ${sy})`);
     limb.lower.setAttribute('transform', `rotate(${degrees(lowerAngle).toFixed(2)} ${ex} ${ey})`);
-    if (limb.bridge) {
-      const startX = jointX + (sx - jointX) * .23;
-      const startY = jointY + (sy - jointY) * .23;
-      const endX = jointX + (tx - jointX) * .23;
-      const endY = jointY + (ty - jointY) * .23;
-      const bridgeX = limb.bridgeOffsetX || 0;
-      limb.bridge.setAttribute('d', `M${(startX + bridgeX).toFixed(2)} ${startY.toFixed(2)}L${(jointX + bridgeX).toFixed(2)} ${jointY.toFixed(2)}L${(endX + bridgeX).toFixed(2)} ${endY.toFixed(2)}`);
-    }
+  };
+  const placeLeg = (leg, hipY, step, lift) => {
+    // Gentle whole-leg compression keeps the source painting's thigh, knee,
+    // trouser folds and boot connected. The fixed hip is covered by the torso.
+    const scale = 1 - lift * step;
+    leg.setAttribute('transform', `translate(0 ${hipY}) scale(1 ${scale.toFixed(4)}) translate(0 ${-hipY})`);
   };
   const ease = value => value * value * (3 - 2 * value);
   const clamp01 = value => Math.max(0, Math.min(1, value));
@@ -169,8 +163,8 @@
     const frontStep = 1 - backStep;
     placeLimb(limbGeometry[0], 259 + 25 * frontReach, 112 - 92 * frontReach);
     placeLimb(limbGeometry[1], 72 + 8 * backReach, 105 - 85 * backReach);
-    placeLimb(limbGeometry[2], 251 + 9 * frontStep, 330 - 85 * frontStep);
-    placeLimb(limbGeometry[3], 100 + 18 * backStep, 380 - 70 * backStep);
+    placeLeg(limbs.frontLeg, 190, frontStep, .25);
+    placeLeg(limbs.backLeg, 204, backStep, .19);
     climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);
