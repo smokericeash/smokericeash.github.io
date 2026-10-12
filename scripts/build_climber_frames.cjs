@@ -1,14 +1,22 @@
-// Rebuild the optimized full-body frames from the three original sprite sheets.
+// Rebuild the optimized full-body frames from the four revised sprite sheets.
 // Run with CHROME_CHANNEL=chrome node scripts/build_climber_frames.cjs.
 const { chromium } = require('playwright');
 const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
+// Keep the torso registered between independently drawn source sheets. The
+// three middle poses of the first handoff are enough; its fourth pose returns
+// to a raised right hand too early and would break the reach sequence.
 const sheets = [
-  { file: 'ascent-climber-cycle-right-a.png', offsetX: 0 },
-  { file: 'ascent-climber-cycle-left.png', offsetX: -40 },
-  { file: 'ascent-climber-cycle-right-b.png', offsetX: 0 },
+  { file: 'ascent-climb-step-left.png', frames: [0, 1, 2], offsetX: 0, offsetY: 0 },
+  { file: 'ascent-climb-left-foot-mid.png', frames: [0], single: true, offsetX: 0, offsetY: 0 },
+  { file: 'ascent-climb-step-left.png', frames: [3], offsetX: 0, offsetY: 0 },
+  { file: 'ascent-climb-hand-to-left.png', frames: [0, 1, 2], offsetX: 0, offsetY: -12 },
+  { file: 'ascent-climb-step-right.png', frames: [0], offsetX: -54, offsetY: -4 },
+  { file: 'ascent-climb-right-foot-mid.png', frames: [0], single: true, offsetX: -54, offsetY: 0 },
+  { file: 'ascent-climb-step-right.png', frames: [1, 2, 3], offsetX: -54, offsetY: -4 },
+  { file: 'ascent-climb-hand-to-right.png', frames: [0, 1, 2, 3], offsetX: -54, offsetY: -12 },
 ];
 
 (async () => {
@@ -21,22 +29,23 @@ const sheets = [
     let number = 0;
     for (const sheet of sheets) {
       const source = fs.readFileSync(path.join(root, 'assets', 'img', sheet.file));
-      const frames = await page.evaluate(async ({ data, offsetX }) => {
+      const frames = await page.evaluate(async ({ data, indices, single, offsetX, offsetY }) => {
         const image = new Image();
         image.src = `data:image/png;base64,${data}`;
         await image.decode();
-        const width = image.width / 2;
-        const height = image.height / 2;
+        const width = image.width / (single ? 1 : 2);
+        const height = image.height / (single ? 1 : 2);
         if (!Number.isInteger(width) || !Number.isInteger(height))
           throw new Error('The source sheet needs four equal cells');
-        return Array.from({ length: 4 }, (_, index) => {
+        return indices.map(index => {
           const canvas = document.createElement('canvas');
           canvas.width = 400;
           canvas.height = 533;
           const context = canvas.getContext('2d');
           context.drawImage(image,
-            (index % 2) * width, Math.floor(index / 2) * height, width, height,
-            offsetX * canvas.width / width, 0, canvas.width, canvas.height);
+            (single ? 0 : index % 2) * width, (single ? 0 : Math.floor(index / 2)) * height, width, height,
+            offsetX * canvas.width / width, offsetY * canvas.height / height,
+            canvas.width, canvas.height);
           // The generator occasionally lets a tool tip from an adjacent panel
           // cross a cell boundary. Remove only tiny disconnected edge islands.
           const pixels = context.getImageData(0, 0, canvas.width, canvas.height);
@@ -60,12 +69,14 @@ const sheets = [
                 queue.push(neighbor);
               }
             }
-            if (queue.length < 350 && (left < 8 || top < 8 || right > canvas.width - 9 || bottom > canvas.height - 9))
+            if ((queue.length < 350 && (left < 8 || top < 8 || right > canvas.width - 9 || bottom > canvas.height - 9)) ||
+                (queue.length < 3000 && top > canvas.height - 25))
               context.clearRect(Math.max(0, left - 2), Math.max(0, top - 2), right - left + 5, bottom - top + 5);
           }
           return canvas.toDataURL('image/webp', .82).split(',')[1];
         });
-      }, { data: source.toString('base64'), offsetX: sheet.offsetX });
+      }, { data: source.toString('base64'), indices: sheet.frames, single: sheet.single,
+        offsetX: sheet.offsetX, offsetY: sheet.offsetY });
       for (const frame of frames) {
         number += 1;
         const target = path.join(root, 'assets', 'media', `ascent-climber-frame-${String(number).padStart(2, '0')}.webp`);

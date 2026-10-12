@@ -4,7 +4,7 @@ Updated: October 12, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent now uses 12 complete, separately illustrated black-and-white climber poses. No limb cutouts, joint rotation, or limb scaling remain.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent now uses 17 complete, registered black-and-white climber poses. The left crampon rises opposite the right-hand reach, then the right crampon rises opposite the left-hand reach. No limb cutouts, joint rotation, or limb scaling remain.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,15 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 12 full-body frame animation — latest handoff
+## October 12 alternating-step refinement — latest handoff
+
+- Completed: replaced the old mostly static-leg 12-frame sequence with 17 curated complete-body drawings. New source art comprises four 2 × 2 climbing/hand-over sheets and two purpose-drawn intermediate steps; `npm run build:climber-frames` produces optimized WebPs. The right hand's high reach now coincides with a visibly rising **left** foot. The left hand's high reach coincides with a visibly rising **right** foot. Registered each whole image by its blue-goggle center to prevent source-sheet placement differences from making the head and torso jitter. Only one fully opaque pose is shown at a time. The route, mountain, wall, camera, post layout, content and other site pages are unchanged; the script cache version is `ascent-9`.
+- Design/technical decision: a two-layer crossfade was tested in the rendered page and rejected because it made the character translucent and showed duplicate boots/tools. An experimental optical-flow midpoint was also rejected because it invented broken extra legs. The final frames are whole painted figures with no independent limb transforms. Camera/scroll progress remains continuously eased, while the character artwork is a 17-step loop per entry. It is not an actual 30 fps video or a physical climbing simulation.
+- Testing: baseline production build and focused Chrome Ascent tests passed before editing. After editing, the production Jekyll build, 26-source-file/9-post/47-page/1,688-reference integrity check and nine article contracts passed. The full Chrome suite passed: 94 routes, 132 responsive pages, 22 axe scans, six general interaction groups, 10 experience groups, 11 editorial groups and 10 Ascent groups. The focused Ascent test verifies leg movement directly from rendered image pixels: left boot leaves the low foothold during the right-hand phase, then right boot leaves its low foothold during the left-hand phase. All 17 phases were captured from the real `/journey/` page and visually reviewed as a contact sheet, with no ghost limbs or body-part separation; desktop and mobile page screenshots were also inspected. A first Lighthouse run caught a mobile performance regression from immediate 17-image preloading. Delaying the remaining frames until after first paint/first interaction restored a passing Ascent score: 95 mobile / 99 desktop performance, 100 accessibility/best practices/SEO and CLS 0 in both local lab runs. Other tested routes scored 98–100 performance except mobile Home at 98. JavaScript syntax, extraction reproducibility and Git whitespace checks are part of final validation.
+- Currently in progress: none after this handoff is committed. Known issues: artwork has discrete frames, so very slow scroll can reveal individual pose changes; the wall/foot contact is illustrated rather than physically solved. Real-device perceived motion remains to be reviewed. Firefox/WebKit test executables are unavailable; remote Linux CI and custom-domain settings remain unverified. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the revised `/journey/` animation at `http://127.0.0.1:4173/journey/` with slow and fast scrolls in both directions on a real device, judging the opposite footstep and frame continuity. If filmed motion is still required, use a coherent purpose-animated sequence or transparent video created from a consistent character model; do not return to independently hinged raster limbs. Restore Firefox/WebKit runners and run branch-only Linux CI before any production merge.
+
+## October 12 full-body frame animation — prior handoff
 
 - Completed: replaced the cutout SVG rig with a 12-pose scroll-driven sequence based on the approved black-and-white alpine climber. Three original transparent sprite sheets are retained under `assets/img/`; the reproducible `npm run build:climber-frames` script splits them into optimized 400 × 533 WebPs under `assets/media/`. The page preloads these assets, displays one intact full-body drawing per phase, and keeps the established route, camera, ice wall, post layout and site design. Bumped the Ascent script cache version. No arm or leg is independently rotated, stretched or detached.
 - Design/technical decision: a two-pose crossfade produced visible ghost limbs during visual inspection, so the site switches whole illustrated frames instead. This is 12 distinct frames per entry on a continuously animated scroll/camera path, not a 30 fps video or biomechanical simulation. Reduced-motion uses one pose. The generated drawings preserve the prior rear three-quarter view and unbranded black-and-white technical outfit.
@@ -224,8 +232,8 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- The October 12 full-body frame revision above is the current implementation. Final visual review and publication checks remain.
-- Currently in progress: none after the October 12 full-body frame commit.
+- The October 12 alternating-step refinement above is the current implementation. Real-device visual review and publication checks remain.
+- Currently in progress: none after the alternating-step refinement commit.
 
 ## Logical commits
 
@@ -247,7 +255,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the new 12-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` in slow and fast scrolls, both directions, especially frame continuity and hand/boot contact. If a truly video-like result is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
+**Review the new 17-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` in slow and fast scrolls, both directions, especially opposite-leg movement, frame continuity and hand/boot contact. If filmed motion is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
 
 ## Reproducible local commands
 

@@ -16,15 +16,35 @@
   const climber = root.querySelector('[data-expedition-climber]');
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
-  const frameUrls = Array.from({ length: 12 }, (_, index) =>
+  const frameUrls = Array.from({ length: 17 }, (_, index) =>
     firstFrameUrl.replace(/01\.webp$/, `${String(index + 1).padStart(2, '0')}.webp`));
-  // Complete illustrated poses replace the old rotating arm/leg fragments.
-  // Preload the small WebPs so a fast wheel gesture does not reveal a blank pose.
-  const frameCache = frameUrls.map(src => {
-    const image = new Image();
-    image.src = src;
-    return image;
-  });
+  // Register each complete illustration by its blue-goggle center. Source
+  // sheets varied in character placement; the old unregistered swaps made
+  // the whole body jump even when the route/camera was continuous.
+  const registration = [
+    [-5, 7], [17, 8], [-3, 22], [-6, 18], [22, 20],
+    [-7, -8], [5, -9], [-10, -6], [-25, -8], [-6, -8],
+    [6, -7], [-21, -6], [0, -7], [-25, -11], [39, -10],
+    [-6, 14], [38, 0],
+  ];
+  // Warm the remaining poses after the first page paint. Fetching all 17 at
+  // startup competed with the mountain's first paint on mobile. Any deliberate
+  // wheel/touch interaction starts preloading sooner.
+  const frameCache = [];
+  const preloadFrames = () => {
+    if (frameCache.length) return;
+    frameUrls.slice(1).forEach(src => {
+      const image = new Image();
+      image.src = src;
+      frameCache.push(image);
+    });
+  };
+  const schedulePreload = () => setTimeout(preloadFrames, 1200);
+  if (document.readyState === 'complete') schedulePreload();
+  else addEventListener('load', schedulePreload, { once: true });
+  addEventListener('wheel', preloadFrames, { once: true, passive: true });
+  addEventListener('touchstart', preloadFrames, { once: true, passive: true });
+  addEventListener('keydown', preloadFrames, { once: true });
   const ease = value => value * value * (3 - 2 * value);
   const clamp01 = value => Math.max(0, Math.min(1, value));
   const position = root.querySelector('[data-expedition-position]');
@@ -112,6 +132,8 @@
     const frameIndex = Math.floor(pose);
     if (primaryFrame.getAttribute('href') !== frameUrls[frameIndex])
       primaryFrame.setAttribute('href', frameUrls[frameIndex]);
+    primaryFrame.setAttribute('x', registration[frameIndex][0]);
+    primaryFrame.setAttribute('y', registration[frameIndex][1]);
     climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);
@@ -193,6 +215,7 @@
   });
   addEventListener('scroll', () => {
     if (!scrollFrame) scrollTarget = scrollPosition = scrollY;
+    if (scrollY > 0) preloadFrames();
     requestSync();
   }, { passive: true });
   addEventListener('resize', measure);
