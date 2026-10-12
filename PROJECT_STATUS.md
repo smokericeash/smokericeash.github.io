@@ -4,7 +4,7 @@ Updated: October 12, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent now uses 17 complete, registered black-and-white climber poses. The left crampon rises opposite the right-hand reach, then the right crampon rises opposite the left-hand reach. No limb cutouts, joint rotation, or limb scaling remain.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent uses 17 complete, registered black-and-white climber poses; the straight supporting leg now stays nearly below the hip instead of stretching sideways into a split.** The opposite foot still steps with each arm reach. No limb cutouts, joint rotation, or limb scaling remain. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -12,6 +12,15 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 12 supporting-leg posture correction — latest handoff
+
+- Completed: redrew five canonical transparent source images and regenerated the affected 400 × 533 WebP poses. In each straight-leg pose, the supporting boot falls almost directly below the hip; the other knee stays bent and stepping upward. Preserved the full-body frame approach, arm sequence, Everest scene, page layout, and content. Added an `ascent-10` image URL and script version so returning browsers fetch the corrected artwork.
+- In progress: none after this commit. The illustrated sequence still has discrete poses rather than a filmed 30 fps motion capture, and foothold contact is visual rather than physically constrained.
+- Design/technical decision: redraw complete figures instead of stretching, hinging, or warping separate limb pieces. Source PNG sheets in `assets/img/` are the editable originals; `npm run build:climber-frames` deterministically creates the shipped WebPs in `assets/media/`.
+- Testing performed: production Jekyll build; all 17 WebPs decoded in Chrome; focused Ascent browser checks; full Chrome browser suite (94 routes, 132 responsive pages, 22 axe scans, 6 general interaction groups, 10 experience groups, 11 editorial groups, 10 Ascent groups); 26 original source files and nine post routes preserved, 47 pages and 1,688 local references valid; nine article rendering contracts; visual review of all 17 rendered `/journey/` phases and individual browser screenshots. The Ascent regression now checks that each support leg's lower portion remains within 60 px of the hip at native 400 px image width and that the support side alternates. Git whitespace check passed.
+- Known issues and limits: the single mid-step drawing briefly has both knees bent; it remains a transition pose. Slow scrolling reveals changes between discrete illustrations. Real-device review, unavailable Firefox/WebKit runners, branch-only Linux CI and custom-domain verification remain outstanding. No push, merge or deployment.
+- **Exact recommended next task:** review `/journey/` on a real phone and desktop with slow/fast up/down scrolling, specifically whether the new vertical supporting leg reads as natural through the mid-step pose. If the character still needs video-like fluidity, create a coherent purpose-animated sequence from one rig/model instead of independently transformed raster limbs. Run branch-only Linux CI and domain checks before any production merge.
 
 ## October 12 alternating-step refinement — latest handoff
 
@@ -255,7 +264,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the new 17-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` in slow and fast scrolls, both directions, especially opposite-leg movement, frame continuity and hand/boot contact. If filmed motion is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
+**Review the corrected 17-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` on real desktop and phone screens, scrolling slowly and quickly in both directions; judge the near-vertical support leg and the brief bent-knee transition. If filmed motion is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
 
 ## Reproducible local commands
 

@@ -42,7 +42,7 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Climber must be one complete pose, with no hinged body parts');
-    assert.ok((await page.locator('[data-climber-frame-primary]').getAttribute('href')).endsWith('ascent-climber-frame-01.webp'));
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-10$/);
     for (let index = 1; index <= 17; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
@@ -62,20 +62,25 @@ const output = { browser: browserName, checks: [] };
         canvas.height = image.height;
         const context = canvas.getContext('2d', { willReadFrequently: true });
         context.drawImage(image, 0, 0);
-        const count = (x, width) => {
-          const pixels = context.getImageData(x, 420, width, 110).data;
-          let opaque = 0;
-          for (let i = 3; i < pixels.length; i += 4) if (pixels[i] > 100) opaque += 1;
-          return opaque;
+        const center = (top, height) => {
+          const pixels = context.getImageData(0, top, image.width, height).data;
+          const xs = [];
+          for (let i = 3; i < pixels.length; i += 4) {
+            if (pixels[i] > 150) xs.push(Math.floor(i / 4) % image.width);
+          }
+          xs.sort((a, b) => a - b);
+          return xs[Math.floor(xs.length / 2)];
         };
-        return { leftLow: count(30, 160), rightLow: count(210, 180) };
+        return { hip: center(210, 70), lowerLeg: center(400, 90) };
       };
-      return Promise.all([1, 4, 5, 9, 10, 11].map(sample));
+      return Promise.all(Array.from({ length: 17 }, (_, index) => sample(index + 1)));
     });
-    assert.ok(footholds[0].leftLow > footholds[1].leftLow && footholds[1].leftLow > footholds[2].leftLow,
-      `Left crampon must visibly step up opposite the high right arm: ${JSON.stringify(footholds.slice(0, 3))}`);
-    assert.ok(footholds[3].rightLow > footholds[4].rightLow && footholds[4].rightLow > footholds[5].rightLow,
-      `Right crampon must visibly step up opposite the high left arm: ${JSON.stringify(footholds.slice(3))}`);
+    for (const [index, pose] of footholds.entries()) {
+      assert.ok(Math.abs(pose.lowerLeg - pose.hip) < 60,
+        `Pose ${index + 1} must keep the supporting leg beneath the hip: ${JSON.stringify(pose)}`);
+    }
+    assert.ok(footholds[0].lowerLeg < footholds[5].lowerLeg && footholds[5].lowerLeg > footholds[10].lowerLeg,
+      'The supporting leg must alternate sides during the climb');
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
     assert.equal(await page.locator('[data-climber-front-arm], [data-climber-back-arm], [data-climber-front-leg], [data-climber-back-leg], [data-climber-front-shin], [data-climber-back-shin]').count(), 0);

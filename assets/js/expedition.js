@@ -17,7 +17,7 @@
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
   const frameUrls = Array.from({ length: 17 }, (_, index) =>
-    firstFrameUrl.replace(/01\.webp$/, `${String(index + 1).padStart(2, '0')}.webp`));
+    firstFrameUrl.replace(/01\.webp/, `${String(index + 1).padStart(2, '0')}.webp`));
   // Register each complete illustration by its blue-goggle center. Source
   // sheets varied in character placement; the old unregistered swaps made
   // the whole body jump even when the route/camera was continuous.
