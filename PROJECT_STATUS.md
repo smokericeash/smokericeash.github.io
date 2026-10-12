@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The Home identity section now carries a faint Everest backdrop, and the dedicated Ascent has a black-and-white alpine climber with a non-rebounding, alternating-limb scroll animation.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. The current implementation passes local Chrome, site-integrity and Lighthouse checks. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent's black-and-white climber now uses vertical hand/boot paths with linked opposite-side steps and knee/elbow bends, instead of small sideways limb rotations.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. The current implementation passes local Chrome, site-integrity and Lighthouse checks. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,17 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 Home mountain and non-rebounding climb — latest handoff
+## October 11 vertical climbing cycle — latest handoff
+
+- Kept the established Home, Work, About, mountain scene, black-and-white climber painting, route highlight, scroll behavior and page design. The change is scoped to the dedicated Ascent's limb and body timing plus its cache-busted script URL.
+- Replaced the previous small independent limb rotations with two-bone inverse-kinematic targets in the original painting's coordinate system. Shoulders and hips stay attached to the torso; elbows and knees solve their angles as each hand/tool and boot travels primarily up or down. The right tool leads the left foot, then the left tool leads the right foot. Two monotonic torso rises per entry follow the planted opposite foot; tool repositioning occurs between pushes. Scrolling backward reverses the same continuous path without a frame swap or downward reset.
+- Used the current Petzl ice-climbing technique video and access book, plus Wyoming Mountain Guides' introductory movement guide, as motion references. Links and the illustration-only limitation are recorded in `docs/ASCENT_ART.md`.
+- Baseline Jekyll build and Chrome expedition test passed before edits. On the final two-push implementation, Jekyll build, site integrity (26 original files unchanged, nine routes, 47 pages, 1,688 references/anchors/assets), full Chrome browser suite (94 routes, 132 responsive pages, 22 axe scans, six general groups, 10 experience groups, 11 editorial groups, 10 expedition groups), and focused Ascent tests pass. The new Ascent regression measures actual painted hand/boot endpoints: all four move mostly vertically, the opposite foot rises with each leading hand, and the camera/body do not rebound. Close-up right/left lead screenshots were inspected; a first leg bend was corrected after inspection.
+- The final local Lighthouse sweep measured Home/Work/article/Ascent mobile performance **97 / 99 / 99 / 96**, desktop **100 / 100 / 100 / 99**; accessibility, best practices and SEO scored 100 throughout, with CLS 0. These are local lab results, not a device frame-rate guarantee.
+- Current work in progress: none once this handoff is committed. Known limits: the single generated painting is articulated with SVG cutouts rather than motion-captured footage; manual real-device review remains useful for the perceived biomechanics and frame pacing. Current Playwright Firefox/WebKit binaries are unavailable, so cross-engine tests for this revision remain to be rerun. No branch push, merge or deployment occurred.
+- **Exact next task:** visually review `/journey/` in the local preview at slow and fast scroll speeds, both directions, especially tool contact and alternating high steps; then restore Firefox/WebKit test runners and rerun their suites before a branch-only remote CI push. Keep `main` and production untouched until that review passes.
+
+## Earlier October 11 Home mountain and non-rebounding climb — superseded motion details above
 
 - Added a subtle Everest image only behind the Home identity panel using the existing optimized illustration. Gradient overlays protect the heading and introduction in light and dark themes; desktop dark/light and mobile dark screenshots were inspected. The separate Home timeline and the rest of the layout stay unchanged.
 - Replaced the dedicated Ascent's orange climber with an original transparent black-and-white technical alpine figure: white hardshell, black pack, helmet, black pants, gloves, two raised ice tools and crampon boots. The generated source, 30 KB alpha WebP and exact built-in imagegen prompts are documented in `docs/ASCENT_ART.md`. No brand logo or endorsement appears. The earlier orange art remains only for provenance.

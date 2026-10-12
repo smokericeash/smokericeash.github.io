@@ -1,13 +1,33 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
 Build, browser suites, and Lighthouse measured October 11, 2026
-(America/Los_Angeles) after the Home backdrop and non-rebounding Ascent refinement.
+(America/Los_Angeles) after the vertical Ascent climbing-cycle refinement.
 
 RESULT
 Ready for design review and a branch-only remote CI run after cross-engine
 checks. No changes have been pushed, merged or deployed. The original source
 checkout is unchanged.
 
-OCTOBER 11 HOME BACKDROP AND NON-REBOUNDING CLIMB — LATEST
+OCTOBER 11 VERTICAL CLIMBING CYCLE — LATEST
+- Preserved the approved site and mountain scene. The Ascent's painted limbs
+  now use two-bone joint solving to aim tools and crampons at vertical targets.
+  Each leading hand pairs with the opposite stepping foot; two upward torso
+  pushes occur while the feet extend. The route highlight remains intact.
+- The focused Chrome regression measures all four painted endpoints: each
+  travels more vertically than horizontally, the opposite foot rises with
+  its leading hand, and downward wheel motion has no figure/page rebound.
+  Close-up screenshots at both lead poses were reviewed and the initially
+  excessive rear-knee fold was corrected.
+- Production build and source checks pass: 26 original files unchanged, nine
+  routes, 47 pages, 1,688 local references/anchors/assets. Full Chrome suite
+  passes: 94 routes, 132 responsive pages, 22 axe scans, six general groups,
+  10 experience, 11 editorial and 10 Ascent groups on the final torso timing.
+- Final local Lighthouse: Home/Work/article/Ascent mobile
+  performance 97/99/99/96, desktop 100/100/100/99. Accessibility, best
+  practices and SEO score 100, CLS 0.
+- Firefox/WebKit executables are unavailable here; this revision still needs
+  cross-engine and actual-device motion review. No push, merge or deployment.
+
+OCTOBER 11 HOME BACKDROP AND NON-REBOUNDING CLIMB — EARLIER
 - Faint Everest art is confined to the Home identity section; desktop dark and
   light plus mobile dark screenshots were inspected for legibility.
 - Replaced the dedicated orange climber with a black-and-white alpine figure

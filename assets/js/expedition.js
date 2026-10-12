@@ -24,6 +24,52 @@
     backThigh: climber.querySelector('[data-climber-back-thigh]'),
     backShin: climber.querySelector('[data-climber-back-shin]'),
   };
+  // Joint coordinates follow the transparent climber painting's 306 x 408
+  // source grid. Solving the elbow/knee between its root and target preserves
+  // segment lengths as a hand reaches or a crampon steps vertically.
+  const limbGeometry = [
+    { upper: limbs.frontArm, lower: limbs.forearm, root: [193, 99], joint: [250, 71], tip: [284, 20] },
+    { upper: limbs.backArm, lower: limbs.backForearm, root: [141, 94], joint: [108, 57], tip: [80, 20] },
+    { upper: limbs.frontLeg, lower: limbs.frontShin, root: [199, 190], joint: [266, 225], tip: [251, 282] },
+    { upper: limbs.backThigh, lower: limbs.backShin, root: [157, 204], joint: [127, 271], tip: [100, 383], bend: -1 },
+  ].map(limb => {
+    const [sx, sy] = limb.root;
+    const [ex, ey] = limb.joint;
+    const [hx, hy] = limb.tip;
+    return {
+      ...limb,
+      upperLength: Math.hypot(ex - sx, ey - sy),
+      lowerLength: Math.hypot(hx - ex, hy - ey),
+      upperBase: Math.atan2(ey - sy, ex - sx),
+      lowerBase: Math.atan2(hy - ey, hx - ex),
+      bend: limb.bend ?? (Math.sign((hx - sx) * (ey - sy) - (hy - sy) * (ex - sx)) || 1),
+    };
+  });
+  const degrees = radians => {
+    const value = radians * 180 / Math.PI;
+    return ((value + 180) % 360 + 360) % 360 - 180;
+  };
+  const placeLimb = (limb, tx, ty) => {
+    const [sx, sy] = limb.root;
+    const [ex, ey] = limb.joint;
+    const dx = tx - sx;
+    const dy = ty - sy;
+    const rawDistance = Math.hypot(dx, dy) || 1;
+    const distance = Math.max(Math.abs(limb.upperLength - limb.lowerLength) + .01,
+      Math.min(limb.upperLength + limb.lowerLength - .01, rawDistance));
+    const ux = dx / rawDistance;
+    const uy = dy / rawDistance;
+    const along = (limb.upperLength ** 2 - limb.lowerLength ** 2 + distance ** 2) / (2 * distance);
+    const across = Math.sqrt(Math.max(0, limb.upperLength ** 2 - along ** 2)) * limb.bend;
+    const jointX = sx + ux * along - uy * across;
+    const jointY = sy + uy * along + ux * across;
+    const upperAngle = Math.atan2(jointY - sy, jointX - sx) - limb.upperBase;
+    const lowerAngle = Math.atan2(ty - jointY, tx - jointX) - limb.lowerBase - upperAngle;
+    limb.upper.setAttribute('transform', `rotate(${degrees(upperAngle).toFixed(2)} ${sx} ${sy})`);
+    limb.lower.setAttribute('transform', `rotate(${degrees(lowerAngle).toFixed(2)} ${ex} ${ey})`);
+  };
+  const ease = value => value * value * (3 - 2 * value);
+  const clamp01 = value => Math.max(0, Math.min(1, value));
   const position = root.querySelector('[data-expedition-position]');
   const motion = matchMedia('(prefers-reduced-motion: reduce)');
   const pacificSky = () => {
@@ -96,24 +142,30 @@
     // The camera and climber share one progress value. A delayed camera made
     // the climber appear to fall back after the wheel stopped. The intended
     // screen height steadily rises throughout the route, without a loop reset.
-    const screenY = 500 - 190 * fraction;
+    const stride = current - Math.floor(current);
+    // Two upward pushes per entry follow the planted opposite foot. Between
+    // pushes the torso holds its height while a tool moves to its next hold.
+    const pushRight = ease(clamp01((stride - .28) / .23));
+    const pushLeft = ease(clamp01((stride - .78) / .22));
+    const climbProgress = (Math.floor(current) + (pushRight + pushLeft) / 2) / stages;
+    const screenY = 500 - 190 * climbProgress;
     const camera = Math.max(0, Math.min(worldHeight - 800, point.y - screenY));
     svg.setAttribute('viewBox', `0 ${camera.toFixed(2)} 600 800`);
     contact.setAttribute('cx', (point.x + 56).toFixed(2));
     contact.setAttribute('cy', (point.y + 69).toFixed(2));
     completed.style.strokeDashoffset = String(totalLength * (1 - fraction));
-    // Left/right arms and legs take opposing turns around their own joints.
-    // Keep the torso and contact point steady on the ice; no cyclical bounce.
-    const reach = motion.matches ? 0 : Math.sin(current * Math.PI * 2);
-    const brace = motion.matches ? 0 : Math.cos(current * Math.PI * 2);
-    limbs.frontArm.setAttribute('transform', `rotate(${(-5 - 13 * reach).toFixed(2)} 193 99)`);
-    limbs.forearm.setAttribute('transform', `rotate(${(-4 - 9 * reach - 2 * brace).toFixed(2)} 250 71)`);
-    limbs.backArm.setAttribute('transform', `rotate(${(5 - 13 * reach).toFixed(2)} 141 94)`);
-    limbs.backForearm.setAttribute('transform', `rotate(${(4 - 9 * reach + 2 * brace).toFixed(2)} 108 57)`);
-    limbs.frontLeg.setAttribute('transform', `rotate(${(-4 - 8 * reach).toFixed(2)} 199 190)`);
-    limbs.frontShin.setAttribute('transform', `rotate(${(3 + 9 * reach).toFixed(2)} 266 225)`);
-    limbs.backThigh.setAttribute('transform', `rotate(${(-4 - 8 * reach).toFixed(2)} 157 204)`);
-    limbs.backShin.setAttribute('transform', `rotate(${(-3 - 8 * reach).toFixed(2)} 127 271)`);
+    // The high tool leads the opposite crampon. As that leg straightens, the
+    // hand comes down relative to the rising torso while the other hand reaches.
+    // Paired targets change mostly in Y, rather than waving sideways in X.
+    const phase = motion.matches ? 0 : current * Math.PI * 2;
+    const frontReach = .5 + .5 * Math.sin(phase);
+    const backReach = 1 - frontReach;
+    const backStep = .5 + .5 * Math.sin(phase - .32);
+    const frontStep = 1 - backStep;
+    placeLimb(limbGeometry[0], 259 + 25 * frontReach, 112 - 92 * frontReach);
+    placeLimb(limbGeometry[1], 72 + 8 * backReach, 105 - 85 * backReach);
+    placeLimb(limbGeometry[2], 251 + 9 * frontStep, 330 - 85 * frontStep);
+    placeLimb(limbGeometry[3], 100 + 18 * backStep, 380 - 70 * backStep);
     climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) rotate(${(tangent * 180 / Math.PI * .025).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);

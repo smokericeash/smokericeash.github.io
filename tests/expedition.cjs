@@ -131,6 +131,20 @@ const output = { browser: browserName, checks: [] };
           const back = new DOMPoint(80, 20).matrixTransform(el.querySelector('[data-climber-back-forearm]').getScreenCTM());
           return front.y - back.y;
         })(),
+        contacts: (() => {
+          const local = el.querySelector('svg').getScreenCTM().inverse();
+          const point = (selector, x, y) => {
+            const screen = new DOMPoint(x, y).matrixTransform(el.querySelector(selector).getScreenCTM());
+            const result = screen.matrixTransform(local);
+            return { x: result.x, y: result.y };
+          };
+          return {
+            frontHand: point('[data-climber-forearm]', 284, 20),
+            backHand: point('[data-climber-back-forearm]', 80, 20),
+            frontFoot: point('[data-climber-front-shin]', 251, 282),
+            backFoot: point('[data-climber-back-shin]', 100, 383),
+          };
+        })(),
       }));
     };
     const reaching = await samplePose(.1);
@@ -143,8 +157,22 @@ const output = { browser: browserName, checks: [] };
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
     assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');
     assert.ok(parseFloat(await page.locator('.expedition-route-done').evaluate(el => el.style.strokeDashoffset)) > 0);
+    const rightLead = await samplePose(.25);
+    const leftLead = await samplePose(.75);
+    const path = (key) => ({
+      dx: Math.abs(rightLead.contacts[key].x - leftLead.contacts[key].x),
+      dy: Math.abs(rightLead.contacts[key].y - leftLead.contacts[key].y),
+    });
+    for (const key of ['frontHand', 'backHand', 'frontFoot', 'backFoot']) {
+      const { dx, dy } = path(key);
+      assert.ok(dy > dx * 1.7 && dy > 35, `${key} should travel mostly up/down: ${JSON.stringify({ dx, dy })}`);
+    }
+    assert.ok(rightLead.contacts.frontHand.y < leftLead.contacts.frontHand.y - 60, 'Right tool reaches high first');
+    assert.ok(rightLead.contacts.backFoot.y < leftLead.contacts.backFoot.y - 45, 'Opposite left crampon steps with the right tool');
+    assert.ok(leftLead.contacts.backHand.y < rightLead.contacts.backHand.y - 55, 'Left tool reaches high next');
+    assert.ok(leftLead.contacts.frontFoot.y < rightLead.contacts.frontFoot.y - 55, 'Opposite right crampon steps with the left tool');
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
-    output.checks.push('Rigged limbs, physical wall travel and parallax respond continuously to progress');
+    output.checks.push('Two linked tool/crampon pairs travel mostly vertically with continuous bends and wall parallax');
 
     await page.locator('.expedition-continuation').scrollIntoViewIfNeeded();
     assert.equal(await page.getByRole('heading', { name: 'The ascent continues' }).count(), 1);
