@@ -1,50 +1,16 @@
 {
-  "chromium": {
-    "browser": "chromium",
-    "checks": [
-      "Home retains the compact shared-post preview, dynamic labels and equipped climber",
-      "About lists Network+ and CRTO on separately spaced lines",
-      "Post panels snap on desktop; illustrated scene tracks Pacific day/night",
-      "Desktop wheel navigation settles a post at the snap position",
-      "Native vertical scrolling advances and reverses camera across actual checkpoints",
-      "Hands reach and pull, boots step, and continuous route progress remains smooth",
-      "Continuing route and five responsive widths, including mobile",
-      "Dark and light automated accessibility scans; desktop/mobile screenshot capture",
-      "Reduced motion keeps entries available and stops limb animation",
-      "No-JavaScript version retains all dated, linked checkpoints"
-    ],
-    "passed": true
-  },
-  "firefox": {
-    "browser": "firefox",
-    "checks": [
-      "Home retains the compact shared-post preview, dynamic labels and equipped climber",
-      "About lists Network+ and CRTO on separately spaced lines",
-      "Post panels snap on desktop; illustrated scene tracks Pacific day/night",
-      "Desktop wheel navigation settles a post at the snap position",
-      "Native vertical scrolling advances and reverses camera across actual checkpoints",
-      "Hands reach and pull, boots step, and continuous route progress remains smooth",
-      "Continuing route and five responsive widths, including mobile",
-      "Dark and light automated accessibility scans; desktop/mobile screenshot capture",
-      "Reduced motion keeps entries available and stops limb animation",
-      "No-JavaScript version retains all dated, linked checkpoints"
-    ],
-    "passed": true
-  },
-  "webkit": {
-    "browser": "webkit",
-    "checks": [
-      "Home retains the compact shared-post preview, dynamic labels and equipped climber",
-      "About lists Network+ and CRTO on separately spaced lines",
-      "Post panels snap on desktop; illustrated scene tracks Pacific day/night",
-      "Desktop wheel navigation settles a post at the snap position",
-      "Native vertical scrolling advances and reverses camera across actual checkpoints",
-      "Hands reach and pull, boots step, and continuous route progress remains smooth",
-      "Continuing route and five responsive widths, including mobile",
-      "Dark and light automated accessibility scans; desktop/mobile screenshot capture",
-      "Reduced motion keeps entries available and stops limb animation",
-      "No-JavaScript version retains all dated, linked checkpoints"
-    ],
-    "passed": true
-  }
+  "browser": "chromium",
+  "checks": [
+    "Home retains the compact shared-post preview, dynamic labels and equipped climber",
+    "About lists Network+ and CRTO on separately spaced lines",
+    "Post navigation avoids forced browser snapping; layered scene tracks Pacific day/night",
+    "Desktop wheel navigation eases through intermediate positions and settles near one entry",
+    "Native vertical scrolling advances and reverses camera across actual checkpoints",
+    "Full-body climbing poses, physical wall travel and parallax respond continuously to progress",
+    "Continuing route and five responsive widths, including mobile",
+    "Dark and light automated accessibility scans; desktop/mobile screenshot capture",
+    "Reduced motion keeps entries available and holds one static climbing pose",
+    "No-JavaScript version retains all dated, linked checkpoints"
+  ],
+  "passed": true
 }

@@ -1,40 +1,47 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
 Build, browser suites, and Lighthouse measured October 11, 2026
-(America/Los_Angeles) after the vertical expedition implementation.
+(America/Los_Angeles) after the full-color Ascent refinement.
 
 RESULT
 Ready for design review and a branch-only remote CI run. No changes have been
 pushed, merged or deployed. The original source checkout is unchanged.
 
-OCTOBER 11 ASCENT VISUAL AND INTERACTION REFINEMENT
-- About credentials render on separate lines with a measured gap.
+OCTOBER 11 LATEST FULL-COLOR ASCENT REFINEMENT
+- About Network+ and CRTO use a literal line break and measured spacing;
+  changed CSS/JS URLs are versioned to avoid stale cached presentation.
 - Home retains its previously approved horizontal preview and compact climber.
-- Desktop post panels use native CSS scroll snapping; a wheel event was tested
-  settling a panel at the snap position. Mobile uses proximity snapping so
-  tall article previews remain scrollable. The mountain camera remains smooth.
-- The dedicated climber uses joint-calculated hands/boots rather than CSS
-  rotations. Browser checks compare reaching, pulling, stepping and pushing
-  at two intermediate route positions; reduced motion keeps a static pose.
-- Original Everest-inspired art is stored in assets/img with responsive WebP
-  versions in assets/media. The 640px mobile version is 91 KB. The
-  illustrated mountain is not a topographic claim; source/prompt are in
-  docs/ASCENT_ART.md. Pacific day/night sun or moon changes locally, with no
-  external call. Desktop dark, night, mobile light and About screenshots
-  were inspected.
+- Forced CSS snapping is gone. On desktop, a wheel gesture moves through many
+  measured intermediate positions and gently settles near the next post after
+  input pauses. Touch, keyboard, scrollbar and reduced-motion scroll natively.
+  Camera easing uses elapsed time so slower Firefox frame delivery does not
+  leave the climber behind the scroll.
+- The dedicated climber now has four original transparent full-body illustrated
+  poses in an orange parka, navy trousers and real alpine gear. A separate near
+  ice-and-rock wall provides physical contact and parallax against the distant
+  Everest panorama. Browser checks cover pose changes and distinct wall motion.
+- Original source images and exact built-in imagegen prompts are documented in
+  docs/ASCENT_ART.md. Mobile AVIF panorama/wall sources have WebP fallbacks;
+  later pose frames defer until after load or first wheel input. The mountain
+  scene is illustrative, not a topographic claim. Pacific sun/moon state uses
+  local time with no external call. Desktop dark, night, mobile and About
+  screenshots were visually inspected.
 - Production build: 47 pages, nine original post routes, 26 preserved source
-  files, 1,684 validated local references and anchors.
+  files, 1,688 validated local references and anchors; nine article contracts.
 - Complete Chrome/Firefox/WebKit suites pass: 94 route checks, 132 responsive
   pages, 22 broad axe scans, six general interactions, 10 dedicated expedition
   groups, 11 editorial groups and 10 Chrome / 9 Firefox / 9 WebKit Home
   experience groups. No reported browser errors or axe violations.
-- The temporary content fixture still passes additions, removal, same-date
-  posts, date/title edits, exclusion and a 20-entry growth case. All fixture
-  files were removed and the normal build was restored.
-- Final local Lighthouse: Home 98, Work 99, article 99, Ascent 95 mobile
-  performance; all four 100 desktop. Accessibility, best practices and SEO
-  score 100 throughout. Ascent mobile LCP 2.9 s, CLS 0, TBT 0. These are lab
-  measurements, not live field performance.
+- The temporary content fixture passes additions, removal, same-date posts,
+  date/title edits, exclusion and a 20-entry growth case. All fixture files
+  were removed and the normal build was restored.
+- Final local Lighthouse mobile performance: Home 99, Work 99, article 98,
+  Ascent 96. Desktop: Home 100, Work 100, article 100, Ascent 99.
+  Accessibility, best practices and SEO score 100 throughout. Ascent mobile
+  LCP 2.7 s, CLS 0, TBT 0. These are lab, not live field measurements.
 - Updated evidence: docs/{browser,experience,editorial,expedition,lighthouse}-results.json.
+
+EARLIER OCTOBER 11 ASCENT REFINEMENT (SUPERSEDED)
+- Its geometric climber and native CSS post snapping were replaced above.
 
 EARLIER OCTOBER 11 VERTICAL EXPEDITION BASELINE
 - Home remains the compact horizontal nine-post preview, with BASE CAMP and
@@ -77,7 +84,7 @@ BUILD AND PRESERVATION
   four tabs (including the original biography), and twelve original images.
 - Exact raw hashes match on this Windows checkout. CI also accepts only Git's
   CRLF-to-LF conversion in text files; image bytes are always checked exactly.
-- 1,684 internal links, anchors, assets and srcset references resolve.
+- 1,688 internal links, anchors, assets and srcset references resolve.
 - Every page has one h1, title, description, canonical, and Open Graph image.
 - Atom feed and sitemap parse correctly; no localhost URLs in production XML.
 - A /preview baseurl build passes the same link/metadata checks.

@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The refined vertical Ascent and About credential spacing are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The new full-color vertical Ascent scene, eased post navigation and About credential line break are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,19 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 Ascent motion and visual refinement — latest handoff
+## October 11 full-color Ascent refinement — latest handoff
+
+- User rejected the preceding black geometric climber, flat mountain contact and abrupt snap. Replaced the dedicated `/journey/` figure with four transparent illustrated full-body poses: orange down parka, navy trousers, helmet, goggles, pack, harness/rope, tools, gloves and crampon boots. Poses alternate reaching/pulling and stepping; the first frame is available without JavaScript. The approved small Home climber remains untouched.
+- Composited a separate original close ice-and-rock wall over the Everest panorama. The climber travels along the near wall rather than appearing to float over the distant mountain; wall and panorama move at different rates for depth. Source files and exact built-in imagegen prompts are in `docs/ASCENT_ART.md`. The imagery is illustrative and not a topographic claim.
+- Removed forced CSS scroll snapping. Desktop wheel input now eases through measurable intermediate scroll positions and gently settles near a post after input pauses. Touch, keyboard, scrollbar dragging and reduced-motion scrolling remain native. Route, camera, wall and pose update continuously in either direction. Camera easing uses elapsed time, keeping it responsive at Firefox's lower headless frame rate. The closing **The route goes on** remains.
+- Made About's credential separation structural with a literal line break and spacing, so Network+ and CRTO cannot collapse onto one line when a cached stylesheet is involved. Both certificate links are preserved. Versioned changed CSS/JS URLs to refresh cached assets.
+- Added mobile AVIF panorama/wall sources and WebP fallbacks. The first climber frame loads immediately; extra poses defer until after load or wheel input. Tested the day/night illustration and real desktop/mobile screenshots. The Pacific sun/moon remains local-time driven; no network or location access.
+- Tested the self-service posting lifecycle: adding, editing, excluding, reordering, shrinking and growing the shared Ascent record passes. Temporary fixtures were removed and the normal production site rebuilt.
+- Final production build and source checks pass: 26 original files unchanged, nine preserved post routes, 47 HTML pages, 1,688 valid local references, XML and metadata, and nine article/taxonomy contracts. Full Chrome, Firefox and WebKit suites pass (per engine: 94 route checks, 132 responsive checks, 22 axe scans, six general interaction groups, 11 editorial groups and 10 dedicated expedition groups; 10 Chrome / nine Firefox / nine WebKit Home experience groups). New Ascent checks sample intermediate wheel positions, post settling, wall parallax, climbing pose changes, responsive art and credential spacing.
+- Full local Lighthouse sweep across Home, Work, an article and The Ascent: mobile performance **99 / 99 / 98 / 96**, desktop **100 / 100 / 100 / 99**; accessibility, best practices and SEO 100 throughout. Ascent mobile LCP 2.7 s, CLS 0, TBT 0. These are lab results, not field guarantees. Evidence: `docs/VALIDATION.txt` and `docs/*-results.json`.
+- Current work in progress: none. Remaining: Aidan's visual approval of the new scene, optional real-device and manual screen-reader checks, remote Linux CI after a branch-only push, and real custom-domain verification before publication. Nothing has been pushed or merged.
+
+## Earlier October 11 Ascent motion and visual refinement — superseded by the above
 
 - Separated the About sidebar's Network+ and CRTO credential links into distinct rows with a measured gap. Both existing destinations remain intact.
 - Preserved the approved Home Ascent preview by moving its original small SVG mountaineer into `_includes/mountaineer-home.html`. The larger, dedicated `/journey/` climber was rebuilt independently with a hooded puffer jacket, helmet, pack, harness, rope, ice axe, gloves and crampon boots.
@@ -156,7 +168,7 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- No currently requested implementation work remains. Final visual review and publication checks are the next step.
+- No currently requested implementation work remains after the new full-color Ascent scene. Final visual review and publication checks are the next step.
 - Currently in progress: none.
 
 ## Logical commits
@@ -172,12 +184,13 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 - `42a0785` — replaces the overlapping curved transition with a verified sequenced fade.
 - `4422f71` — free timeline scrolling, animated control jumps, Work navigation, period-free standalone name and calmer post reveals.
 - `66ef075` — vertical Ascent expedition, shared post eligibility, geared climber, CRTO/About refinement and dedicated browser/content fixtures.
-- `4ef52b6` — responsive Everest-inspired scene, rebuilt climber rig, desktop post snapping, Pacific day/night state, About credential spacing and regression checks.
+- `4ef52b6` — earlier Everest-inspired scene, geometric climber and desktop post snapping, since replaced by the latest refinement.
+- `cffd097` — full-color mountaineer and foreground wall, elapsed-time camera easing, softened wheel settling, structural credential break, responsive art and focused regressions.
 - This handoff and refreshed validation evidence are recorded in the following documentation commit.
 
 ## Exact recommended next task
 
-**Review the refined `/journey/` expedition at `http://127.0.0.1:4173/journey/`: wheel through the snapped post panels in both directions, inspect the hand/boot movement and Pacific day/night scene, and verify a real mobile device if available. Check the separated credentials on `/about/`. Fix any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
+**Review the latest `/journey/` expedition at `http://127.0.0.1:4173/journey/`: wheel slowly and quickly in both directions, inspect the orange climber's wall contact and four poses, view the final panel and both day/night states, and try a real mobile device if available. Check the separate credential lines at `/about/`. Address any visual feedback, then push only `codex/portfolio-v2` and open a review PR for Linux CI. Verify actual custom-domain settings before production merge; never push or merge directly into main.**
 
 ## Reproducible local commands
 
