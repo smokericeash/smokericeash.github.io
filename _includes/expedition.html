@@ -2,26 +2,29 @@
 <section class="expedition" data-expedition aria-label="The Ascent expedition">
   <div class="expedition-visual" aria-hidden="true">
     <picture class="expedition-picture">
+      <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-everest-illustration-640.avif' | relative_url }}" type="image/avif">
       <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-everest-illustration-640.webp' | relative_url }}" type="image/webp">
       <source media="(max-width: 1000px)" srcset="{{ '/assets/media/ascent-everest-illustration-800.webp' | relative_url }}" type="image/webp">
       <img class="expedition-backdrop" src="{{ '/assets/media/ascent-everest-illustration.webp' | relative_url }}" alt="" width="1086" height="1448" decoding="async" loading="eager" fetchpriority="high">
     </picture>
+    <picture class="expedition-wall-picture">
+      <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-icewall-480.avif' | relative_url }}" type="image/avif">
+      <source media="(max-width: 680px)" srcset="{{ '/assets/media/ascent-icewall-480.webp' | relative_url }}" type="image/webp">
+      <img class="expedition-wall" src="{{ '/assets/media/ascent-icewall-800.webp' | relative_url }}" alt="" width="800" height="1067" decoding="async" loading="eager" fetchpriority="low">
+    </picture>
     <span class="expedition-celestial"></span>
     <svg class="expedition-art" viewBox="0 0 600 800" preserveAspectRatio="xMidYMid slice" focusable="false">
-      <defs>
-        <linearGradient id="expedition-sky" x2="0" y2="1"><stop offset="0" stop-color="#7794a4"/><stop offset=".48" stop-color="#315268"/><stop offset="1" stop-color="#102633"/></linearGradient>
-        <linearGradient id="expedition-rock" x2="1" y2="1"><stop offset="0" stop-color="#839ca5"/><stop offset=".35" stop-color="#496b7c"/><stop offset="1" stop-color="#173548"/></linearGradient>
-        <linearGradient id="expedition-ice" x2="0" y2="1"><stop offset="0" stop-color="#ecf8fa"/><stop offset="1" stop-color="#8db9c9"/></linearGradient>
-        <filter id="expedition-contact-blur"><feGaussianBlur stdDeviation="3"/></filter>
-      </defs>
-      <rect class="expedition-sky" width="600" height="800" />
+      <defs><filter id="expedition-contact-blur"><feGaussianBlur stdDeviation="3"/></filter></defs>
       <g data-expedition-world>
-        <g data-expedition-distance></g>
-        <g data-expedition-terrain></g>
-        <path class="expedition-route" data-expedition-route />
-        <path class="expedition-route-done" data-expedition-route-done />
+        <path class="expedition-route" data-expedition-route transform="translate(-58 0)" />
+        <path class="expedition-route-done" data-expedition-route-done transform="translate(-58 0)" />
         <ellipse class="expedition-contact-shadow" data-expedition-contact rx="17" ry="5" filter="url(#expedition-contact-blur)" />
-        <g class="expedition-climber" data-expedition-climber>{% include mountaineer.html %}</g>
+        <g class="expedition-climber" data-expedition-climber>
+          {% for frame in (1..4) %}
+          {% assign frame_id = frame | prepend: '0' | slice: -2, 2 %}
+          <image class="expedition-climber-frame" data-expedition-frame="{{ forloop.index0 }}" {% if forloop.first %}href{% else %}data-frame-src{% endif %}="{{ '/assets/media/ascent-climber-' | append: frame_id | append: '.webp' | relative_url }}" x="-54" y="-106" width="88" height="117" preserveAspectRatio="xMidYMid meet"{% unless forloop.first %} opacity="0"{% endunless %} />
+          {% endfor %}
+        </g>
       </g>
     </svg>
     <div class="expedition-vignette"></div>

@@ -1,9 +1,7 @@
 .expedition-page { padding-bottom: clamp(28px, 5vw, 64px); }
 .expedition-page .page-heading { max-width: 900px; padding-bottom: 0; }
 @media (min-width: 681px) and (min-height: 700px) {
-  html:has(.expedition) { scroll-behavior: auto; scroll-snap-type: y mandatory; scroll-padding-top: 84px; }
-  .expedition-page, .expedition-prologue, .expedition-checkpoint, .expedition-continuation,
-  html:has(.expedition) .site-footer { scroll-snap-align: center; scroll-snap-stop: always; }
+  html:has(.expedition) { scroll-behavior: auto; scroll-padding-top: 84px; }
 }
 .expedition {
   --expedition-sky: #142b3a;
@@ -25,19 +23,25 @@
   border-right: 1px solid var(--line);
 }
 .expedition-picture {
-  position: absolute; inset: 0; display: block; width: 100%; height: 140%;
-  transform: translate3d(0, -28.57%, 0); will-change: transform;
+  position: absolute; inset: 0; display: block; width: 100%; height: 112%;
+  transform: translate3d(0, -10.71%, 0); will-change: transform;
 }
 .expedition-backdrop { display: block; width: 100%; height: 100%; object-fit: cover; object-position: 50% 50%; filter: saturate(.86) contrast(1.03); }
+.expedition-wall-picture {
+  position: absolute; inset: 0; z-index: 2; display: block; width: 100%; height: 122%;
+  transform: translate3d(0, -18.03%, 0); will-change: transform;
+}
+.expedition-wall { display: block; width: 100%; height: 100%; object-fit: cover; object-position: right center; filter: drop-shadow(-18px 8px 22px #0a1c2a99); }
 .expedition-visual[data-pacific-sky='night'] .expedition-backdrop {
   filter: brightness(.39) saturate(.7) contrast(1.12) hue-rotate(9deg);
 }
+.expedition-visual[data-pacific-sky='night'] .expedition-wall { filter: brightness(.56) saturate(.77) drop-shadow(-18px 8px 24px #071523bd); }
 .expedition-visual[data-pacific-sky='night']::before {
   content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, #0a1c345e, #091b2999);
 }
 .expedition-celestial {
-  position: absolute; z-index: 2; top: 15%; right: 14%; width: 29px; height: 29px;
+  position: absolute; z-index: 1; top: 15%; left: 18%; width: 29px; height: 29px;
   border-radius: 50%; pointer-events: none;
   background: #fff5db; box-shadow: 0 0 25px 9px #fff7dc88, 0 0 75px 32px #eaf5e944;
 }
@@ -48,22 +52,15 @@
   content: ''; position: absolute; inset: -3px -5px 2px 7px; border-radius: 50%; background: #183046;
 }
 .expedition-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; z-index: 3; }
-.expedition-sky { opacity: 0; }
-.expedition-distance { fill: #9cb9c5; opacity: .035; }
-.expedition-distance-shadow { fill: #29495c; opacity: .045; }
-.expedition-rock { fill: url(#expedition-rock); stroke: #ecfaff; stroke-opacity: .06; stroke-width: 2; opacity: .08; }
-.expedition-snow { fill: url(#expedition-ice); opacity: .1; }
-.expedition-ice { fill: none; stroke: #e1faff; stroke-width: 2; opacity: .2; }
-.expedition-ledge { fill: none; stroke: #e8f8f7; stroke-width: 2; opacity: .16; }
-.expedition-snowfall { fill: #edf8f9; opacity: .65; }
 .expedition-route, .expedition-route-done {
   fill: none; stroke: #16374b; stroke-width: 2.4; stroke-dasharray: 4 9; opacity: .66;
   vector-effect: non-scaling-stroke;
 }
 .expedition-route-done { stroke: #e8f6f6; stroke-width: 3.3; stroke-dasharray: none; opacity: .9; filter: drop-shadow(0 1px 2px #0d273c); }
 .expedition-contact-shadow { fill: #071e2c; opacity: .43; }
-.expedition-climber { filter: drop-shadow(0 5px 7px #071b25d9); }
-.expedition-climber .mountaineer-jacket-shade { opacity: .8; }
+.expedition-climber { filter: drop-shadow(5px 8px 9px #071b25d9); }
+.expedition-climber-frame { transition: opacity 115ms ease-in-out; }
+.expedition-visual[data-pacific-sky='night'] .expedition-climber { filter: brightness(.77) saturate(.86) drop-shadow(5px 8px 9px #071b25ec); }
 .expedition-vignette {
   position: absolute; inset: 0; z-index: 4; pointer-events: none;
   background: linear-gradient(90deg, #0a1e2d43, transparent 35%, #08172124), linear-gradient(0deg, #071a2b9c, transparent 30%, transparent 70%, #0922397a);
@@ -132,8 +129,7 @@
   .expedition-prologue, .expedition-continuation, .expedition-checkpoint { padding: 32px; }
 }
 @media (max-width: 680px) {
-  html:has(.expedition) { scroll-behavior: auto; scroll-snap-type: y proximity; scroll-padding-top: calc(69px + min(46svh, 370px)); }
-  .expedition-prologue, .expedition-checkpoint, .expedition-continuation { scroll-snap-align: start; }
+  html:has(.expedition) { scroll-behavior: auto; scroll-padding-top: calc(69px + min(46svh, 370px)); }
   .expedition { display: block; }
   .expedition-visual {
     top: 69px; height: min(46svh, 370px); min-height: 250px;
@@ -146,10 +142,11 @@
   }
   .expedition-checkpoint::before { display: none; }
   .expedition-image { max-height: 190px; }
+  .expedition-route-done { stroke-width: 2.2; opacity: .38; }
 }
 @media (prefers-reduced-motion: reduce) {
-  html:has(.expedition) { scroll-snap-type: none; }
   .expedition-vignette::after { animation: none; }
+  .expedition-climber-frame { transition: none; }
   .expedition-checkpoint::before { transition: none; }
 }
 @media print {

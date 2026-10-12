@@ -28,6 +28,7 @@ const output = { browser: browserName, checks: [] };
 
     await page.goto(base + '/about/');
     assert.equal(await page.locator('.credential-list a').count(), 2);
+    assert.equal(await page.locator('.credential-list br').count(), 1, 'A literal line break must survive stale CSS');
     assert.equal(await page.locator('.credential-list a').last().getAttribute('href'), 'https://certs.zeropointsecurity.co.uk/c206a569-e644-4fae-ae5f-d2bf97d1360f');
     const credentials = await page.locator('.credential-list a').evaluateAll(links => links.map(link => link.getBoundingClientRect().toJSON()));
     assert.ok(credentials[1].top >= credentials[0].bottom + 8, 'Credentials need separate lines and spacing');
@@ -39,46 +40,61 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber .mountaineer-pack').count(), 1);
+    assert.equal(await page.locator('.expedition-climber-frame').count(), 4);
+    for (const frame of await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => image.getAttribute('href') || image.dataset.frameSrc))) {
+      assert.equal((await page.request.get(base + frame)).status(), 200, `${frame} must load`);
+    }
     assert.equal(await page.locator('.expedition-visual').getAttribute('aria-hidden'), 'true');
     assert.equal(await page.locator('.expedition-panel h2 a').count(), homeCount);
-    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollSnapType), 'y mandatory');
-    assert.equal(await checkpoints.first().evaluate(el => getComputedStyle(el).scrollSnapAlign), 'center');
+    assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollSnapType), 'none');
     const pacificSky = await page.locator('.expedition-visual').getAttribute('data-pacific-sky');
     const hour = await page.evaluate(() => Number(new Intl.DateTimeFormat('en-US', { timeZone: 'America/Los_Angeles', hour: 'numeric', hourCycle: 'h23' }).format(new Date())));
     assert.equal(pacificSky, hour >= 6 && hour < 19 ? 'day' : 'night');
     assert.ok((await page.locator('.expedition-backdrop').getAttribute('src')).endsWith('ascent-everest-illustration.webp'));
+    assert.ok((await page.locator('.expedition-wall').getAttribute('src')).endsWith('ascent-icewall-800.webp'));
     await page.locator('.expedition-visual').evaluate(el => { el.dataset.pacificSky = 'night'; });
     const nightFilter = await page.locator('.expedition-backdrop').evaluate(el => getComputedStyle(el).filter);
     await page.locator('.expedition-visual').evaluate(el => { el.dataset.pacificSky = 'day'; });
     const dayFilter = await page.locator('.expedition-backdrop').evaluate(el => getComputedStyle(el).filter);
     assert.notEqual(nightFilter, dayFilter);
     await page.locator('.expedition-visual').evaluate((el, sky) => { el.dataset.pacificSky = sky; }, pacificSky);
-    output.checks.push('Post panels snap on desktop; illustrated scene tracks Pacific day/night');
+    output.checks.push('Post navigation avoids forced browser snapping; layered scene tracks Pacific day/night');
 
     await checkpoints.nth(1).evaluate(el => el.scrollIntoView({ block: 'center', behavior: 'instant' }));
     await page.waitForTimeout(150);
     const beforeWheel = await page.evaluate(() => scrollY);
+    await page.evaluate(() => {
+      window.__wheelPositions = [];
+      const begun = performance.now();
+      const sample = () => {
+        window.__wheelPositions.push(Math.round(scrollY));
+        if (performance.now() - begun < 850) requestAnimationFrame(sample);
+      };
+      requestAnimationFrame(sample);
+    });
     await page.mouse.move(1100, 460);
-    await page.mouse.wheel(0, 750);
-    await page.waitForTimeout(950);
+    await page.mouse.wheel(0, 580);
+    await page.waitForTimeout(1600);
+    const intermediatePositions = await page.evaluate(() => new Set(window.__wheelPositions).size);
+    assert.ok(intermediatePositions >= (browserName === 'firefox' ? 4 : 7), `Wheel should ease through intermediate positions: ${intermediatePositions}`);
     const settled = await page.evaluate(() => {
       const target = 84 + (innerHeight - 84) / 2;
       const panels = [...document.querySelectorAll('.expedition-checkpoint')];
       return Math.min(...panels.map(el => Math.abs(el.getBoundingClientRect().top + el.getBoundingClientRect().height / 2 - target)));
     });
     assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeWheel) > 100, 'Wheel must reach another post');
-    assert.ok(settled < 90, `Post did not settle near screen center: ${settled}`);
-    output.checks.push('Desktop wheel navigation settles a post at the snap position');
+    assert.ok(Math.abs(await page.evaluate(() => scrollY) - beforeWheel) < 950, 'Wheel should not leap over several entries');
+    assert.ok(settled < 250, `Post did not settle near a reading position: ${settled}`);
+    output.checks.push('Desktop wheel navigation eases through intermediate positions and settles near one entry');
     const positions = [];
     for (const index of [0, Math.floor(homeCount / 2), homeCount - 1]) {
       await checkpoints.nth(index).scrollIntoViewIfNeeded();
-      await page.waitForTimeout(450);
+      await page.waitForTimeout(850);
       positions.push(Number((await page.locator('.expedition-art').getAttribute('viewBox')).split(' ')[1]));
     }
     assert.ok(positions[0] > positions[1] && positions[1] > positions[2], `Camera did not climb: ${positions}`);
     await checkpoints.first().scrollIntoViewIfNeeded();
-    await page.waitForTimeout(450);
+    await page.waitForTimeout(850);
     const reversed = Number((await page.locator('.expedition-art').getAttribute('viewBox')).split(' ')[1]);
     assert.ok(reversed > positions[1], 'Upward scrolling must reverse the camera');
     output.checks.push('Native vertical scrolling advances and reverses camera across actual checkpoints');
@@ -88,21 +104,24 @@ const output = { browser: browserName, checks: [] };
     await page.evaluate(() => { document.documentElement.style.scrollSnapType = 'none'; });
     const samplePose = async (fraction) => {
       await page.evaluate(({ firstY, nextY, fraction }) => scrollTo(0, firstY + (nextY - firstY) * fraction - innerHeight * .52), { firstY, nextY, fraction });
-      await page.waitForTimeout(400);
+      await page.waitForTimeout(850);
       return page.locator('.expedition-climber').evaluate(el => ({
-        handY: Number(el.querySelector('.mountaineer-arm-front .mountaineer-glove').getAttribute('cy')),
-        boot: el.querySelector('.mountaineer-leg-front .mountaineer-boot').getAttribute('d'),
-        armTransform: el.querySelector('.mountaineer-arm-front').style.transform,
+        pose: [...el.querySelectorAll('.expedition-climber-frame')].findIndex(image => Number(getComputedStyle(image).opacity) > .9),
+        frames: [...el.querySelectorAll('.expedition-climber-frame')].map(image => ({ loaded: image.hasAttribute('href'), opacity: getComputedStyle(image).opacity })),
+        transform: el.getAttribute('transform'),
+        wall: document.querySelector('.expedition-wall-picture').style.transform,
+        scroll: scrollY,
+        stage: document.querySelector('[data-expedition-position]').textContent,
       }));
     };
-    const reaching = await samplePose(.25);
-    const pulling = await samplePose(.75);
-    assert.ok(Math.abs(reaching.handY - pulling.handY) > 2, 'Hand must reach and pull vertically');
-    assert.notEqual(reaching.boot, pulling.boot, 'Boot must step and push');
-    assert.equal(reaching.armTransform, '', 'Limb pose must use stable joint geometry, not CSS rotation');
+    const reaching = await samplePose(.1);
+    const pulling = await samplePose(.9);
+    assert.notEqual(reaching.pose, pulling.pose, `Realistic climber frames must change with ascent: ${JSON.stringify({ reaching, pulling })}`);
+    assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
+    assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');
     assert.ok(parseFloat(await page.locator('.expedition-route-done').evaluate(el => el.style.strokeDashoffset)) > 0);
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
-    output.checks.push('Hands reach and pull, boots step, and continuous route progress remains smooth');
+    output.checks.push('Full-body climbing poses, physical wall travel and parallax respond continuously to progress');
 
     await page.locator('.expedition-continuation').scrollIntoViewIfNeeded();
     assert.equal(await page.getByRole('heading', { name: 'The ascent continues' }).count(), 1);
@@ -134,7 +153,8 @@ const output = { browser: browserName, checks: [] };
       await page.setViewportSize({ width: 390, height: 844 });
       await page.selectOption('#theme-select', 'light');
       await checkpoints.nth(Math.floor(homeCount / 2)).scrollIntoViewIfNeeded();
-      assert.ok((await page.locator('.expedition-backdrop').evaluate(el => el.currentSrc)).endsWith('ascent-everest-illustration-640.webp'));
+      assert.ok(/ascent-everest-illustration-640\.(avif|webp)$/.test(await page.locator('.expedition-backdrop').evaluate(el => el.currentSrc)));
+      assert.ok(/ascent-icewall-480\.(avif|webp)$/.test(await page.locator('.expedition-wall').evaluate(el => el.currentSrc)));
       await page.screenshot({ path: 'test-results/expedition-mobile-light.png' });
     }
     output.checks.push('Dark and light automated accessibility scans; desktop/mobile screenshot capture');
@@ -143,10 +163,10 @@ const output = { browser: browserName, checks: [] };
     await page.reload();
     await checkpoints.last().scrollIntoViewIfNeeded();
     assert.equal(await page.locator('.expedition-panel').first().evaluate(el => getComputedStyle(el).transitionDuration), '0s');
-    const stillHand = await page.locator('.expedition-climber .mountaineer-arm-front .mountaineer-glove').getAttribute('cy');
+    const stillPose = await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => getComputedStyle(image).opacity));
     await checkpoints.first().scrollIntoViewIfNeeded();
-    assert.equal(await page.locator('.expedition-climber .mountaineer-arm-front .mountaineer-glove').getAttribute('cy'), stillHand);
-    output.checks.push('Reduced motion keeps entries available and stops limb animation');
+    assert.deepEqual(await page.locator('.expedition-climber-frame').evaluateAll(images => images.map(image => getComputedStyle(image).opacity)), stillPose);
+    output.checks.push('Reduced motion keeps entries available and holds one static climbing pose');
     const lastDestination = await page.locator('.expedition-panel h2 a').last().getAttribute('href');
     await context.close();
 

@@ -185,8 +185,8 @@ h1, h2, h3 {
 .ascent-climber .mountaineer-arm-back .mountaineer-sleeve { stroke: #dcecf1; }
 .ascent-climber .mountaineer-jacket { fill: #4c8297; }
 .ascent-climber .mountaineer-helmet { fill: #edf4f5; }
-.about-aside dd.credential-list { display: grid; gap: 12px; }
-.about-aside dd.credential-list a { display: block; width: fit-content; line-height: 1.5; }
+.about-aside dd.credential-list a { display: inline-block; line-height: 1.5; }
+.about-aside dd.credential-list a:first-child { margin-bottom: 12px; }
 .ascent-map-labels {
   position: absolute;
   inset: auto 14px 9px;

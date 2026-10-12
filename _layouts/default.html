@@ -9,12 +9,17 @@
   <link rel="alternate" type="application/atom+xml" title="Aidan Chen — Work" href="{{ '/feed.xml' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/site.css' | relative_url }}">
   <link rel="stylesheet" href="{{ '/assets/css/experience.css' | relative_url }}">
-  <link rel="stylesheet" href="{{ '/assets/css/ascent.css' | relative_url }}">
-  {% if page.url == '/journey/' %}<link rel="stylesheet" href="{{ '/assets/css/expedition.css' | relative_url }}">{% endif %}
+  <link rel="stylesheet" href="{{ '/assets/css/ascent.css' | relative_url }}?v=ascent-2">
+  {% if page.url == '/journey/' %}
+  <link rel="preload" as="image" href="{{ '/assets/media/ascent-everest-illustration-640.avif' | relative_url }}" type="image/avif" media="(max-width: 680px)" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ '/assets/media/ascent-everest-illustration-800.webp' | relative_url }}" media="(min-width: 681px) and (max-width: 1000px)" fetchpriority="high">
+  <link rel="preload" as="image" href="{{ '/assets/media/ascent-everest-illustration.webp' | relative_url }}" media="(min-width: 1001px)" fetchpriority="high">
+  <link rel="stylesheet" href="{{ '/assets/css/expedition.css' | relative_url }}?v=ascent-2">
+  {% endif %}
   <script src="{{ '/assets/js/site.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/experience.js' | relative_url }}" defer></script>
   <script src="{{ '/assets/js/contact.js' | relative_url }}" defer></script>
-  {% if page.url == '/journey/' %}<script src="{{ '/assets/js/expedition.js' | relative_url }}" defer></script>{% endif %}
+  {% if page.url == '/journey/' %}<script src="{{ '/assets/js/expedition.js' | relative_url }}?v=ascent-2" defer></script>{% endif %}
 </head>
 <body data-baseurl="{{ site.baseurl }}">
   {% include header.html %}
