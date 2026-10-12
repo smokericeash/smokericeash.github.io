@@ -16,18 +16,11 @@
   const climber = root.querySelector('[data-expedition-climber]');
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
-  const frameUrls = Array.from({ length: 17 }, (_, index) =>
+  const frameUrls = Array.from({ length: 16 }, (_, index) =>
     firstFrameUrl.replace(/01\.webp/, `${String(index + 1).padStart(2, '0')}.webp`));
-  // Register each complete illustration by its blue-goggle center. Source
-  // sheets varied in character placement; the old unregistered swaps made
-  // the whole body jump even when the route/camera was continuous.
-  const registration = [
-    [-5, 7], [17, 8], [-3, 22], [-6, 18], [22, 20],
-    [-7, -8], [5, -9], [-10, -6], [-25, -8], [-6, -8],
-    [6, -7], [-21, -6], [0, -7], [-25, -11], [39, -10],
-    [-6, 14], [38, 0],
-  ];
-  // Warm the remaining poses after the first page paint. Fetching all 17 at
+  // Every complete-body image is registered to the same goggle position at
+  // export time, so runtime pose changes need no per-limb or per-frame shifts.
+  // Warm the remaining poses after the first page paint. Fetching all 16 at
   // startup competed with the mountain's first paint on mobile. Any deliberate
   // wheel/touch interaction starts preloading sooner.
   const frameCache = [];
@@ -117,8 +110,8 @@
     // the climber appear to fall back after the wheel stopped. The intended
     // screen height steadily rises throughout the route, without a loop reset.
     const stride = current - Math.floor(current);
-    // Two upward pushes per entry follow the planted opposite foot. Between
-    // pushes the torso holds its height while a tool moves to its next hold.
+    // Two upward pushes per entry follow the illustrated foothold phases.
+    // Between pushes the torso holds its height while a tool finds a hold.
     const pushRight = ease(clamp01((stride - .28) / .23));
     const pushLeft = ease(clamp01((stride - .78) / .22));
     const climbProgress = (Math.floor(current) + (pushRight + pushLeft) / 2) / stages;
@@ -132,8 +125,6 @@
     const frameIndex = Math.floor(pose);
     if (primaryFrame.getAttribute('href') !== frameUrls[frameIndex])
       primaryFrame.setAttribute('href', frameUrls[frameIndex]);
-    primaryFrame.setAttribute('x', registration[frameIndex][0]);
-    primaryFrame.setAttribute('y', registration[frameIndex][1]);
     climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);

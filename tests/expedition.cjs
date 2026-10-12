@@ -42,8 +42,8 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Climber must be one complete pose, with no hinged body parts');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-10$/);
-    for (let index = 1; index <= 17; index += 1) {
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-11$/);
+    for (let index = 1; index <= 16; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
         image.src = `/assets/media/ascent-climber-frame-${String(index).padStart(2, '0')}.webp`;
@@ -73,14 +73,16 @@ const output = { browser: browserName, checks: [] };
         };
         return { hip: center(210, 70), lowerLeg: center(400, 90) };
       };
-      return Promise.all(Array.from({ length: 17 }, (_, index) => sample(index + 1)));
+      return Promise.all(Array.from({ length: 16 }, (_, index) => sample(index + 1)));
     });
     for (const [index, pose] of footholds.entries()) {
       assert.ok(Math.abs(pose.lowerLeg - pose.hip) < 60,
         `Pose ${index + 1} must keep the supporting leg beneath the hip: ${JSON.stringify(pose)}`);
     }
-    assert.ok(footholds[0].lowerLeg < footholds[5].lowerLeg && footholds[5].lowerLeg > footholds[10].lowerLeg,
-      'The supporting leg must alternate sides during the climb');
+    assert.ok(footholds[0].lowerLeg - footholds[0].hip < -20 &&
+      footholds[8].lowerLeg - footholds[8].hip > 35 &&
+      Math.abs(footholds[15].lowerLeg - footholds[15].hip) < 25,
+    'The planted supporting leg must change sides and return under the body');
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
     assert.equal(await page.locator('[data-climber-front-arm], [data-climber-back-arm], [data-climber-front-leg], [data-climber-back-leg], [data-climber-front-shin], [data-climber-back-shin]').count(), 0);
