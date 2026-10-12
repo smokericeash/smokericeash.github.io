@@ -81,16 +81,22 @@ h1, h2, h3 {
   isolation: isolate;
   min-height: 350px;
 }
+.profile-intro::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+  pointer-events: none;
+  background: url('../media/ascent-everest-illustration-800.webp') center 24% / cover no-repeat;
+  filter: saturate(.6);
+  opacity: .25;
+}
 .profile-intro::after {
   content: '';
   position: absolute;
-  right: -1%;
-  bottom: -1px;
-  width: 55%;
-  height: 90px;
-  background: var(--ridge-far);
-  clip-path: polygon(0 100%, 15% 84%, 26% 90%, 39% 53%, 49% 70%, 65% 30%, 75% 52%, 89% 12%, 100% 38%, 100% 100%);
-  opacity: 0.34;
+  inset: 0;
+  background: linear-gradient(90deg, var(--bg) 0%, transparent 42%, var(--bg) 100%),
+    linear-gradient(0deg, var(--bg), transparent 75%);
   pointer-events: none;
   z-index: -1;
 }
@@ -215,7 +221,11 @@ h1, h2, h3 {
 .chronicle-scrubber input::-moz-range-thumb { border-radius: 2px; }
 
 @media (max-width: 800px) {
-  .profile-intro::after { width: 75%; height: 66px; opacity: 0.23; }
+  .profile-intro::before {
+    background-image: url('../media/ascent-everest-illustration-640.webp');
+    background-image: image-set(url('../media/ascent-everest-illustration-640.avif') type('image/avif'), url('../media/ascent-everest-illustration-640.webp') type('image/webp'));
+    background-position: 58% 23%;
+  }
   .ascent-map { height: 145px; margin-bottom: 20px; }
 }
 @media (max-width: 560px) {

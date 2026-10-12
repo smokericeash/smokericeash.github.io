@@ -4,7 +4,7 @@ Updated: October 11, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The integrated Ascent introduction and continuously articulated full-color climber are implemented and locally verified on `codex/portfolio-v2`.** The Home design, self-service Markdown workflow, original content, four navigation destinations, existing links and tested interactions remain intact. No local check is failing. The current browser suites pass in Chrome, Firefox and WebKit. Nothing has been pushed, merged or deployed.
+**The Home identity section now carries a faint Everest backdrop, and the dedicated Ascent has a black-and-white alpine climber with a non-rebounding, alternating-limb scroll animation.** The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. The current implementation passes local Chrome, site-integrity and Lighthouse checks. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,18 @@ Updated: October 11, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 11 integrated Ascent and continuous climb — latest handoff
+## October 11 Home mountain and non-rebounding climb — latest handoff
+
+- Added a subtle Everest image only behind the Home identity panel using the existing optimized illustration. Gradient overlays protect the heading and introduction in light and dark themes; desktop dark/light and mobile dark screenshots were inspected. The separate Home timeline and the rest of the layout stay unchanged.
+- Replaced the dedicated Ascent's orange climber with an original transparent black-and-white technical alpine figure: white hardshell, black pack, helmet, black pants, gloves, two raised ice tools and crampon boots. The generated source, 30 KB alpha WebP and exact built-in imagegen prompts are documented in `docs/ASCENT_ART.md`. No brand logo or endorsement appears. The earlier orange art remains only for provenance.
+- Split the new image into nine clipped layers so both shoulders/elbows and both hips/knees respond continuously to scroll. Opposing hand heights alternate; the torso remains planted at the contact point without a repeated bob. Camera and character now derive from the same eased progress and a monotonically rising screen path. Desktop wheel settling is constrained to the gesture direction, eliminating the scroll reversal that caused apparent drops. The illuminated route and Pacific day/night atmosphere remain.
+- Removed the changing upper-left scene label (“ICE & ROCK” and related text); kept the numbered Ascent indicator on the right. Updated asset versions to avoid stale cached motion and styling.
+- Baseline production build passed before edits. Baseline Chrome Ascent test passed using installed Chrome because this environment lacks Playwright's bundled executable. After edits, production build, source integrity (26 unchanged originals, nine routes, 47 pages, 1,688 local references/anchors/assets), complete Chrome browser suite (94 routes, 132 responsive pages, 22 axe scans, six general groups, 10 experience groups, 11 editorial groups, 10 expedition groups), and stronger Ascent assertions all pass. The focused test checks directional wheel travel, no downward figure rebound, continuous poses, alternating higher hands, articulated legs, responsiveness, reduced motion and no-JS links. Desktop/mobile screenshots were reviewed.
+- Eight local Lighthouse runs: Home/Work/article/Ascent mobile performance **98 / 99 / 98 / 96**, desktop **100 / 100 / 100 / 99**. Accessibility, best practices and SEO score 100 throughout. Home mobile LCP 2.3 s and Ascent mobile LCP 2.7 s; CLS 0 on all runs. These are lab scores, not a guaranteed real-device frame rate.
+- Current work in progress: none. Known limits: the generated figure and illustrated wall are visual storytelling, not a physically simulated or video-captured climb; frame pacing and hand-to-wall contact need human review on a real device. Current Firefox/WebKit binaries are missing, so cross-engine tests for this latest refinement remain to be rerun. Remote Linux CI and custom-domain checks remain pending; nothing has been pushed, merged or deployed.
+- **Exact next task:** open the local Home and `/journey/` preview on a real desktop/mobile device, assess the two-handed climbing motion and wall contact while scrolling both directions, then restore/install Firefox and WebKit runners and rerun their full suites before a branch-only push for remote CI. Do not merge to `main` or publish until that review passes.
+
+## Earlier October 11 integrated Ascent and continuous climb — superseded where noted above
 
 - Removed the explicit sun/moon ornament. Local Pacific-time day/night lighting still subtly adjusts the mountain scene without location permission or a network request.
 - Removed the four-image pose swap. One approved orange mountaineer image now supplies seven clipped SVG layers: torso, back arm, shoulder/forearm, front leg, thigh and shin. Shoulder, elbow, hip and knee transforms update continuously with scroll rather than switching raster frames; reduced motion holds a static, complete pose. The unused three WebP pose derivatives were removed, while the original four-panel source sheet remains for provenance.

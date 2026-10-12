@@ -62,7 +62,10 @@
 .expedition-contact-shadow { fill: #071e2c; opacity: .43; }
 .expedition-climber [data-climber-front-arm],
 .expedition-climber [data-climber-forearm],
+.expedition-climber [data-climber-back-arm],
+.expedition-climber [data-climber-back-forearm],
 .expedition-climber [data-climber-front-leg],
+.expedition-climber [data-climber-front-shin],
 .expedition-climber [data-climber-back-thigh],
 .expedition-climber [data-climber-back-shin] { will-change: transform; }
 .expedition-vignette {
@@ -79,7 +82,7 @@
 @keyframes expedition-atmosphere { to { transform: translate3d(4%, -3%, 0); opacity: .55; } }
 .expedition-hud {
   position: absolute; z-index: 5; top: 24px; left: 26px; right: 26px;
-  display: flex; justify-content: space-between; gap: 20px;
+  display: flex; justify-content: flex-end; gap: 20px;
   color: #e9f6f8; font: 600 11px/1.5 var(--sans);
   letter-spacing: .16em; text-transform: uppercase; text-shadow: 0 1px 8px #081c28;
 }

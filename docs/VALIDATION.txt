@@ -1,12 +1,35 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
 Build, browser suites, and Lighthouse measured October 11, 2026
-(America/Los_Angeles) after the continuous Ascent rig and integrated introduction.
+(America/Los_Angeles) after the Home backdrop and non-rebounding Ascent refinement.
 
 RESULT
-Ready for design review and a branch-only remote CI run. No changes have been
-pushed, merged or deployed. The original source checkout is unchanged.
+Ready for design review and a branch-only remote CI run after cross-engine
+checks. No changes have been pushed, merged or deployed. The original source
+checkout is unchanged.
 
-OCTOBER 11 CONTINUOUS CLIMB AND INTEGRATED INTRODUCTION — LATEST
+OCTOBER 11 HOME BACKDROP AND NON-REBOUNDING CLIMB — LATEST
+- Faint Everest art is confined to the Home identity section; desktop dark and
+  light plus mobile dark screenshots were inspected for legibility.
+- Replaced the dedicated orange climber with a black-and-white alpine figure
+  and nine continuously articulated clipped sections. Both raised hands trade
+  height as the legs step; one progress value drives the figure and camera.
+  The route highlight remains, and the upper-left zone text was removed.
+- Chrome wheel regression passes: downward page positions never reverse in
+  the sample, the figure never moves down more than 3 px, and the raised hand
+  order flips between climbing phases. Reverse/native/reduced-motion/no-JS
+  behavior remains covered. This does not guarantee 30 FPS on every device.
+- Production build and source integrity pass: 26 original files unchanged,
+  nine routes, 47 HTML pages, 1,688 local references, valid XML/metadata.
+  Complete current Chrome suite passes: 94 routes, 132 responsive pages,
+  22 axe scans, six general, 10 experience, 11 editorial and 10 Ascent groups.
+- Local Lighthouse mobile performance: Home 98, Work 99, article 98, Ascent
+  96; desktop 100, 100, 100, 99. Accessibility, best practices and SEO are
+  100 throughout. Home mobile LCP 2.3 s; Ascent mobile LCP 2.7 s; CLS 0.
+- Playwright's bundled Firefox/WebKit binaries are unavailable in this
+  environment. Prior cross-engine passes are from before this latest change;
+  rerun them after restoring the browsers. Nothing was pushed or deployed.
+
+OCTOBER 11 CONTINUOUS CLIMB AND INTEGRATED INTRODUCTION — EARLIER
 - Removed the sun/moon ornament; retained subtle Pacific-time mountain lighting.
 - Replaced four-image pose swapping with seven SVG layers cut from one original
   full-color climber image. Shoulder, elbow, hip and knee transforms follow

@@ -22,6 +22,7 @@ const output = { browser: browserName, checks: [] };
     assert.ok(homeCount >= 9);
     assert.equal(await page.locator('.ascent-map-labels').innerText(), 'BASE CAMP · 2025\nSUMMIT AWAITS · 2026');
     assert.equal(await page.locator('.profile-summary .credential-link').count(), 0);
+    assert.match(await page.locator('.profile-intro').evaluate(el => getComputedStyle(el, '::before').backgroundImage), /ascent-everest-illustration-800\.webp/);
     assert.equal(await page.locator('.ascent-climber .mountaineer-pack').count(), 1);
     if (browserName === 'chromium') await page.locator('.home-timeline').screenshot({ path: 'test-results/home-ascent-preview.png' });
     output.checks.push('Home retains the compact shared-post preview, dynamic labels and equipped climber');
@@ -40,10 +41,11 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber image').count(), 7);
-    assert.deepEqual(await page.locator('.expedition-climber image').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('href')))]), ['/assets/media/ascent-climber-01.webp']);
+    assert.equal(await page.locator('.expedition-climber image').count(), 9);
+    assert.deepEqual(await page.locator('.expedition-climber image').evaluateAll(images => [...new Set(images.map(image => image.getAttribute('href')))]), ['/assets/media/ascent-climber-alpine.webp']);
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
-    for (const part of ['front-arm', 'forearm', 'back-arm', 'front-leg', 'back-thigh', 'back-shin']) assert.equal(await page.locator(`[data-climber-${part}]`).count(), 1);
+    assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
+    for (const part of ['front-arm', 'forearm', 'back-arm', 'back-forearm', 'front-leg', 'front-shin', 'back-thigh', 'back-shin']) assert.equal(await page.locator(`[data-climber-${part}]`).count(), 1);
     assert.equal(await page.locator('.expedition-visual').getAttribute('aria-hidden'), 'true');
     assert.equal(await page.locator('.expedition-panel h2 a').count(), homeCount);
     assert.equal(await page.evaluate(() => getComputedStyle(document.documentElement).scrollSnapType), 'none');
@@ -66,10 +68,12 @@ const output = { browser: browserName, checks: [] };
     await page.evaluate(() => {
       window.__wheelPositions = [];
       window.__armPositions = [];
+      window.__climberScreenY = [];
       const begun = performance.now();
       const sample = () => {
         window.__wheelPositions.push(Math.round(scrollY));
         window.__armPositions.push(document.querySelector('[data-climber-front-arm]').getAttribute('transform'));
+        window.__climberScreenY.push(document.querySelector('[data-expedition-climber]').getScreenCTM().f);
         if (performance.now() - begun < 850) requestAnimationFrame(sample);
       };
       requestAnimationFrame(sample);
@@ -79,8 +83,12 @@ const output = { browser: browserName, checks: [] };
     await page.waitForTimeout(1600);
     const intermediatePositions = await page.evaluate(() => new Set(window.__wheelPositions).size);
     assert.ok(intermediatePositions >= (browserName === 'firefox' ? 4 : 7), `Wheel should ease through intermediate positions: ${intermediatePositions}`);
+    const scrollReversal = await page.evaluate(() => window.__wheelPositions.slice(1).reduce((max, y, i) => Math.max(max, window.__wheelPositions[i] - y), 0));
+    assert.ok(scrollReversal <= 1, `Downward wheel settling must not reverse the page: ${scrollReversal}px`);
     const continuousPoses = await page.evaluate(() => new Set(window.__armPositions).size);
     assert.ok(continuousPoses >= (browserName === 'chromium' ? 24 : 4), `Climbing joints should animate continuously, not swap four images: ${continuousPoses}`);
+    const rebound = await page.evaluate(() => window.__climberScreenY.slice(1).reduce((max, y, i) => Math.max(max, y - window.__climberScreenY[i]), 0));
+    assert.ok(rebound < 3, `Climber must not drop back down during downward wheel travel: ${rebound.toFixed(1)}px`);
     const settled = await page.evaluate(() => {
       const target = 84 + (innerHeight - 84) / 2;
       const panels = [...document.querySelectorAll('.expedition-checkpoint')];
@@ -111,16 +119,26 @@ const output = { browser: browserName, checks: [] };
       await page.waitForTimeout(850);
       return page.locator('.expedition-climber').evaluate(el => ({
         frontArm: el.querySelector('[data-climber-front-arm]').getAttribute('transform'),
+        backArm: el.querySelector('[data-climber-back-arm]').getAttribute('transform'),
+        frontLeg: el.querySelector('[data-climber-front-leg]').getAttribute('transform'),
         backLeg: el.querySelector('[data-climber-back-shin]').getAttribute('transform'),
         transform: el.getAttribute('transform'),
         wall: document.querySelector('.expedition-wall-picture').style.transform,
         scroll: scrollY,
         stage: document.querySelector('[data-expedition-position]').textContent,
+        handOrder: (() => {
+          const front = new DOMPoint(284, 20).matrixTransform(el.querySelector('[data-climber-forearm]').getScreenCTM());
+          const back = new DOMPoint(80, 20).matrixTransform(el.querySelector('[data-climber-back-forearm]').getScreenCTM());
+          return front.y - back.y;
+        })(),
       }));
     };
     const reaching = await samplePose(.1);
     const pulling = await samplePose(.9);
     assert.notEqual(reaching.frontArm, pulling.frontArm, `Arm must move continuously with ascent: ${JSON.stringify({ reaching, pulling })}`);
+    assert.notEqual(reaching.backArm, pulling.backArm, 'Other arm must reach on its own joint');
+    assert.notEqual(reaching.frontLeg, pulling.frontLeg, 'Other leg must step on its own joint');
+    assert.ok(reaching.handOrder * pulling.handOrder < 0, `Raised hands should alternate: ${reaching.handOrder}, ${pulling.handOrder}`);
     assert.notEqual(reaching.backLeg, pulling.backLeg, 'Supporting leg must move with the climbing cycle');
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
     assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');
