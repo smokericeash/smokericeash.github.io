@@ -28,7 +28,7 @@ const path = require('node:path');
       const frames = await page.locator('.expedition-climber').evaluate(element =>
         [...element.querySelectorAll('image')].map(image => ({
           frame: image.getAttribute('href').match(/frame-(\d+)/)?.[1],
-          opacity: image.getAttribute('opacity'),
+          opacity: getComputedStyle(image).opacity,
         })));
       const name = String(index + 1).padStart(2, '0');
       const target = path.join(__dirname, '..', 'test-results', 'climber-motion-' + name + '.png');

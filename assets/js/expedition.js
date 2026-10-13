@@ -15,13 +15,12 @@
   const contact = root.querySelector('[data-expedition-contact]');
   const climber = root.querySelector('[data-expedition-climber]');
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
-  const nextFrame = climber.querySelector('[data-climber-frame-next]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
   const frameUrls = Array.from({ length: 10 }, (_, index) =>
     firstFrameUrl.replace(/01\.webp/, `${String(index + 1).padStart(2, '0')}.webp`));
   // Every complete-body image is registered to the same goggle position at
-  // export time. The two whole-body images blend between neighboring poses;
-  // there are no separately animated limbs or per-pose transforms.
+  // export time. Only one fully opaque pose is drawn at once: crossfading
+  // complete figures made the mountaineer look translucent against the ice.
   // Warm the remaining poses after the first page paint. Fetching all poses at
   // startup competed with the mountain's first paint on mobile. Any deliberate
   // wheel/touch interaction starts preloading sooner.
@@ -126,15 +125,9 @@
     // A full right/left stepping cycle spans two entries. The previous cycle
     // raced through every pose during a single moderate wheel gesture.
     const pose = motion.matches ? 0 : current * frameUrls.length / 2;
-    const frameIndex = Math.floor(pose) % frameUrls.length;
-    const nextIndex = (frameIndex + 1) % frameUrls.length;
-    const blend = motion.matches ? 0 : ease(pose - Math.floor(pose));
+    const frameIndex = Math.round(pose) % frameUrls.length;
     if (primaryFrame.getAttribute('href') !== frameUrls[frameIndex])
       primaryFrame.setAttribute('href', frameUrls[frameIndex]);
-    if (nextFrame.getAttribute('href') !== frameUrls[nextIndex])
-      nextFrame.setAttribute('href', frameUrls[nextIndex]);
-    primaryFrame.setAttribute('opacity', (1 - blend).toFixed(3));
-    nextFrame.setAttribute('opacity', blend.toFixed(3));
     climber.setAttribute('transform', `translate(${(point.x + 45).toFixed(2)} ${(point.y + 65).toFixed(2)}) scale(1.65)`);
     position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
     const nearest = Math.round(current);
