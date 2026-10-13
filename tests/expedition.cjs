@@ -42,7 +42,7 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Render one opaque complete pose without separate limbs');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-15$/);
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-16$/);
     for (let index = 1; index <= 13; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
@@ -53,9 +53,9 @@ const output = { browser: browserName, checks: [] };
       assert.deepEqual(image, { width: 400, height: 533 }, `Full-body frame ${index} must load`);
     }
     assert.deepEqual(
-      fs.readFileSync('assets/media/ascent-climber-frame-07.webp'),
       fs.readFileSync('assets/media/ascent-climber-frame-08.webp'),
-      'The settled foothold should hold for two frames instead of flashing a foot-only variation',
+      fs.readFileSync('assets/media/ascent-climber-frame-09.webp'),
+      'The both-straight foothold should hold for two frames',
     );
     const footholds = await page.evaluate(async () => {
       const sample = async index => {
@@ -78,15 +78,25 @@ const output = { browser: browserName, checks: [] };
         };
         const rgba = context.getImageData(0, 300, image.width, image.height - 300).data;
         const bootXs = [];
+        const bootHeights = [[], []];
         for (let i = 0; i < rgba.length; i += 4) {
           const [red, green, blue, alpha] = rgba.subarray(i, i + 4);
           if (alpha > 160 && red > 100 && green > 35 && green < 160 &&
-              blue < 105 && red > green * 1.25) bootXs.push(Math.floor(i / 4) % image.width);
+              blue < 105 && red > green * 1.25) {
+            const x = Math.floor(i / 4) % image.width;
+            const y = 300 + Math.floor(i / 4 / image.width);
+            bootXs.push(x);
+            if (y > 305) bootHeights[x < 225 ? 0 : 1].push(y);
+          }
         }
         bootXs.sort((a, b) => a - b);
+        const bootY = bootHeights.map(heights => {
+          heights.sort((a, b) => a - b);
+          return heights[Math.floor(heights.length / 2)];
+        });
         return { hip: center(210, 70), lowerLeg: center(400, 90),
           orangeSpan: bootXs[Math.floor(bootXs.length * .9)] - bootXs[Math.floor(bootXs.length * .1)],
-          orangeCount: bootXs.length };
+          orangeCount: bootXs.length, bootY };
       };
       return Promise.all(Array.from({ length: 13 }, (_, index) => sample(index + 1)));
     });
@@ -95,6 +105,11 @@ const output = { browser: browserName, checks: [] };
         `Pose ${index + 1} must keep the supporting leg beneath the hip: ${JSON.stringify(pose)}`);
       assert.ok(pose.orangeSpan > 35 && pose.orangeCount > 150,
         `Pose ${index + 1} must show two separated crampon boots: ${JSON.stringify(pose)}`);
+      const heightDifference = Math.abs(pose.bootY[0] - pose.bootY[1]);
+      if ([0, 7, 8].includes(index))
+        assert.ok(heightDifference < 25, `Both boots should be level in straight-leg pose ${index + 1}: ${JSON.stringify(pose)}`);
+      else
+        assert.ok(heightDifference > 60, `Exactly one boot should be raised in bent-leg pose ${index + 1}: ${JSON.stringify(pose)}`);
     }
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
     assert.equal(await page.locator('[data-expedition-zone]').count(), 0);
@@ -140,6 +155,17 @@ const output = { browser: browserName, checks: [] };
     assert.ok(scrollReversal <= 1, `Downward wheel settling must not reverse the page: ${scrollReversal}px`);
     const visitedFrames = await page.evaluate(() => new Set(window.__poseFrames).size);
     assert.ok(visitedFrames >= 3, `Wheel travel should show several illustrated full-body poses: ${visitedFrames}`);
+    if (browserName === 'chromium') {
+      const largestFrameStep = await page.evaluate(() => {
+        const sequence = window.__poseFrames.map(url => Number(url.match(/frame-(\d+)/)[1]))
+          .filter((number, index, all) => index === 0 || number !== all[index - 1]);
+        return sequence.slice(1).reduce((largest, number, index) => {
+          const distance = Math.abs(number - sequence[index]);
+          return Math.max(largest, Math.min(distance, 13 - distance));
+        }, 0);
+      });
+      assert.ok(largestFrameStep <= 1, `Moderate wheel travel skipped illustrated poses: ${largestFrameStep}`);
+    }
     const rebound = await page.evaluate(() => window.__climberScreenY.slice(1).reduce((max, y, i) => Math.max(max, y - window.__climberScreenY[i]), 0));
     assert.ok(rebound < 3, `Climber must not drop back down during downward wheel travel: ${rebound.toFixed(1)}px`);
     const settled = await page.evaluate(() => {
