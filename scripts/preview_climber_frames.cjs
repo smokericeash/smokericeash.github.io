@@ -10,7 +10,7 @@ const path = require('node:path');
     ...(process.env.CHROME_CHANNEL ? { channel: process.env.CHROME_CHANNEL } : {}),
   });
   try {
-    const cells = Array.from({ length: 10 }, (_, index) => {
+    const cells = Array.from({ length: 13 }, (_, index) => {
       const number = String(index + 1).padStart(2, '0');
       const data = fs.readFileSync(path.join(root, 'assets', 'media',
         `ascent-climber-frame-${number}.webp`)).toString('base64');
@@ -29,7 +29,7 @@ const path = require('node:path');
       await scene.locator('.expedition-checkpoint').nth(4).evaluate(element =>
         element.scrollIntoView({ block: 'center', behavior: 'instant' }));
       await scene.waitForTimeout(250);
-      for (const index of [1, 3, 6, 8, 10]) {
+      for (const index of [1, 3, 5, 7, 9, 11, 13]) {
         const number = String(index).padStart(2, '0');
         await scene.locator('[data-climber-frame-primary]').evaluate((element, number) => {
           element.setAttribute('href', element.getAttribute('href')

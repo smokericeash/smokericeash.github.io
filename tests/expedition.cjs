@@ -42,8 +42,8 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Render one opaque complete pose without separate limbs');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-14$/);
-    for (let index = 1; index <= 10; index += 1) {
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-15$/);
+    for (let index = 1; index <= 13; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
         image.src = `/assets/media/ascent-climber-frame-${String(index).padStart(2, '0')}.webp`;
@@ -52,6 +52,11 @@ const output = { browser: browserName, checks: [] };
       }, index);
       assert.deepEqual(image, { width: 400, height: 533 }, `Full-body frame ${index} must load`);
     }
+    assert.deepEqual(
+      fs.readFileSync('assets/media/ascent-climber-frame-07.webp'),
+      fs.readFileSync('assets/media/ascent-climber-frame-08.webp'),
+      'The settled foothold should hold for two frames instead of flashing a foot-only variation',
+    );
     const footholds = await page.evaluate(async () => {
       const sample = async index => {
         const image = new Image();
@@ -83,7 +88,7 @@ const output = { browser: browserName, checks: [] };
           orangeSpan: bootXs[Math.floor(bootXs.length * .9)] - bootXs[Math.floor(bootXs.length * .1)],
           orangeCount: bootXs.length };
       };
-      return Promise.all(Array.from({ length: 10 }, (_, index) => sample(index + 1)));
+      return Promise.all(Array.from({ length: 13 }, (_, index) => sample(index + 1)));
     });
     for (const [index, pose] of footholds.entries()) {
       assert.ok(Math.abs(pose.lowerLeg - pose.hip) < 70,
@@ -182,8 +187,8 @@ const output = { browser: browserName, checks: [] };
     const pulling = await samplePose(.9);
     assert.notEqual(reaching.frame, pulling.frame, 'Complete climbing pose must change with scroll');
     const frameNumber = pose => Number(pose.frame.match(/frame-(\d+)\.webp/)[1]);
-    const advance = (frameNumber(pulling) - frameNumber(reaching) + 10) % 10;
-    assert.ok(advance >= 3 && advance <= 5, `One entry should consume about half a climbing cycle: ${advance} poses`);
+    const advance = (frameNumber(pulling) - frameNumber(reaching) + 13) % 13;
+    assert.ok(advance >= 4 && advance <= 7, `One entry should consume about half a climbing cycle: ${advance} poses`);
     assert.equal(reaching.opacity, '1', 'The illustrated climber must remain fully opaque');
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
     assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');

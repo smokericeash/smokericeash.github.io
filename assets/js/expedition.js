@@ -16,7 +16,7 @@
   const climber = root.querySelector('[data-expedition-climber]');
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
-  const frameUrls = Array.from({ length: 10 }, (_, index) =>
+  const frameUrls = Array.from({ length: 13 }, (_, index) =>
     firstFrameUrl.replace(/01\.webp/, `${String(index + 1).padStart(2, '0')}.webp`));
   // Every complete-body image is registered to the same goggle position at
   // export time. Only one fully opaque pose is drawn at once: crossfading

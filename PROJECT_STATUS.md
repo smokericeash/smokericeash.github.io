@@ -4,7 +4,7 @@ Updated: October 12, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent uses ten complete black-and-white mountaineer poses with alternating footwork.** The far-leg phase now bends toward the wall on the image right; both boot toes face right through the cycle. A single opaque full-body pose is shown at a time, so the climber no longer becomes translucent during handovers. One cycle still spans two entries, preserving scroll pace. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent now uses thirteen complete black-and-white mountaineer frames.** Three intermediate drawings break up the previously abrupt far-leg lowering, and a settled stance holds across two frames in place of the foot-turn-only pose. Both boots continue to point toward the image-right wall. A single opaque full-body pose is shown at a time; one cycle still spans two entries, preserving scroll pace. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,16 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 12 right-facing, opaque pose correction — latest handoff
+## October 12 leg handover refinement — latest handoff
+
+- Completed: inserted three complete intermediate poses between the former 03 and 04 so the far knee and boot lower in stages instead of jumping directly to both boots down. Removed the former pose 05 that merely turned a foot. Repeated the settled stance for two frames. The cycle is now thirteen opaque frames over the same two-entry scroll interval. Kept the right-facing viewpoint, torso, arm sequence, mountain, scroll easing, content and layout. Regenerated the registered WebPs and bumped the Ascent cache version to `ascent-15`.
+- Currently in progress: none after committing this focused correction. The local preview remains branch-only.
+- Decisions: use complete drawings rather than separate rotating limb pieces; keep each pose fully opaque. Do not adopt intermediate candidates that turn a boot toward the viewer or distort the standing leg. `scripts/build_climber_frames.cjs` remains the deterministic 400 × 533 WebP exporter.
+- Known issues: the new far-leg descent is more gradual, but this is still an illustrated discrete-frame sequence, not video. The next near-leg takeoff after the brief hold is visible when scrubbing slowly; generated candidates to soften it were rejected for incorrect boot direction and body consistency. Tool/crampon contact is illustrative, not physically simulated. Real-device motion judgment, Firefox/WebKit runners, branch-only Linux CI and live custom-domain verification remain outstanding. Nothing has been pushed or merged.
+- Testing: Jekyll production build; thirteen-frame source contact sheet, 26-position rendered scroll sheet and desktop scene visually inspected; focused Ascent Chrome checks; full Chrome suite (94 routes, 132 responsive pages, 22 axe checks, six interaction groups, 10 experience groups, 11 editorial groups, 10 Ascent groups); site integrity (26 original files unchanged, nine post routes, 47 HTML pages, 1,688 local references); JavaScript syntax and Git whitespace checks. Local `/journey/` responds HTTP 200.
+- **Exact recommended next task:** review the thirteen-frame gait in the live `/journey/` preview, especially the 03→07 descent and 08→09 near-leg takeoff at slow and moderate scrolling. If the latter still looks abrupt, create a single coherent right-facing transition drawing with both boots pointing right and the support leg unchanged; reject boot-only rotations. Then restore Firefox/WebKit coverage, run branch-only Linux CI and verify the custom domain before considering any production merge.
+
+## October 12 right-facing, opaque pose correction — earlier handoff, superseded where noted above
 
 - Completed: replaced the six poses that needed right-facing leg or transition corrections with complete edited drawings. In the new far-leg phase, the knee folds toward the image-right wall behind the supporting shin, and both crampon toes point right. Kept the same outfit, rear-three-quarter viewpoint, mountain, camera path, route highlight, scroll easing and cycle speed. Removed the two-image opacity crossfade and now renders one complete opaque pose at a time. Re-exported all ten registered WebPs and bumped Ascent URLs to `ascent-14`.
 - Currently in progress: none after committing this handoff. The site is still a branch-only local preview, not a production release.
