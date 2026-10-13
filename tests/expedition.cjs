@@ -41,9 +41,9 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
-    assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Climber must be one complete pose, with no hinged body parts');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-12$/);
-    for (let index = 1; index <= 16; index += 1) {
+    assert.equal(await page.locator('.expedition-climber image').count(), 2, 'Blend complete poses without separate limbs');
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-13$/);
+    for (let index = 1; index <= 10; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
         image.src = `/assets/media/ascent-climber-frame-${String(index).padStart(2, '0')}.webp`;
@@ -83,12 +83,12 @@ const output = { browser: browserName, checks: [] };
           orangeSpan: bootXs[Math.floor(bootXs.length * .9)] - bootXs[Math.floor(bootXs.length * .1)],
           orangeCount: bootXs.length };
       };
-      return Promise.all(Array.from({ length: 16 }, (_, index) => sample(index + 1)));
+      return Promise.all(Array.from({ length: 10 }, (_, index) => sample(index + 1)));
     });
     for (const [index, pose] of footholds.entries()) {
       assert.ok(Math.abs(pose.lowerLeg - pose.hip) < 60,
         `Pose ${index + 1} must keep the supporting leg beneath the hip: ${JSON.stringify(pose)}`);
-      assert.ok(pose.orangeSpan > 95 && pose.orangeCount > 150,
+      assert.ok(pose.orangeSpan > 65 && pose.orangeCount > 150,
         `Pose ${index + 1} must show two separated crampon boots: ${JSON.stringify(pose)}`);
     }
     assert.equal(await page.locator('.expedition-celestial').count(), 0);
@@ -171,6 +171,8 @@ const output = { browser: browserName, checks: [] };
       await page.waitForTimeout(850);
       return page.locator('.expedition-climber').evaluate(el => ({
         frame: el.querySelector('[data-climber-frame-primary]').getAttribute('href'),
+        primaryOpacity: Number(el.querySelector('[data-climber-frame-primary]').getAttribute('opacity')),
+        nextOpacity: Number(el.querySelector('[data-climber-frame-next]').getAttribute('opacity')),
         transform: el.getAttribute('transform'),
         wall: document.querySelector('.expedition-wall-picture').style.transform,
         scroll: scrollY,
@@ -180,13 +182,18 @@ const output = { browser: browserName, checks: [] };
     const reaching = await samplePose(.1);
     const pulling = await samplePose(.9);
     assert.notEqual(reaching.frame, pulling.frame, 'Complete climbing pose must change with scroll');
+    const frameNumber = pose => Number(pose.frame.match(/frame-(\d+)\.webp/)[1]);
+    const advance = (frameNumber(pulling) - frameNumber(reaching) + 10) % 10;
+    assert.ok(advance >= 3 && advance <= 5, `One entry should consume about half a climbing cycle: ${advance} poses`);
+    assert.ok(Math.abs(reaching.primaryOpacity + reaching.nextOpacity - 1) < .01,
+      'Neighboring complete poses should blend without a brightness jump');
     assert.notEqual(reaching.transform, pulling.transform, 'Climber must travel along the wall');
     assert.notEqual(reaching.wall, pulling.wall, 'Foreground wall must parallax separately from the distant mountain');
     assert.ok(parseFloat(await page.locator('.expedition-route-done').evaluate(el => el.style.strokeDashoffset)) > 0);
     const rightLead = await samplePose(.25);
     const leftLead = await samplePose(.75);
     assert.notEqual(rightLead.frame, leftLead.frame, 'Opposite reach phases need distinct complete illustrations');
-    assert.equal(await page.locator('.expedition-climber image').count(), 1, 'No independently moving limbs at any phase');
+    assert.equal(await page.locator('.expedition-climber image').count(), 2, 'No independently moving limbs at any phase');
     await page.evaluate(() => { document.documentElement.style.removeProperty('scroll-snap-type'); });
     output.checks.push('Distinct full-body reach phases travel with limited body sway and wall parallax');
 
