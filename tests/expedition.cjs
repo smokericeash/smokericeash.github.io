@@ -42,7 +42,7 @@ const output = { browser: browserName, checks: [] };
     assert.equal(await page.locator('.chronicle').count(), 0);
     assert.equal(await page.locator('.expedition-art').count(), 1);
     assert.equal(await page.locator('.expedition-climber image').count(), 1, 'Render one opaque complete pose without separate limbs');
-    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-17$/);
+    assert.match(await page.locator('[data-climber-frame-primary]').getAttribute('href'), /ascent-climber-frame-01\.webp\?v=ascent-18$/);
     for (let index = 1; index <= 12; index += 1) {
       const image = await page.evaluate(async index => {
         const image = new Image();
@@ -110,12 +110,8 @@ const output = { browser: browserName, checks: [] };
         assert.ok(heightDifference < 25, `Both boots should be level in straight-leg pose ${index + 1}: ${JSON.stringify(pose)}`);
       else {
         assert.ok(heightDifference > 60, `Exactly one boot should be raised in bent-leg pose ${index + 1}: ${JSON.stringify(pose)}`);
-        if (index >= 1 && index <= 6)
-          assert.ok(pose.bootY[0] < pose.bootY[1] - 60,
-            `Left bent boot must read on image-left in pose ${index + 1}: ${JSON.stringify(pose)}`);
-        if (index >= 9)
-          assert.ok(pose.bootY[1] < pose.bootY[0] - 60,
-            `Right bent boot must read on image-right in pose ${index + 1}: ${JSON.stringify(pose)}`);
+        assert.ok(pose.bootY[1] < pose.bootY[0] - 60,
+          `Raised boot must reach toward the image-right wall, not kick backward, in pose ${index + 1}: ${JSON.stringify(pose)}`);
       }
     }
     assert.equal(await page.locator('.expedition-celestial').count(), 0);

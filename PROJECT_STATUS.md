@@ -1,10 +1,10 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 12, 2026 (America/Los_Angeles).
+Updated: October 14, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent uses twelve complete black-and-white mountaineer frames with three clear leg states:** both straight, left bent/right straight, and right bent/left straight. The raised left boot now appears on image-left of the right support leg, making the left and right phases visually distinct. The foot-turn-only pose has been removed. A single opaque full-body pose is shown at a time; one cycle still spans two entries, preserving scroll pace. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The dedicated Ascent uses twelve complete black-and-white mountaineer frames with three leg positions:** both straight, left bent/right straight, and right bent/left straight. The left/far leg now bends **behind the straight right leg toward the image-right wall**; the outward image-left bend was rejected and removed. The foot-turn-only pose stays removed. A single opaque full-body pose is shown at a time; one cycle still spans two entries, preserving scroll pace. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,16 @@ Updated: October 12, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 12 left-leg clarity and foot-turn removal — latest handoff
+## October 14 left knee behind the support leg — latest handoff
+
+- Completed: corrected frames 02–07 by restoring the matching complete illustrations from `d6013f4`: the left/far thigh passes behind the straight right leg, with its raised knee and boot extending to image-right toward the wall. This follows the user's explicit clarification after rejecting the outward/leftward bent-knee candidates. Regenerated the six affected WebPs and bumped asset URLs to `ascent-18`. The removed foot-turn frame remains absent. Page design, route, camera, easing, two-entry cycle duration and the other frames are unchanged.
+- Currently in progress: none after this scoped correction. The local preview server was restarted at `http://127.0.0.1:4173/`.
+- Decisions: three leg positions are carried through twelve complete full-body frames to retain the existing arm sequence. Anatomical left does NOT mean its knee must appear on image-left: the far thigh belongs behind the near straight leg, and the bent knee faces the image-right wall. Do not reintroduce the rejected outward heel curl to make left/right easier to distinguish. Whole figures remain opaque, without rotating limb pieces or crossfades. Generated candidates from this session were rejected and were not installed.
+- Known issues: the gait remains a discrete illustrated sequence, with visible state changes during slow scrubbing; it is not physically simulated or video. Far-leg depth relies on occlusion and can be subtle at small sizes. Exact ice-tool and crampon contact remains illustrative. Real-device motion approval, Firefox/WebKit runners, branch-only Linux CI and live custom-domain verification remain outstanding. Nothing has been pushed or merged.
+- Testing: baseline Ascent test passed after restarting the preview; production Jekyll build and focused Chrome Ascent checks passed after correction. Reviewed the twelve-frame sheet and 26-position rendered mountain sheet. Four actual wheel gestures traversed all twelve frames in order forward/reverse with zero skipped poses; rendering samples ranged from 159 to 265 per gesture. Updated the pixel check to require raised boots on the wall-facing side rather than the erroneous image-left requirement. Site integrity passed (26 originals unchanged, nine post routes, 47 pages, 1,688 references); Git whitespace checked. Broader Chrome suite was not repeated for this art/cache-only correction; its prior pass is recorded below.
+- **Exact recommended next task:** review the left/far-leg overlap on the local `/journey/` page, particularly 02–07, at slow and moderate scroll speeds. Preserve the rightward bend behind the supporting right leg. If accepted, resume Firefox/WebKit, Linux CI and domain checks before considering any production merge.
+
+## October 12 left-leg clarity and foot-turn removal — earlier handoff, superseded by October 14
 
 - Completed: edited the complete figure art for the three left-leg-bent arm positions (02/03, 04/05, 06/07) so the raised left knee and boot project to image-left of the straight right support leg; both boot toes still point toward image-right. Removed the ineffective boot-turn drawing formerly at frame 10 and renumbered 11–13 as 10–12. Regenerated twelve WebPs and bumped Ascent asset URLs to `ascent-17`. Kept the page design, mountain, torso/arm reach order, right-facing outfit, camera, easing, and two-entry cycle duration.
 - Currently in progress: none after this scoped correction. Local preview only, on `codex/portfolio-v2`.
