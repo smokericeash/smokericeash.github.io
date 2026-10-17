@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 14, 2026 (America/Los_Angeles).
+Updated: October 17, 2026 (America/Los_Angeles).
 
 ## Current state
 
@@ -13,7 +13,17 @@ Updated: October 14, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 14 wardrobe cleanup and left half-step — latest handoff
+## October 17 continuation and cross-engine verification — latest handoff
+
+- Completed: inspected branch/history and the uncommitted October 14 work; preserved it and committed the cleaned thirteen-frame climber sequence as `f50bdd4`. All twelve approved original sources and original WebPs remain unchanged relative to `3c31cb6`. No artwork, poses, timing, layout or content was redrawn in this continuation. Restarted the stopped local preview server and reviewed regenerated pose/scroll sheets plus the rendered mobile scene.
+- Completed: restored cross-engine coverage using the existing `.browser-cache` binaries. Updated GitHub Actions to a Chromium/Firefox/WebKit matrix, with unique review artifacts per engine, Chromium-only Lighthouse/worker/Pages artifact steps, and deployment still requiring the entire build matrix. Corrected README descriptions of the removed hinged rig. Updated validation evidence and this handoff.
+- Currently in progress: no unfinished local implementation. This is a tested local branch, not a production release; remote Linux CI and final real-device/design acceptance remain.
+- Design/technical decisions: retain thirteen complete opaque images, the two-entry cycle, existing camera/easing, and separate preserved originals. A single new halfway left-knee pose sits between original 01 and 02. Do not reintroduce hinged limbs, crossfades or the rejected backward knee. Current CI changes only increase verification coverage; branch/PR runs cannot deploy and no push occurred.
+- Testing: fresh production build; source/link/metadata/XML integrity (26 originals, nine post routes, 47 pages, 1,688 references); nine article/taxonomy contracts. Full Chrome, Firefox and WebKit suites passed: each 94 route checks, 132 responsive checks, 22 axe scans, six general groups, 11 editorial groups and 10 Ascent groups; experience groups 10/9/9 respectively (touch emulation is Chromium-only). Firefox required execution outside the Windows sandbox because tab creation fails inside it; browser security settings were not weakened. Service-worker migration passed. Ascent Lighthouse mobile/desktop performance 95/99, accessibility/best-practices/SEO 100, CLS 0; mobile LCP 2.7 s, desktop 0.9 s, no warnings. Workflow YAML parsed and matrix/deployment guards reviewed; it has not run remotely. Git whitespace checked.
+- Known issues/remaining: discrete illustrated motion and small painted texture differences remain; automated scrolling checks are not a guarantee of frame rate on every device. Windows WebKit is not real iOS/Safari hardware. Linux CI, manual real-device/screen-reader review and any custom-domain settings remain unverified. No CNAME or custom domain was found; preserve the configured GitHub Pages URL instead of inventing one. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the preserved cleaned gait on a real desktop/phone, especially 01→02→03. Then run the new three-engine workflow on `codex/portfolio-v2` through a branch-only review PR/manual run after visual acceptance; inspect Linux results before considering a production merge. Confirm whether the configured GitHub Pages URL is the intended destination or a custom domain needs configuration. Do not merge into main or deploy while these checks remain open.
+
+## October 14 wardrobe cleanup and left half-step — implementation handoff
 
 - Completed: created `assets/img/ascent-climber-clean/` with cleaned copies of all approved poses and `pose-01-half.png`. Removed dangling hip ropes and pale pants harness straps. Added exactly one left/far knee intermediate between straight and fully raised; existing pose order retained. Original sources and WebPs have no Git changes. Exported thirteen new `ascent-climber-clean-frame-*.webp` assets and updated page/script cache URLs to `ascent-19`.
 - Currently in progress: none after this scoped implementation. Local production preview is available at `http://127.0.0.1:4173/journey/`.
@@ -322,8 +332,8 @@ Evidence: `docs/VALIDATION.txt`, `docs/browser-results.json`, `docs/experience-r
 - Windows WebKit is not native Safari/iOS device coverage. Manual screen-reader/device review has not been performed; automated checks are not WCAG certification.
 - Native cross-document transitions differ by engine: Chrome/WebKit use them; tested Firefox uses the entrance fallback. Reduced motion removes both.
 - Docker/devcontainer execution remains untested; the native Ruby workflow is verified.
-- The October 12 alternating-step refinement above is the current implementation. Real-device visual review and publication checks remain.
-- Currently in progress: none after the alternating-step refinement commit.
+- The October 17 handoff above is current: thirteen complete cleaned frames, preserved originals, and local three-engine validation. Real-device visual review and remote publication checks remain.
+- Currently in progress: none locally after the cleanup and cross-engine validation commits.
 
 ## Logical commits
 
@@ -345,7 +355,7 @@ The earlier architecture, design, asset and validation commits remain intact (`8
 
 ## Exact recommended next task
 
-**Review the corrected 17-pose `/journey/` climb at `http://127.0.0.1:4173/journey/` on real desktop and phone screens, scrolling slowly and quickly in both directions; judge the near-vertical support leg and the brief bent-knee transition. If filmed motion is still needed, use a coherent purpose-animated sequence or transparent video, not independently transformed limbs. Restore Firefox/WebKit testing, run branch-only Linux CI, and verify custom-domain settings before production merge. Never push or merge directly into main.**
+Review the thirteen-frame cleaned `/journey/` gait on a real desktop and phone, preserving the approved poses and speed. After visual acceptance, run the three-engine GitHub workflow on the feature branch and inspect Linux results, then confirm the publication domain. Keep main and production untouched until those checks pass. See the October 17 handoff for current evidence and remaining limits.
 
 ## Reproducible local commands
 

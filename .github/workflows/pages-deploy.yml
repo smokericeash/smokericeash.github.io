@@ -12,6 +12,10 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chromium, firefox, webkit]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -33,25 +37,29 @@ jobs:
           node-version: "22"
           cache: npm
       - run: npm ci --ignore-scripts
-      - run: npx playwright install --with-deps chromium
+      - run: npx playwright install --with-deps ${{ matrix.browser }}
       - name: Browser and accessibility checks
+        env:
+          TEST_BROWSER: ${{ matrix.browser }}
         run: |
           python3 -m http.server 4173 --bind 127.0.0.1 --directory _site &
           SERVER_PID=$!
           trap 'kill "$SERVER_PID"' EXIT
           npm test
-          node tests/worker-migration.cjs
-          npm run test:performance
+          if [ "$TEST_BROWSER" = "chromium" ]; then
+            node tests/worker-migration.cjs
+            npm run test:performance
+          fi
       - name: Upload review build and test evidence
         if: always()
         uses: actions/upload-artifact@v4
         with:
-          name: portfolio-review
+          name: portfolio-review-${{ matrix.browser }}
           path: |
             _site
             test-results
       - name: Upload Pages artifact
-        if: github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master'
+        if: matrix.browser == 'chromium' && (github.ref == 'refs/heads/main' || github.ref == 'refs/heads/master')
         uses: actions/upload-pages-artifact@v3
         with:
           path: _site

@@ -1,13 +1,47 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Build, browser suites, and Lighthouse measured October 11, 2026
-(America/Los_Angeles) after the vertical Ascent climbing-cycle refinement.
+Latest continuation verified October 17, 2026 (America/Los_Angeles).
 
-RESULT
-Ready for design review and a branch-only remote CI run after cross-engine
-checks. No changes have been pushed, merged or deployed. The original source
-checkout is unchanged.
+CURRENT RESULT
+The approved design and thirteen-frame cleaned climber sequence are preserved.
+Local Chrome, Firefox and WebKit coverage passes. No push, merge or deployment.
+Remote Linux CI, final visual/device acceptance and domain verification remain.
+The historical results below describe older implementations and are superseded
+by this section where they differ.
 
-OCTOBER 11 VERTICAL CLIMBING CYCLE — LATEST
+OCTOBER 17 CLEANED FRAME SEQUENCE AND CROSS-ENGINE COVERAGE — LATEST
+- Committed the prior session's wardrobe cleanup and single left-knee halfway
+  drawing as f50bdd4. All twelve approved original sources and original WebPs
+  remain unchanged. New copies remove hip ropes/pale pants straps. No pose,
+  pace, camera, layout or content was redrawn in this continuation.
+- Production Jekyll build passes. Integrity: 26 originals unchanged, nine post
+  routes, 47 pages, 1,688 references, valid metadata/XML. Nine article/taxonomy
+  rendering contracts pass.
+- Full Chrome/Firefox/WebKit suites pass. Per engine: 94 route checks,
+  132 responsive checks, 22 axe scans, six general interaction groups,
+  11 editorial groups and 10 Ascent groups. Experience groups are 10/9/9:
+  touch-emulation coverage is Chromium-only.
+- Firefox and WebKit binaries were already in ignored .browser-cache. Firefox
+  tab creation fails inside the Windows sandbox; the successful Firefox suite
+  ran outside that sandbox without disabling browser security preferences.
+- Reviewed regenerated 13-pose and 26-scroll-position sheets and the rendered
+  mobile scene. All engines exercise opacity, halfway boot height, moderate
+  wheel-frame order, reverse scrolling, responsive layouts, reduced motion,
+  no-JS access and dark/light accessibility. This does not establish video-like
+  motion or a guaranteed frame rate on arbitrary real devices.
+- Legacy service-worker retirement and unrelated-scope preservation pass.
+- Ascent-only Lighthouse: performance 95 mobile / 99 desktop; accessibility,
+  best practices and SEO 100 on both. LCP 2.7 s / 0.9 s, CLS 0 / 0,
+  TBT 120 ms / 0 ms, no warnings. Other page scores below are historical,
+  not remeasured in this continuation. Evidence is in ignored test-results/.
+- CI now runs a three-engine matrix with unique evidence artifacts; all engines
+  gate deploy. Only Chromium uploads Pages and runs Lighthouse/worker checks.
+  YAML syntax/guards reviewed locally; GitHub-hosted Linux execution pending.
+- README now describes whole-body raster animation instead of the removed rig.
+- Remaining: real device and screen-reader review; branch-only Linux CI after
+  visual acceptance; verify intended GitHub Pages/custom-domain destination.
+  No CNAME or actual custom domain found, so URL configuration is unchanged.
+
+OCTOBER 11 VERTICAL CLIMBING CYCLE — HISTORICAL
 - Preserved the approved site and mountain scene. The Ascent's painted limbs
   now use two-bone joint solving to aim tools and crampons at vertical targets.
   Each leading hand pairs with the opposite stepping foot; two upward torso
