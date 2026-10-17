@@ -4,7 +4,7 @@ Updated: October 14, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The dedicated Ascent uses twelve complete black-and-white mountaineer frames with three leg positions:** both straight, left bent/right straight, and right bent/left straight. The left/far leg now bends **behind the straight right leg toward the image-right wall**; the outward image-left bend was rejected and removed. The foot-turn-only pose stays removed. A single opaque full-body pose is shown at a time; one cycle still spans two entries, preserving scroll pace. The self-service Markdown workflow, original content, four navigation destinations, existing links and approved page structure remain intact. Earlier Firefox/WebKit results predate this latest refinement; their executables are unavailable in this environment. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. The Ascent now uses thirteen complete opaque climber frames:** separate cleaned copies of all twelve approved poses, plus one left-knee halfway lift. Dangling hip ropes and pale pants straps are removed. All twelve original sources and original WebPs remain untouched. The left/far knee continues bending behind the straight right leg toward the image-right wall. The two-entry cycle, ascent pace, camera and easing remain unchanged. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,16 @@ Updated: October 14, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 14 left knee behind the support leg — latest handoff
+## October 14 wardrobe cleanup and left half-step — latest handoff
+
+- Completed: created `assets/img/ascent-climber-clean/` with cleaned copies of all approved poses and `pose-01-half.png`. Removed dangling hip ropes and pale pants harness straps. Added exactly one left/far knee intermediate between straight and fully raised; existing pose order retained. Original sources and WebPs have no Git changes. Exported thirteen new `ascent-climber-clean-frame-*.webp` assets and updated page/script cache URLs to `ascent-19`.
+- Currently in progress: none after this scoped implementation. Local production preview is available at `http://127.0.0.1:4173/journey/`.
+- Decisions: preserve the approved original artwork permanently; new wardrobe edits use a separate source directory. Export order is `01, 01-half, 02..12`. Register whole figures to the original goggles and lowest support boot to prevent size drift. Never rotate, stretch or composite individual limbs. Both-straight rendered poses are 01/09/10; 02 is the new left intermediate; 03–08 retain the left bend behind the straight right leg; 11–13 retain the right-leg sequence. Cycle still spans two posts, with unchanged easing and camera. Detailed asset provenance and edit prompts are in `docs/ASCENT_ART.md`.
+- Known issues: edited art has small texture differences from originals; the poses are preserved but edited pixels are not identical. The sequence remains discrete illustration rather than video or physically solved climbing. Firefox/WebKit runners, branch-only Linux CI, real-device approval and live custom-domain verification remain outstanding. No push or merge.
+- Testing: production Jekyll build and focused Chrome Ascent checks (10 groups) passed. Reviewed original/cleaned comparisons, all thirteen poses and 26 rendered scroll positions. Four forward/reverse wheel gestures visited all thirteen frames in order with zero skipped poses (250–309 rendering samples per gesture). The automated boot-height check places the new left intermediate between straight and fully raised. Site integrity passed: 26 originals unchanged, nine post routes, 47 HTML pages and 1,688 references. No diff in approved original climber source/export paths. JavaScript syntax and Git whitespace checked. Broader browser suite was not repeated for this scoped asset/count change.
+- **Exact recommended next task:** review the cleaned thirteen-frame gait on `/journey/`, especially the new 01→02→03 left-knee lift. Preserve these originals and the approved pace. If accepted, resume Firefox/WebKit, branch-only Linux CI and domain verification before any production merge.
+
+## October 14 left knee behind the support leg — earlier handoff, superseded by wardrobe cleanup
 
 - Completed: corrected frames 02–07 by restoring the matching complete illustrations from `d6013f4`: the left/far thigh passes behind the straight right leg, with its raised knee and boot extending to image-right toward the wall. This follows the user's explicit clarification after rejecting the outward/leftward bent-knee candidates. Regenerated the six affected WebPs and bumped asset URLs to `ascent-18`. The removed foot-turn frame remains absent. Page design, route, camera, easing, two-entry cycle duration and the other frames are unchanged.
 - Currently in progress: none after this scoped correction. The local preview server was restarted at `http://127.0.0.1:4173/`.

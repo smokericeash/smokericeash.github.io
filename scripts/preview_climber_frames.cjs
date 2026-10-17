@@ -10,10 +10,10 @@ const path = require('node:path');
     ...(process.env.CHROME_CHANNEL ? { channel: process.env.CHROME_CHANNEL } : {}),
   });
   try {
-    const cells = Array.from({ length: 12 }, (_, index) => {
+    const cells = Array.from({ length: 13 }, (_, index) => {
       const number = String(index + 1).padStart(2, '0');
       const data = fs.readFileSync(path.join(root, 'assets', 'media',
-        `ascent-climber-frame-${number}.webp`)).toString('base64');
+        `ascent-climber-clean-frame-${number}.webp`)).toString('base64');
       return `<figure><img src="data:image/webp;base64,${data}"><figcaption>${number}</figcaption></figure>`;
     });
     const page = await browser.newPage({ viewport: { width: 1200, height: 1455 }, deviceScaleFactor: 1 });
@@ -29,11 +29,11 @@ const path = require('node:path');
       await scene.locator('.expedition-checkpoint').nth(4).evaluate(element =>
         element.scrollIntoView({ block: 'center', behavior: 'instant' }));
       await scene.waitForTimeout(250);
-      for (const index of [1, 3, 5, 7, 9, 11, 12]) {
+      for (const index of [1, 2, 3, 5, 7, 9, 11, 13]) {
         const number = String(index).padStart(2, '0');
         await scene.locator('[data-climber-frame-primary]').evaluate((element, number) => {
           element.setAttribute('href', element.getAttribute('href')
-            .replace(/ascent-climber-frame-\d+\.webp/, `ascent-climber-frame-${number}.webp`));
+            .replace(/ascent-climber-clean-frame-\d+\.webp/, `ascent-climber-clean-frame-${number}.webp`));
         }, number);
         await scene.waitForTimeout(120);
         const imageTarget = path.join(root, 'test-results', `climber-scene-${number}.png`);

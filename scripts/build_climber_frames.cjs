@@ -4,7 +4,9 @@ const fs = require('node:fs');
 const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
-const count = 12;
+// Keep the approved source sequence untouched. The extra left-leg half step
+// sits between original poses 01 and 02; every approved pose remains present.
+const sources = ['01', '01-half', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
 
 (async () => {
   const browser = await chromium.launch({
@@ -13,11 +15,14 @@ const count = 12;
   });
   try {
     const page = await browser.newPage();
-    for (let index = 1; index <= count; index += 1) {
+    for (let index = 1; index <= sources.length; index += 1) {
       const number = String(index).padStart(2, '0');
-      const source = path.join(root, 'assets', 'img', 'ascent-climber-sequence', 'pose-' + number + '.png');
+      const source = path.join(root, 'assets', 'img', 'ascent-climber-clean', 'pose-' + sources[index - 1] + '.png');
       const data = fs.readFileSync(source).toString('base64');
-      const result = await page.evaluate(async data => {
+      const originalNumber = sources[index - 1] === '01-half' ? '02' : sources[index - 1];
+      const baseline = fs.readFileSync(path.join(root, 'assets', 'media',
+        'ascent-climber-frame-' + originalNumber + '.webp')).toString('base64');
+      const result = await page.evaluate(async ({ data, baseline }) => {
         const image = new Image();
         image.src = 'data:image/png;base64,' + data;
         await image.decode();
@@ -43,17 +48,36 @@ const count = 12;
           }
         }
         if (count < 15) throw new Error('Could not register blue goggles');
+        // Cleanup can slightly change canvas occupancy. Register the complete
+        // figure to BOTH approved goggles and the lowest planted crampon;
+        // never stretch or transform an individual limb.
+        const original = new Image();
+        original.src = 'data:image/webp;base64,' + baseline;
+        await original.decode();
+        const reference = document.createElement('canvas');
+        reference.width = 400;
+        reference.height = 533;
+        const referenceContext = reference.getContext('2d');
+        referenceContext.drawImage(original, 0, 0);
+        const bottom = pixels => {
+          for (let y = 532; y >= 300; y -= 1)
+            for (let x = 0; x < 400; x += 1)
+              if (pixels[(y * 400 + x) * 4 + 3] > 160) return y;
+          throw new Error('Could not register support boot');
+        };
+        const referenceBottom = bottom(referenceContext.getImageData(0, 0, 400, 533).data);
+        const size = (referenceBottom - 104) / (bottom(pixels) - totalY / count);
         const output = document.createElement('canvas');
         output.width = 400;
         output.height = 533;
         output.getContext('2d').drawImage(draft,
-          Math.round(211 - totalX / count), Math.round(104 - totalY / count));
+          211 - totalX / count * size, 104 - totalY / count * size, 400 * size, 533 * size);
         return {
           data: output.toDataURL('image/webp', .86).split(',')[1],
           goggle: [Math.round(totalX / count), Math.round(totalY / count)],
         };
-      }, data);
-      const target = path.join(root, 'assets', 'media', 'ascent-climber-frame-' + number + '.webp');
+      }, { data, baseline });
+      const target = path.join(root, 'assets', 'media', 'ascent-climber-clean-frame-' + number + '.webp');
       fs.writeFileSync(target, Buffer.from(result.data, 'base64'));
       console.log(path.relative(root, target) + ' ' + fs.statSync(target).size + ' bytes; lens ' + result.goggle);
     }
