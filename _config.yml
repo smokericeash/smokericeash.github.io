@@ -54,6 +54,7 @@ exclude:
     tools,
     tests,
     test-results,
+    prototypes,
     node_modules,
     package.json,
     package-lock.json,
