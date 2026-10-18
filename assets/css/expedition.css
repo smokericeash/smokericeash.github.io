@@ -54,11 +54,6 @@
   background: linear-gradient(180deg, #0a1c345e, #091b2999);
 }
 .expedition-art { position: absolute; inset: 0; display: block; width: 100%; height: 100%; z-index: 3; }
-.expedition-route, .expedition-route-done {
-  fill: none; stroke: #16374b; stroke-width: 2.4; stroke-dasharray: 4 9; opacity: .66;
-  vector-effect: non-scaling-stroke;
-}
-.expedition-route-done { stroke: #e8f6f6; stroke-width: 3.3; stroke-dasharray: none; opacity: .9; filter: drop-shadow(0 1px 2px #0d273c); }
 .expedition-contact-shadow { fill: #071e2c; opacity: .43; }
 .expedition-climber [data-climber-front-arm],
 .expedition-climber [data-climber-forearm],
@@ -158,7 +153,6 @@
   }
   .expedition-checkpoint::before { display: none; }
   .expedition-image { max-height: 190px; }
-  .expedition-route-done { stroke-width: 2.2; opacity: .38; }
 }
 @media (prefers-reduced-motion: reduce) {
   .expedition-vignette::after { animation: none; }

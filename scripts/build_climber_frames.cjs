@@ -5,8 +5,8 @@ const path = require('node:path');
 
 const root = path.resolve(__dirname, '..');
 // Keep the approved source sequence untouched. The extra left-leg half step
-// sits between original poses 01 and 02; every approved pose remains present.
-const sources = ['01', '01-half', '02', '03', '04', '05', '06', '07', '08', '09', '10', '11', '12'];
+// lifts between 01/02 and lowers between 07/08; every approved pose remains.
+const sources = ['01', '01-half', '02', '03', '04', '05', '06', '07', '07-half', '08', '09', '10', '11', '12'];
 
 (async () => {
   const browser = await chromium.launch({
@@ -17,9 +17,9 @@ const sources = ['01', '01-half', '02', '03', '04', '05', '06', '07', '08', '09'
     const page = await browser.newPage();
     for (let index = 1; index <= sources.length; index += 1) {
       const number = String(index).padStart(2, '0');
-      const source = path.join(root, 'assets', 'img', 'ascent-climber-clean', 'pose-' + sources[index - 1] + '.png');
+      const source = path.join(root, 'assets', 'img', 'ascent-climber-swirl', 'pose-' + sources[index - 1] + '.png');
       const data = fs.readFileSync(source).toString('base64');
-      const originalNumber = sources[index - 1] === '01-half' ? '02' : sources[index - 1];
+      const originalNumber = { '01-half': '02', '07-half': '08' }[sources[index - 1]] || sources[index - 1];
       const baseline = fs.readFileSync(path.join(root, 'assets', 'media',
         'ascent-climber-frame-' + originalNumber + '.webp')).toString('base64');
       const result = await page.evaluate(async ({ data, baseline }) => {
@@ -77,7 +77,7 @@ const sources = ['01', '01-half', '02', '03', '04', '05', '06', '07', '08', '09'
           goggle: [Math.round(totalX / count), Math.round(totalY / count)],
         };
       }, { data, baseline });
-      const target = path.join(root, 'assets', 'media', 'ascent-climber-clean-frame-' + number + '.webp');
+      const target = path.join(root, 'assets', 'media', 'ascent-climber-swirl-frame-' + number + '.webp');
       fs.writeFileSync(target, Buffer.from(result.data, 'base64'));
       console.log(path.relative(root, target) + ' ' + fs.statSync(target).size + ' bytes; lens ' + result.goggle);
     }

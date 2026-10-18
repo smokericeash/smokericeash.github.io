@@ -11,12 +11,11 @@
   const backdrop = root.querySelector('.expedition-picture');
   const wall = root.querySelector('.expedition-wall-picture');
   const route = root.querySelector('[data-expedition-route]');
-  const completed = root.querySelector('[data-expedition-route-done]');
   const contact = root.querySelector('[data-expedition-contact]');
   const climber = root.querySelector('[data-expedition-climber]');
   const primaryFrame = climber.querySelector('[data-climber-frame-primary]');
   const firstFrameUrl = primaryFrame.getAttribute('href');
-  const frameUrls = Array.from({ length: 13 }, (_, index) =>
+  const frameUrls = Array.from({ length: 14 }, (_, index) =>
     firstFrameUrl.replace(/01\.webp/, `${String(index + 1).padStart(2, '0')}.webp`));
   // Every complete-body image is registered to the same goggle position at
   // export time. Only one fully opaque pose is drawn at once: crossfading
@@ -65,10 +64,7 @@
     return `C${previous.x} ${previous.y - 192} ${point.x} ${point.y + 190} ${point.x} ${point.y}`;
   }).join(' ');
   route.setAttribute('d', d);
-  completed.setAttribute('d', d);
   const totalLength = route.getTotalLength();
-  completed.style.strokeDasharray = String(totalLength);
-  completed.style.strokeDashoffset = String(totalLength);
   root.dataset.enhanced = '';
 
   let anchors = [];
@@ -121,7 +117,6 @@
     svg.setAttribute('viewBox', `0 ${camera.toFixed(2)} 600 800`);
     contact.setAttribute('cx', (point.x + 56).toFixed(2));
     contact.setAttribute('cy', (point.y + 69).toFixed(2));
-    completed.style.strokeDashoffset = String(totalLength * (1 - fraction));
     // A full right/left stepping cycle spans two entries. The previous cycle
     // raced through every pose during a single moderate wheel gesture.
     const pose = motion.matches ? 0 : current * frameUrls.length / 2;

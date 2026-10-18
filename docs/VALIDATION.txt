@@ -1,14 +1,37 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Latest continuation verified October 17, 2026 (America/Los_Angeles).
+Latest continuation verified October 18, 2026 (America/Los_Angeles).
 
 CURRENT RESULT
-The approved design and thirteen-frame cleaned climber sequence are preserved.
-Local Chrome, Firefox and WebKit coverage passes. No push, merge or deployment.
+The approved design remains intact. The active climber uses fourteen complete
+frames with contrasting white-left/dark-right trouser spirals and an extra
+left-leg lowering pose. Local Chrome, Firefox and WebKit focused Ascent checks
+pass. No push, merge or deployment.
 Remote Linux CI, final visual/device acceptance and domain verification remain.
 The historical results below describe older implementations and are superseded
 by this section where they differ.
 
-OCTOBER 17 CLEANED FRAME SEQUENCE AND CROSS-ENGINE COVERAGE — LATEST
+OCTOBER 18 SWIRL CONTRAST AND LEFT-LEG RETURN — LATEST
+- Fourteen complete transparent source drawings live in
+  assets/img/ascent-climber-swirl/, with matching 400 x 533 optimized WebPs.
+  White barber-pole bands follow the anatomical left leg through both phases;
+  inverse dark bands mark the right. The earlier approved source/export sets
+  remain unchanged. The rejected subtle-print candidates are ignored.
+- The full-body left-knee lowering intermediate complements the existing
+  lifting intermediate. Both visible route strokes are gone; the movement
+  path remains unpainted in SVG defs. Two-entry pace and camera/easing remain.
+- Production Jekyll build and site integrity pass: 26 originals, nine post
+  routes, 47 pages, 1,688 references. Visual review covered all fourteen
+  poses and 28 rendered mountain positions.
+- Focused Ascent checks pass in Chromium, Firefox and WebKit (10 groups each).
+  Firefox required execution outside the Windows sandbox for tab creation;
+  no browser security setting was changed. One boot-height check includes the
+  exact 60-pixel boundary; the boot is visibly raised in frame 14.
+- Prior October 17 full browser suites and Lighthouse figures below describe
+  the previous thirteen-frame artwork. They were not remeasured for this
+  isolated image/export change. Real-device motion judgment, remote Linux CI,
+  screen-reader review and publication-domain verification are still pending.
+
+OCTOBER 17 CLEANED FRAME SEQUENCE AND CROSS-ENGINE COVERAGE — EARLIER
 - Committed the prior session's wardrobe cleanup and single left-knee halfway
   drawing as f50bdd4. All twelve approved original sources and original WebPs
   remain unchanged. New copies remove hip ropes/pale pants straps. No pose,

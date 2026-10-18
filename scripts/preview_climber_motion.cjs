@@ -18,8 +18,8 @@ const path = require('node:path');
       return rect.top + scrollY + rect.height / 2;
     }));
     const captures = [];
-    for (let index = 0; index < 26; index += 1) {
-      const current = 4 + (index + .5) / 13;
+    for (let index = 0; index < 28; index += 1) {
+      const current = 4 + (index + .5) / 14;
       const before = Math.floor(current) - 1;
       const between = current - Math.floor(current);
       const focus = anchors[before] + (anchors[before + 1] - anchors[before]) * between;
@@ -40,7 +40,7 @@ const path = require('node:path');
       '<figure><img src="data:image/png;base64,' + fs.readFileSync(target).toString('base64') +
       '"><figcaption>' + name + ' ' + frames.map(frame => frame.frame + ':' + frame.opacity).join(' ') +
       '</figcaption></figure>');
-    await sheet.setContent('<style>html,body{margin:0;background:#13202a;color:#dbe6ed;font:12px sans-serif}main{display:grid;grid-template-columns:repeat(13,1fr)}figure{height:420px;margin:0;border:1px solid #445;position:relative}img{width:100%;height:100%;object-fit:contain}figcaption{position:absolute;bottom:3px;left:3px;background:#13202a}</style><main>' + cells.join('') + '</main>');
+    await sheet.setContent('<style>html,body{margin:0;background:#13202a;color:#dbe6ed;font:12px sans-serif}main{display:grid;grid-template-columns:repeat(14,1fr)}figure{height:420px;margin:0;border:1px solid #445;position:relative}img{width:100%;height:100%;object-fit:contain}figcaption{position:absolute;bottom:3px;left:3px;background:#13202a}</style><main>' + cells.join('') + '</main>');
     await sheet.locator('img').last().evaluate(image => image.decode());
     const target = path.join(__dirname, '..', 'test-results', 'climber-motion-contact.png');
     await sheet.screenshot({ path: target, fullPage: true });

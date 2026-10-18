@@ -1,10 +1,10 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 17, 2026 (America/Los_Angeles).
+Updated: October 18, 2026 (America/Los_Angeles).
 
 ## Current state
 
-**The approved site design remains intact. The Ascent now uses thirteen complete opaque climber frames:** separate cleaned copies of all twelve approved poses, plus one left-knee halfway lift. Dangling hip ropes and pale pants straps are removed. All twelve original sources and original WebPs remain untouched. The left/far knee continues bending behind the straight right leg toward the image-right wall. The two-entry cycle, ascent pace, camera and easing remain unchanged. Nothing has been pushed, merged or deployed.
+**The approved site design remains intact. Current refinement: fourteen complete opaque climber drawings**, adding one left-knee lowering intermediate to the approved lift intermediate. Broad white barber-pole swirls identify the anatomical left trouser leg; inverse matte-black swirls mark the right. The visible line beside the climber is removed, with movement geometry kept unpainted in SVG defs. Earlier approved source/export sets remain untouched. The two-entry cycle, overall pace and camera/easing are preserved. Nothing has been pushed, merged or deployed.
 
 - Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
 - Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
@@ -13,7 +13,17 @@ Updated: October 17, 2026 (America/Los_Angeles).
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 17 continuation and cross-engine verification — latest handoff
+## October 18 left-leg return, contrasting swirls and line removal — latest handoff
+
+- Completed implementation: added a complete lowering pose between full left-knee bend and both-straight, preserving the approved pose order. The user rejected both an initial blue-gray tab and a subtle angular print. Active sources in `assets/img/ascent-climber-swirl/` have broad ivory-white spiral bands on the anatomical left leg and matching inverse dark bands on the right. The white follows the raised far leg during left steps and the straight support leg during right steps. Earlier approved source/export sets remain intact; rejected subtle candidates are in ignored `test-results/rejected-subtle-pattern/`. Export order: `01, 01-half, 02..07, 07-half, 08..12` (14 frames). Cache version `ascent-21`.
+- Completed implementation: removed both rendered trail paths and their CSS/JS drawing logic. A single path in SVG defs retains identical character/camera travel. The Home route preview is unchanged. No cycle-speed or easing adjustments.
+- Currently in progress: no unfinished local implementation. Real-device visual acceptance and release checks remain.
+- Decisions: the new intermediate is a full drawing with the original arms/torso and straight right support leg; no independent limb transformations or opacity blending. The swirl contrast is a clothing detail in every whole-body image. Whole-image goggles/support-boot registration remains. Earlier approved image sets stay preserved. Prompts/provenance are in `docs/ASCENT_ART.md`.
+- Known limitations: discrete painted frames and small texture differences remain, rather than physically solved or filmed motion. Real-device approval, remote Linux matrix and publication-domain verification remain outstanding. No push/merge/deploy.
+- Testing: production Jekyll build; site integrity (26 originals unchanged, nine post routes, 47 pages, 1,688 references); fourteen-pose and 28-position in-scene contact sheets visually reviewed, including both alternating leg phases and removal of the visible line. Focused Ascent suite passed in Chromium, Firefox and WebKit (10 checks each), including both left-leg halfway positions, boot separation, frame order, reverse scrolling, reduced motion, no-JS access and the absence of the line. Firefox required unsandboxed execution because Windows sandbox tab creation fails; browser security settings were unchanged. JavaScript syntax and Git whitespace checks should be rerun at final commit. The earlier October 17 full suites and Lighthouse scores below predate the October 18 artwork change and were not repeated for this scoped edit.
+- **Exact recommended next task:** review the fourteen-frame gait on a real desktop and phone at slow and moderate wheel/touch speeds, especially the visibility of the white left-leg swirl in both step phases and the left-bend → lowering → straight transition. Then run branch-only Linux CI and verify the eventual publication domain before considering a production merge. Do not push, merge into `main`, or deploy until those release checks and visual acceptance are complete.
+
+## October 17 continuation and cross-engine verification — earlier handoff
 
 - Completed: inspected branch/history and the uncommitted October 14 work; preserved it and committed the cleaned thirteen-frame climber sequence as `f50bdd4`. All twelve approved original sources and original WebPs remain unchanged relative to `3c31cb6`. No artwork, poses, timing, layout or content was redrawn in this continuation. Restarted the stopped local preview server and reviewed regenerated pose/scroll sheets plus the rendered mobile scene.
 - Completed: restored cross-engine coverage using the existing `.browser-cache` binaries. Updated GitHub Actions to a Chromium/Firefox/WebKit matrix, with unique review artifacts per engine, Chromium-only Lighthouse/worker/Pages artifact steps, and deployment still requiring the entire build matrix. Corrected README descriptions of the removed hinged rig. Updated validation evidence and this handoff.
