@@ -59,8 +59,14 @@ After adding or replacing images, run from the repository root:
 
 This creates WebP sizes and updates _data/images.json; originals stay untouched.
 Run it for inline screenshots too, so the build has their dimensions. The tool
-requires Pillow (already available in this workspace). On a new machine, install
-it once with: python -m pip install Pillow
+requires Pillow in the Python interpreter you use. The current default Python
+(C:/Python314/python.exe) does not have it installed. Install it once with:
+
+  python -m pip install Pillow
+
+Then rerun the image command. You can check availability with:
+
+  python -c "from PIL import Image; print(Image.__version__)"
 Commit the originals, generated assets/media files, and _data/images.json with
 the post. You never need to edit image metadata or derivatives manually.
 
@@ -110,3 +116,35 @@ codex/portfolio-v2 branch and has not been deployed; until it is published, edit
 this repository rather than the untouched original production checkout.
 
 Official Markdown-post/draft reference: https://jekyllrb.com/docs/posts/
+
+MAINTENANCE NOTES
+
+- Edit source Markdown/templates/data, never _site/: every build regenerates it.
+- A filename's short-title becomes the URL. Keep published filenames stable and
+  use a unique short-title across all years: the URL does not include the date.
+- Use consistent category/tag names. Similar but different names create separate
+  topics. Case-only variants share an archive, but consistent spelling is clearer.
+- Old entries may have title/summary overrides in _data/journey.yml. If a preview
+  ignores an edited post title/description, check its URL-keyed override there.
+  New entries need no override. The older curated /work/ case studies use
+  _data/work.yml; the primary Work tab at /research/ is automatic from posts.
+- Image processing currently scans JPG/JPEG/PNG directly inside assets/img/,
+  not subfolders. It rebuilds the image manifest from that folder. Keep the
+  source files, use unique basenames, and commit originals, generated WebPs and
+  _data/images.json together. Do not delete an original still referenced by a post.
+- The integrity test locks the original migrated files using
+  docs/content-baseline.json. An intentional edit to one of those files reports
+  Content changed; review the edit and deliberately update its baseline as part
+  of that change. Do not weaken preservation checks merely to make them pass.
+- Saving locally is not publication. The current redesign is still a local
+  codex/portfolio-v2 branch. PRs/branch workflow runs validate; only main/master
+  can deploy through the existing Actions workflow after required checks pass.
+- For production validation, set $env:JEKYLL_ENV='production' before building
+  in PowerShell; production CSS compression is disabled in development builds.
+- Keep Gemfile.lock and package-lock.json committed. New-machine dependencies
+  use bundle install and npm ci --ignore-scripts. Update dependencies separately
+  from article changes, then rerun the browser and performance suites.
+- Actual-device acceptance, remote Linux CI and publication-domain confirmation
+  still remain before the redesign's first release. The current canonical URL
+  is https://smokericeash.github.io; change url/baseurl only when the deployment
+  destination is confirmed.

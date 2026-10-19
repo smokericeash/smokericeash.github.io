@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), five requested browser copy corrections.
+Updated: October 19, 2026 (America/Los_Angeles), posting workflow and maintenance caveats.
 
 ## Current state
 
@@ -12,6 +12,13 @@ Updated: October 19, 2026 (America/Los_Angeles), five requested browser copy cor
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 19 posting and maintenance guidance — latest handoff
+
+- **Completed:** checked the actual post template, config, image tool, content generator, preservation tests and CI workflow before explaining the authoring process. Corrected POSTING.txt's inaccurate statement that Pillow is already available: the current default C:/Python314/python.exe raises ModuleNotFoundError for PIL. Added the one-time install/import-check commands and maintenance notes covering stable unique slugs, original-image retention, optional journey overrides, curated legacy Work pages, preservation baselines, source/build separation and production/deployment requirements.
+- **Verification:** default Python import was executed and confirmed the missing optional image dependency. Repository code and workflow support the documented behavior. No code, article, image or UI changed; the prior production/browser validation remains applicable. Pillow was not installed automatically for this informational request.
+- **Currently in progress / remaining:** no unfinished implementation for this guidance request. Image authors must install Pillow in their chosen Python before using the optimizer. Existing first-release checks remain: actual-device acceptance, Linux CI and publication-domain confirmation.
+- **Exact recommended next task:** use docs/post-template.md and docs/POSTING.txt for the first real post; use a text-only post or install Pillow before preparing images. Continue release checks before merging/deploying the redesign.
 
 ## October 19 browser copy corrections — latest handoff
 
