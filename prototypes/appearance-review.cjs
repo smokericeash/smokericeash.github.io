@@ -3,7 +3,8 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
+const approvedRef = process.env.APPEARANCE_BASELINE || '753310f';
+const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -50,7 +51,10 @@ const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
         const s = v.matrixTransform(svg.getScreenCTM()); return { x: Math.round(s.x), y: Math.round(s.y) }; };
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
         feet: [project(state.feet.left), project(state.feet.right)],
-        knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a };
+        knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a,
+        rightShoulder: project(state.shoulders.right), rightHand: project(state.hands.right),
+        rightReach: Math.hypot(state.hands.right.x - state.shoulders.right.x, state.hands.right.y - state.shoulders.right.y),
+        sleeveLength: Number(document.querySelector('[data-photo-right-arm-bend]')?.getAttribute('data-fabric-length') || 0) };
     }, progress);
     await isolateBody();
     const baselineShots = [];
@@ -70,15 +74,16 @@ const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
     }
     await isolateBody();
     let connectedPoses = 0;
-    let worstKneeCoverage = 1, baselineKneeCoverage = 1, changedOutsideKnees = 0;
+    let worstKneeCoverage = 1, baselineKneeCoverage = 1, changedOutsideScope = 0;
+    let extendedPoseDifferences = 0, shortestPullSleeve = Infinity;
     for (let sample = 0; sample < 32; sample++) {
       const targets = await pose(sample / 16);
       const shot = (await page.screenshot({ omitBackground: true })).toString('base64');
       if (sample === 0) {
-        fs.writeFileSync('test-results/knee-seam-before.png', Buffer.from(baselineShots[sample], 'base64'));
-        fs.writeFileSync('test-results/knee-seam-after.png', Buffer.from(shot, 'base64'));
+        fs.writeFileSync('test-results/appearance-scope-before.png', Buffer.from(baselineShots[sample], 'base64'));
+        fs.writeFileSync('test-results/appearance-scope-after.png', Buffer.from(shot, 'base64'));
       }
-      const seam = await page.evaluate(async ({ shot, baseline, targets }) => {
+      const seam = await page.evaluate(async ({ shot, baseline, targets, scope }) => {
         const decode = async source => {
           const image = new Image(); image.src = `data:image/png;base64,${source}`; await image.decode();
           const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
@@ -86,11 +91,18 @@ const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
           return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
         };
         const current = await decode(shot), previous = await decode(baseline);
-        let outside = 0;
+        let outside = 0, differences = 0;
         for (let y = 0; y < 800; y++) for (let x = 0; x < 600; x++) {
           const i = (y * 600 + x) * 4;
-          if ([0, 1, 2, 3].some(c => Math.abs(current[i + c] - previous[i + c]) > 2) &&
-              targets.knees.every(p => Math.hypot(x - p.x, y - p.y) > 20 * targets.scale)) outside++;
+          if ([0, 1, 2, 3].some(c => Math.abs(current[i + c] - previous[i + c]) > 2)) {
+            differences++;
+            const s = targets.scale, a = targets.rightShoulder, b = targets.rightHand;
+            const inside = scope === 'knees'
+              ? targets.knees.some(p => Math.hypot(x - p.x, y - p.y) <= 20 * s)
+              : x >= Math.min(a.x, b.x) - 35 * s && x <= Math.max(a.x, b.x) + 35 * s &&
+                y >= Math.min(a.y, b.y) - 18 * s && y <= Math.max(a.y, b.y) + 44 * s;
+            if (!inside) outside++;
+          }
         }
         const coverage = pixels => Math.min(...targets.knees.map(p => {
           const radius = 11 * targets.scale;
@@ -99,9 +111,11 @@ const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
             if (Math.hypot(dx, dy) <= radius) { total++; if (pixels[((p.y + dy) * 600 + p.x + dx) * 4 + 3] > 80) opaque++; }
           return opaque / total;
         }));
-        return { outside, current: coverage(current), previous: coverage(previous) };
-      }, { shot, baseline: baselineShots[sample], targets });
-      changedOutsideKnees += seam.outside;
+        return { outside, differences, current: coverage(current), previous: coverage(previous) };
+      }, { shot, baseline: baselineShots[sample], targets, scope });
+      changedOutsideScope += seam.outside;
+      if (scope === 'right-arm' && targets.rightReach >= 54) extendedPoseDifferences += seam.differences;
+      if (scope === 'right-arm' && targets.rightReach < 44) shortestPullSleeve = Math.min(shortestPullSleeve, targets.sleeveLength);
       worstKneeCoverage = Math.min(worstKneeCoverage, seam.current);
       baselineKneeCoverage = Math.min(baselineKneeCoverage, seam.previous);
       const connected = await page.evaluate(async ({ shot, targets }) => {
@@ -160,9 +174,14 @@ const approvedRef = process.env.APPEARANCE_BASELINE || '214bce2';
       return different / (clothPixelBytes / 4);
     }, shots);
     console.log(JSON.stringify({ approvedRef, approvedPosesUnchanged: 1001, connectedPoses,
-      baselineKneeCoverage, worstKneeCoverage, changedOutsideKnees, flagPixelDifference: flagDifference }));
+      baselineKneeCoverage, worstKneeCoverage, scope, changedOutsideScope,
+      extendedPoseDifferences, shortestPullSleeve, flagPixelDifference: flagDifference }));
     assert.ok(worstKneeCoverage > .99, 'Knee fabric must cover the seam throughout the bend cycle');
-    assert.equal(changedOutsideKnees, 0, 'The appearance correction must remain local to the knees');
+    assert.equal(changedOutsideScope, 0, 'The appearance correction must remain local to its requested region');
+    if (scope === 'right-arm') {
+      assert.equal(extendedPoseDifferences, 0, 'The approved stretched-arm rendering must stay identical');
+      assert.ok(shortestPullSleeve >= 54, 'The right sleeve should bend without shrinking during the pull');
+    }
     assert.ok(flagDifference < .02, 'The same dark-blue cloth must remain aligned across the final handover');
   } finally { await browser.close(); }
 })().catch(error => { console.error(error); process.exitCode = 1; });

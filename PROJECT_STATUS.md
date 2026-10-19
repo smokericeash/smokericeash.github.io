@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 18, 2026 (America/Los_Angeles), localized knee seam repair.
+Updated: October 18, 2026 (America/Los_Angeles), right sleeve pull-up proportion correction.
 
 ## Current state
 
@@ -13,7 +13,15 @@ Updated: October 18, 2026 (America/Los_Angeles), localized knee seam repair.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 18 knee seam repair — latest handoff
+## October 18 right sleeve pull-up correction — latest handoff
+
+- **Completed:** fixed the right arm becoming too short during the pull. The existing complete photographic sleeve now deforms continuously around a rounded elbow when the shoulder-to-grip distance contracts, retaining about 56 SVG units of fabric length rather than compressing the whole arm to the 31–44-unit grip distance. The exact extended-arm drawing is preserved. The shoulder, gripping hand/axe, left arm, legs and repaired knees, waist gear, flag, summit portraits, camera, body trajectory, and scroll timing are unchanged. No image asset was regenerated or edited. Photo-skin cache version is `ascent-28`.
+- **Technical decision:** a connected texture mesh bends the original sleeve; it does not swap poses or rotate separate upper/lower-arm pictures. It switches continuously to the existing original rendering at full reach and returns to the original rendering before the summit flag gestures. Early coarse mesh candidates were rejected after enlarged visual inspection; the final narrow, overlapping texture sections avoid open strip seams and mesh inversion.
+- **Verification:** `prototypes/appearance-review.cjs` defaults to approved commit `753310f` and the `right-arm` scope. All 1,001 solved pose states remain identical. Across 32 rendered cycle positions, there are zero changed pixels outside the right-arm region and zero pixel differences in the accepted stretched-arm phases. The shortest measured sleeve length in sampled pulls is 55.961 SVG units. Both knee seam cores remain fully opaque, torso-to-boot connectivity passes, and the dark-blue flag handoff comparison is unchanged. Enlarged pull/reach phases and desktop/mobile in-page scenes were visually inspected. Production Jekyll build, site integrity (26 originals, nine posts, 47 pages, 1,690 references), JavaScript syntax and focused Chrome/Firefox/WebKit rig suites passed. Final Chrome wheel sample: 248 updates, zero rebound, maximum body displacement 4.48 px per sample. The broader full-site suites were not repeated for this sleeve-only change.
+- **Currently in progress / remaining:** no unfinished implementation for this scoped sleeve correction. Real-device visual acceptance and the broader release checks below remain. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the right-arm pull in the local preview at slow/moderate forward and reverse scroll speeds while preserving the accepted extended pose and all other artwork/motion. Continue broader release checks after that review; do not redesign the climber without a specific request.
+
+## October 18 knee seam repair — earlier handoff
 
 - **Completed:** closed the wedge-shaped gaps between both photographed thighs and calves during deep bends. A small matching photographic fabric gusset sits behind each knee seam and follows its existing joint. It reuses the approved summit trouser texture through an SVG clip; no image source was regenerated or edited. Only the two local knee regions change visually. The approved poses, proportions, waist/rope gear, arms, tools, flag, summit portraits, camera, and scroll timing are preserved. Photo-skin cache version is `ascent-26`.
 - **Verification:** `prototypes/appearance-review.cjs` now uses the latest approved `214bce2` baseline, waits for all referenced image decodes before capture, and compares 32 rendered positions across the alternating cycle. The knee seam core is fully opaque at every sample (minimum coverage improved from about 89.3% to 100%), with **zero changed pixels outside the small knee regions**. All 1,001 complete solved pose states remain identical; both boots remain connected to the torso in all 32 alpha silhouettes; the existing blue-flag continuity check still passes. Enlarged knee phases and full desktop/mobile scenes were visually reviewed. Production Jekyll build, site integrity (26 originals, nine posts, 47 pages, 1,690 references), JavaScript syntax, and focused Chrome/Firefox/WebKit contact-rig suites passed. Full-site layout/content tests were not repeated beyond site integrity because this change is confined to the photographic knee skin.

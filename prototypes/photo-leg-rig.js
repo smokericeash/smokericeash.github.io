@@ -34,6 +34,7 @@
     },
   };
   const rel = (p, origin) => ({ x: p.x - origin.x, y: p.y - origin.y });
+  const smooth = value => { const t = Math.max(0, Math.min(1, value)); return t * t * (3 - 2 * t); };
   const align = (node, sourceStart, sourceEnd, targetStart, targetEnd, widthScale) => {
     const sourceAngle = Math.atan2(sourceEnd.y - sourceStart.y, sourceEnd.x - sourceStart.x) * 180 / Math.PI;
     const targetAngle = Math.atan2(targetEnd.y - targetStart.y, targetEnd.x - targetStart.x) * 180 / Math.PI;
@@ -86,6 +87,110 @@
         segments[side][segment] = group;
       }
     }
+    // Bend the original continuous sleeve around a softly rounded elbow. The
+    // shoulder and gripping hand stay fixed; only the fabric between them bends.
+    // A straight shoulder-to-hand scale made the entire arm shrink on a pull.
+    const sleeve = sleeves.right;
+    const sourceStart = rel(sleeve.shoulder, sleeve.wholeCrop);
+    const sourceEnd = rel(sleeve.hand, sleeve.wholeCrop);
+    const sourceLength = Math.hypot(sourceEnd.x - sourceStart.x, sourceEnd.y - sourceStart.y);
+    const ux = (sourceEnd.x - sourceStart.x) / sourceLength;
+    const uy = (sourceEnd.y - sourceStart.y) / sourceLength;
+    const sourcePoint = (t, v) => ({ x: sourceStart.x + ux * sourceLength * t - uy * v,
+      y: sourceStart.y + uy * sourceLength * t + ux * v });
+    const bentSleeve = svgNode('g', { 'data-photo-right-arm-bend': '', display: 'none' });
+    const patches = [];
+    // Opaque pixel bounds of the approved sleeve; narrow cross sections keep
+    // the inner elbow mesh from turning inside out at the deepest bend.
+    for (let band = 0; band < 24; band++) {
+      const a = -.2 + band * 1.4 / 24, b = -.2 + (band + 1) * 1.4 / 24;
+      for (const [low, high] of [[-65, 0], [0, 160]]) for (const corners of [
+        [[a, low], [b, low], [b, high]], [[a, low], [b, high], [a, high]],
+      ]) {
+        const points = corners.map(([t, v]) => sourcePoint(t, v));
+        const id = `rig-right-sleeve-${patches.length}`;
+        const center = { x: points.reduce((sum, p) => sum + p.x, 0) / 3,
+          y: points.reduce((sum, p) => sum + p.y, 0) / 3 };
+        const expanded = points.map(p => {
+          const d = Math.hypot(p.x - center.x, p.y - center.y);
+          return `${p.x + (p.x - center.x) * .8 / d},${p.y + (p.y - center.y) * .8 / d}`;
+        }).join(' ');
+        const clip = svgNode('clipPath', { id, clipPathUnits: 'userSpaceOnUse' });
+        clip.append(svgNode('polygon', { points: expanded })); defs.append(clip);
+        const patch = svgNode('g');
+        patch.append(svgNode('image', { href: `${assetRoot}/ascent-rig-right-arm-whole.webp`,
+          width: sleeve.wholeCrop.width, height: sleeve.wholeCrop.height, 'clip-path': `url(#${id})` }));
+        bentSleeve.append(patch);
+        patches.push({ patch, corners, points });
+      }
+    }
+    body.append(bentSleeve);
+    const bendRightSleeve = (shoulder, hand, finalProgress) => {
+      const dx = hand.x - shoulder.x, dy = hand.y - shoulder.y;
+      const distance = Math.hypot(dx, dy);
+      const amount = smooth((54 - distance) / 14) * (1 - smooth((finalProgress - .68) / .06));
+      bentSleeve.setAttribute('display', amount > .00001 ? 'inline' : 'none');
+      segments.right.whole.setAttribute('display', amount > .00001 ? 'none' : 'inline');
+      if (amount <= .00001) return;
+      const length = distance + amount * Math.max(0, 56 - distance);
+      const x = dx / distance, y = dy / distance;
+      const profile = height => {
+        const elbow = { x: shoulder.x + dx * .46 - y * height, y: shoulder.y + dy * .46 + x * height };
+        const upper = Math.hypot(elbow.x - shoulder.x, elbow.y - shoulder.y);
+        const lower = Math.hypot(hand.x - elbow.x, hand.y - elbow.y);
+        const u = { x: (elbow.x - shoulder.x) / upper, y: (elbow.y - shoulder.y) / upper };
+        const v = { x: (hand.x - elbow.x) / lower, y: (hand.y - elbow.y) / lower };
+        const trim = Math.min(14, upper * .48, lower * .48);
+        const a = { x: elbow.x - u.x * trim, y: elbow.y - u.y * trim };
+        const b = { x: elbow.x + v.x * trim, y: elbow.y + v.y * trim };
+        const curve = t => ({ x: (1 - t) ** 2 * a.x + 2 * (1 - t) * t * elbow.x + t * t * b.x,
+          y: (1 - t) ** 2 * a.y + 2 * (1 - t) * t * elbow.y + t * t * b.y });
+        const samples = [0]; let previous = a;
+        for (let i = 1; i <= 20; i++) {
+          const point = curve(i / 20);
+          samples.push(samples[i - 1] + Math.hypot(point.x - previous.x, point.y - previous.y));
+          previous = point;
+        }
+        return { elbow, upper, lower, u, v, trim, a, b, curve, samples,
+          first: upper - trim, total: upper + lower - 2 * trim + samples[20] };
+      };
+      let low = 0, high = length;
+      for (let i = 0; i < 22; i++) {
+        const height = (low + high) / 2;
+        if (profile(height).total < length) low = height; else high = height;
+      }
+      const bend = profile((low + high) / 2);
+      const map = (t, v) => {
+        const at = t * bend.total;
+        let point, tangent;
+        if (at <= bend.first) {
+          point = { x: shoulder.x + bend.u.x * at, y: shoulder.y + bend.u.y * at }; tangent = bend.u;
+        } else if (at >= bend.first + bend.samples[20]) {
+          const d = at - bend.first - bend.samples[20];
+          point = { x: bend.b.x + bend.v.x * d, y: bend.b.y + bend.v.y * d }; tangent = bend.v;
+        } else {
+          const d = at - bend.first;
+          let i = 1; while (bend.samples[i] < d) i++;
+          const u = (i - 1 + (d - bend.samples[i - 1]) / (bend.samples[i] - bend.samples[i - 1])) / 20;
+          point = bend.curve(u);
+          const tx = (1 - u) * (bend.elbow.x - bend.a.x) + u * (bend.b.x - bend.elbow.x);
+          const ty = (1 - u) * (bend.elbow.y - bend.a.y) + u * (bend.b.y - bend.elbow.y);
+          const norm = Math.hypot(tx, ty); tangent = { x: tx / norm, y: ty / norm };
+        }
+        return { x: point.x - tangent.y * v * .12, y: point.y + tangent.x * v * .12 };
+      };
+      for (const { patch, corners, points: [p, q, r] } of patches) {
+        const [a, b, c] = corners.map(([t, v]) => map(t, v));
+        const det = (q.x - p.x) * (r.y - p.y) - (r.x - p.x) * (q.y - p.y);
+        const m11 = ((b.x - a.x) * (r.y - p.y) - (c.x - a.x) * (q.y - p.y)) / det;
+        const m12 = ((b.y - a.y) * (r.y - p.y) - (c.y - a.y) * (q.y - p.y)) / det;
+        const m21 = ((q.x - p.x) * (c.x - a.x) - (r.x - p.x) * (b.x - a.x)) / det;
+        const m22 = ((q.x - p.x) * (c.y - a.y) - (r.x - p.x) * (b.y - a.y)) / det;
+        patch.setAttribute('transform', `matrix(${m11} ${m12} ${m21} ${m22} ${a.x - m11 * p.x - m21 * p.y} ${a.y - m12 * p.x - m22 * p.y})`);
+      }
+      bentSleeve.setAttribute('data-fabric-length', length.toFixed(3));
+      bentSleeve.setAttribute('data-grip-distance', distance.toFixed(3));
+    };
     const update = state => {
       for (const side of ['left', 'right']) {
         const p = parts[side];
@@ -105,6 +210,7 @@
         const shoulder = rel(state.shoulders[side], state.origin);
         const hand = rel(state.hands[side], state.origin);
         align(segments[side].whole, rel(a.shoulder, a.wholeCrop), rel(a.hand, a.wholeCrop), shoulder, hand, .12);
+        if (side === 'right') bendRightSleeve(shoulder, hand, state.finalProgress);
       }
     };
     return { update, segments };
