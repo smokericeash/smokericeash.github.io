@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), posting workflow and maintenance caveats.
+Updated: October 19, 2026 (America/Los_Angeles), localized hip-seam repair.
 
 ## Current state
 
@@ -12,6 +12,13 @@ Updated: October 19, 2026 (America/Los_Angeles), posting workflow and maintenanc
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 19 localized hip-seam repair — latest handoff
+
+- **Completed:** filled the exposed waist/thigh sockets with two small photographic fabric underlays, reusing the existing thigh images behind the waist and legs. Each follows its existing upper-thigh direction while staying centered on the unchanged hip. No source image, pose, proportion setting, limb target, arm, knee, waist gear, summit portrait/flag, camera or scroll timing changed. Live/authoring copies match; photo-skin cache version is ascent-30.
+- **Verification:** baseline Chrome contact-rig suite passed before editing. Appearance QA now defaults to immutable approved commit 639980e with hips scope and samples 160 rendered positions across the full climb. All 1,001 complete solver states are identical; zero changed pixels outside small hip regions; both hip-core alpha coverages improve from a worst 92.2% to 100%; knee cores remain fully opaque; both boots remain connected; dark-blue flag handoff remains unchanged. Enlarged phases and the reported 1019x800 late-climb positions were visually reviewed forward and backward. Production build/site integrity pass (26 originals, nine routes, 47 pages, 1,690 references); focused Chrome/Firefox/WebKit contact-rig suites all pass. Chrome wheel sample: 248 updates, zero rebound, maximum displacement 4.45px. Broader layout/performance suites were not repeated for this local fabric-only patch.
+- **Currently in progress / remaining:** no unfinished implementation for this request. Existing release checks remain actual-device acceptance, Linux CI and domain confirmation; this patch makes no new claim about exact wall-hold collision. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the repaired hip seam at slow/moderate forward/reverse scrolling on desktop and phone, particularly around the final Network+ checkpoint. Preserve all accepted movement/artwork and continue existing release checks afterward.
 
 ## October 19 posting and maintenance guidance — latest handoff
 

@@ -3,8 +3,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '753310f';
-const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
+const approvedRef = process.env.APPEARANCE_BASELINE || '639980e';
+const scope = process.env.APPEARANCE_SCOPE || 'hips';
+const cycleSamples = scope === 'hips' ? 160 : 32;
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -52,13 +53,14 @@ const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
         feet: [project(state.feet.left), project(state.feet.right)],
         knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a,
+        hips: [project(state.hips.left), project(state.hips.right)],
         rightShoulder: project(state.shoulders.right), rightHand: project(state.hands.right),
         rightReach: Math.hypot(state.hands.right.x - state.shoulders.right.x, state.hands.right.y - state.shoulders.right.y),
         sleeveLength: Number(document.querySelector('[data-photo-right-arm-bend]')?.getAttribute('data-fabric-length') || 0) };
     }, progress);
     await isolateBody();
     const baselineShots = [];
-    for (let sample = 0; sample < 32; sample++) {
+    for (let sample = 0; sample < cycleSamples; sample++) {
       await pose(sample / 16);
       baselineShots.push((await page.screenshot({ omitBackground: true })).toString('base64'));
     }
@@ -75,8 +77,9 @@ const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
     await isolateBody();
     let connectedPoses = 0;
     let worstKneeCoverage = 1, baselineKneeCoverage = 1, changedOutsideScope = 0;
+    let worstHipCoverage = 1, baselineHipCoverage = 1;
     let extendedPoseDifferences = 0, shortestPullSleeve = Infinity;
-    for (let sample = 0; sample < 32; sample++) {
+    for (let sample = 0; sample < cycleSamples; sample++) {
       const targets = await pose(sample / 16);
       const shot = (await page.screenshot({ omitBackground: true })).toString('base64');
       if (sample === 0) {
@@ -91,29 +94,36 @@ const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
           return ctx.getImageData(0, 0, canvas.width, canvas.height).data;
         };
         const current = await decode(shot), previous = await decode(baseline);
-        let outside = 0, differences = 0;
+        let outside = 0, differences = 0; const outliers = [];
         for (let y = 0; y < 800; y++) for (let x = 0; x < 600; x++) {
           const i = (y * 600 + x) * 4;
           if ([0, 1, 2, 3].some(c => Math.abs(current[i + c] - previous[i + c]) > 2)) {
             differences++;
             const s = targets.scale, a = targets.rightShoulder, b = targets.rightHand;
-            const inside = scope === 'knees'
+            const inside = scope === 'hips'
+              ? targets.hips.some(p => Math.hypot(x - p.x, y - p.y) <= 22 * s)
+              : scope === 'knees'
               ? targets.knees.some(p => Math.hypot(x - p.x, y - p.y) <= 20 * s)
               : x >= Math.min(a.x, b.x) - 35 * s && x <= Math.max(a.x, b.x) + 35 * s &&
                 y >= Math.min(a.y, b.y) - 18 * s && y <= Math.max(a.y, b.y) + 44 * s;
-            if (!inside) outside++;
+            if (!inside) { outside++; if (outliers.length < 3) outliers.push([x, y, Array.from(previous.slice(i,i+4)), Array.from(current.slice(i,i+4))]); }
           }
         }
-        const coverage = pixels => Math.min(...targets.knees.map(p => {
-          const radius = 11 * targets.scale;
+        const coverage = (pixels, joints, coreRadius = 11) => Math.min(...joints.map(p => {
+          const radius = coreRadius * targets.scale;
           let opaque = 0, total = 0;
           for (let dy = -Math.ceil(radius); dy <= radius; dy++) for (let dx = -Math.ceil(radius); dx <= radius; dx++)
             if (Math.hypot(dx, dy) <= radius) { total++; if (pixels[((p.y + dy) * 600 + p.x + dx) * 4 + 3] > 80) opaque++; }
           return opaque / total;
         }));
-        return { outside, differences, current: coverage(current), previous: coverage(previous) };
+        return { outside, differences, outliers,
+          current: coverage(current, targets.knees), previous: coverage(previous, targets.knees),
+          hipCurrent: coverage(current, targets.hips, 17), hipPrevious: coverage(previous, targets.hips, 17) };
       }, { shot, baseline: baselineShots[sample], targets, scope });
       changedOutsideScope += seam.outside;
+      if (seam.outside) console.log({ sample, outliers: seam.outliers });
+      worstHipCoverage = Math.min(worstHipCoverage, seam.hipCurrent);
+      baselineHipCoverage = Math.min(baselineHipCoverage, seam.hipPrevious);
       if (scope === 'right-arm' && targets.rightReach >= 54) extendedPoseDifferences += seam.differences;
       if (scope === 'right-arm' && targets.rightReach < 44) shortestPullSleeve = Math.min(shortestPullSleeve, targets.sleeveLength);
       worstKneeCoverage = Math.min(worstKneeCoverage, seam.current);
@@ -174,9 +184,10 @@ const scope = process.env.APPEARANCE_SCOPE || 'right-arm';
       return different / (clothPixelBytes / 4);
     }, shots);
     console.log(JSON.stringify({ approvedRef, approvedPosesUnchanged: 1001, connectedPoses,
-      baselineKneeCoverage, worstKneeCoverage, scope, changedOutsideScope,
+      baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
       extendedPoseDifferences, shortestPullSleeve, flagPixelDifference: flagDifference }));
     assert.ok(worstKneeCoverage > .99, 'Knee fabric must cover the seam throughout the bend cycle');
+    if (scope === 'hips') assert.ok(worstHipCoverage > .99, 'Both hip seams must remain fully clothed as the thighs flex');
     assert.equal(changedOutsideScope, 0, 'The appearance correction must remain local to its requested region');
     if (scope === 'right-arm') {
       assert.equal(extendedPoseDifferences, 0, 'The approved stretched-arm rendering must stay identical');

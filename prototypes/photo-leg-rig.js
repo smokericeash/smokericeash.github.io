@@ -64,6 +64,19 @@
     for (const type of ['leg', 'arm']) for (const side of ['left', 'right']) {
       const source = type === 'leg' ? parts[side] : sleeves[side];
       if (type === 'leg') {
+        // Keep fabric behind the waist/thigh overlap as the hip flexes. This
+        // underlay fills the exposed socket without moving either body part.
+        const hipFabric = { x: 135, y: 155 };
+        const hipClip = svgNode('clipPath', { id: `rig-photo-${side}-hip`, clipPathUnits: 'userSpaceOnUse' });
+        hipClip.append(svgNode('ellipse', { cx: hipFabric.x, cy: hipFabric.y, rx: 70, ry: 75 }));
+        defs.append(hipClip);
+        const hip = svgNode('g', { 'data-photo-hip': side });
+        hip.append(svgNode('image', { href: `${assetRoot}/ascent-rig-${side}-leg-thigh.webp`,
+          width: source.thighCrop.width, height: source.thighCrop.height,
+          'clip-path': `url(#rig-photo-${side}-hip)` }));
+        body.insertBefore(hip, pelvis);
+        segments[side].hip = hip;
+        segments[side].hipFabric = hipFabric;
         // The two cropped fabric ends uncover a wedge at deep bends. A small
         // photographic gusset behind them keeps the knee continuously clothed.
         const fabric = { x: side === 'left' ? 425 : 630, y: 970 };
@@ -202,6 +215,9 @@
         align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .155);
         align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .14);
         const upperLength = Math.hypot(knee.x - hip.x, knee.y - hip.y);
+        const hipAngle = Math.atan2(knee.y - hip.y, knee.x - hip.x) * 180 / Math.PI - 90;
+        const hipFabric = segments[side].hipFabric;
+        segments[side].hip.setAttribute('transform', `translate(${hip.x.toFixed(2)} ${hip.y.toFixed(2)}) rotate(${hipAngle.toFixed(2)}) scale(.26) translate(${-hipFabric.x} ${-hipFabric.y})`);
         const lowerLength = Math.hypot(foot.x - knee.x, foot.y - knee.y);
         const tangentX = (knee.x - hip.x) / upperLength + (foot.x - knee.x) / lowerLength;
         const tangentY = (knee.y - hip.y) / upperLength + (foot.y - knee.y) / lowerLength;
