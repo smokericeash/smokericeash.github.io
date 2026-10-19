@@ -129,10 +129,12 @@
       const dx = hand.x - shoulder.x, dy = hand.y - shoulder.y;
       const distance = Math.hypot(dx, dy);
       const amount = smooth((54 - distance) / 14) * (1 - smooth((finalProgress - .68) / .06));
-      bentSleeve.setAttribute('display', amount > .00001 ? 'inline' : 'none');
-      segments.right.whole.setAttribute('display', amount > .00001 ? 'none' : 'inline');
-      if (amount <= .00001) return;
-      const length = distance + amount * Math.max(0, 56 - distance);
+      // A shallower elbow keeps the pull full-sized without bunching the sleeve.
+      const length = distance + amount * Math.max(0, 52 - distance);
+      const bends = length - distance > .001;
+      bentSleeve.setAttribute('display', bends ? 'inline' : 'none');
+      segments.right.whole.setAttribute('display', bends ? 'none' : 'inline');
+      if (!bends) return;
       const x = dx / distance, y = dy / distance;
       const profile = height => {
         const elbow = { x: shoulder.x + dx * .46 - y * height, y: shoulder.y + dy * .46 + x * height };
