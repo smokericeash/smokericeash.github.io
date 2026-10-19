@@ -212,7 +212,9 @@
         const hip = rel(state.hips[side], state.origin);
         const knee = rel(state.knees[side], state.origin);
         const foot = rel(state.feet[side], state.origin);
-        align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .155);
+        // The right photo has a narrower trouser silhouette; match its fabric width.
+        const thighWidth = side === 'right' ? .1674 : .155;
+        align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, thighWidth);
         align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .14);
         const upperLength = Math.hypot(knee.x - hip.x, knee.y - hip.y);
         const hipAngle = Math.atan2(knee.y - hip.y, knee.x - hip.x) * 180 / Math.PI - 90;

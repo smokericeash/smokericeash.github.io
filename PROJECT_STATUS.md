@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), localized hip-seam repair.
+Updated: October 19, 2026 (America/Los_Angeles), right-thigh width correction.
 
 ## Current state
 
@@ -12,6 +12,13 @@ Updated: October 19, 2026 (America/Los_Angeles), localized hip-seam repair.
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 19 right-thigh width correction — latest handoff
+
+- **Completed:** widened only the anatomical right thigh by 8% (cross-sectional scale .155 to .1674) to match the left. Source-alpha measurements showed the right thigh narrower at three sample rows (171/172/164 px versus 193/185/176 px), while the calves already matched or the right was slightly wider. Consequently the calves, boots, left leg, repaired hip/knee seams, poses, lengths/targets, arms, gear, flag/summit and camera/scroll timing remain unchanged. Authoring/live copies match; photo cache is ascent-31.
+- **Verification:** production Jekyll build and site integrity pass (26 originals, nine routes, 47 pages, 1,690 references). Appearance review defaults to approved commit 81c65f4 and right-thigh scope: all 1,001 complete solver states unchanged; 160 rendered positions remain connected with opaque hip/knee cores; zero pixel changes outside the old/new right-thigh image bounds and raster fringe; flag continuity unchanged. Enlarged phases and the reported 1019x798 checkpoint-six poses were visually reviewed. Chrome contact-rig check passes (248 wheel samples, no rebound, max displacement 4.41px). Focused Firefox and WebKit contact-rig checks also pass with zero rebound. Broader suites were not repeated for this thigh-width-only patch.
+- **Currently in progress / remaining:** no unfinished implementation or local verification for this request. Existing release checks remain actual-device acceptance, Linux CI and domain confirmation. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review right/left thigh balance at checkpoint six on the current preview, preserving all other approved artwork and movement. Continue the existing release checks afterward.
 
 ## October 19 localized hip-seam repair — latest handoff
 

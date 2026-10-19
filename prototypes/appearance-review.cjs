@@ -3,9 +3,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '639980e';
-const scope = process.env.APPEARANCE_SCOPE || 'hips';
-const cycleSamples = scope === 'hips' ? 160 : 32;
+const approvedRef = process.env.APPEARANCE_BASELINE || '81c65f4';
+const scope = process.env.APPEARANCE_SCOPE || 'right-thigh';
+const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -50,7 +50,11 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
       svg.setAttribute('viewBox', `250 ${state.origin.y - 150} 230 ${230 * 4 / 3}`);
       const project = p => { const v = svg.createSVGPoint(); v.x = p.x; v.y = p.y;
         const s = v.matrixTransform(svg.getScreenCTM()); return { x: Math.round(s.x), y: Math.round(s.y) }; };
+      const thigh = document.querySelector('[data-photo-limb="right-leg-thigh"] image');
+      const inverse = thigh.getScreenCTM().inverse();
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
+        rightThigh: { inverse: [inverse.a, inverse.b, inverse.c, inverse.d, inverse.e, inverse.f],
+          width: Number(thigh.getAttribute('width')), height: Number(thigh.getAttribute('height')) },
         feet: [project(state.feet.left), project(state.feet.right)],
         knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a,
         hips: [project(state.hips.left), project(state.hips.right)],
@@ -59,9 +63,10 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
         sleeveLength: Number(document.querySelector('[data-photo-right-arm-bend]')?.getAttribute('data-fabric-length') || 0) };
     }, progress);
     await isolateBody();
-    const baselineShots = [];
+    const baselineShots = [], baselineThighs = [];
     for (let sample = 0; sample < cycleSamples; sample++) {
-      await pose(sample / 16);
+      const targets = await pose(sample / 16);
+      baselineThighs.push(targets.rightThigh);
       baselineShots.push((await page.screenshot({ omitBackground: true })).toString('base64'));
     }
     await setup(false);
@@ -86,7 +91,7 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
         fs.writeFileSync('test-results/appearance-scope-before.png', Buffer.from(baselineShots[sample], 'base64'));
         fs.writeFileSync('test-results/appearance-scope-after.png', Buffer.from(shot, 'base64'));
       }
-      const seam = await page.evaluate(async ({ shot, baseline, targets, scope }) => {
+      const seam = await page.evaluate(async ({ shot, baseline, baselineThigh, targets, scope }) => {
         const decode = async source => {
           const image = new Image(); image.src = `data:image/png;base64,${source}`; await image.decode();
           const canvas = document.createElement('canvas'); canvas.width = image.width; canvas.height = image.height;
@@ -100,7 +105,16 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
           if ([0, 1, 2, 3].some(c => Math.abs(current[i + c] - previous[i + c]) > 2)) {
             differences++;
             const s = targets.scale, a = targets.rightShoulder, b = targets.rightHand;
-            const inside = scope === 'hips'
+            const insideThigh = thigh => {
+              const [m11, m12, m21, m22, tx, ty] = thigh.inverse;
+              const u = m11 * (x + .5) + m21 * (y + .5) + tx;
+              const v = m12 * (x + .5) + m22 * (y + .5) + ty;
+              // Include the subpixel raster fringe of both old/new image bounds.
+              return u >= -3 && v >= -3 && u <= thigh.width + 3 && v <= thigh.height + 3;
+            };
+            const inside = scope === 'right-thigh'
+              ? insideThigh(targets.rightThigh) || insideThigh(baselineThigh)
+              : scope === 'hips'
               ? targets.hips.some(p => Math.hypot(x - p.x, y - p.y) <= 22 * s)
               : scope === 'knees'
               ? targets.knees.some(p => Math.hypot(x - p.x, y - p.y) <= 20 * s)
@@ -119,7 +133,7 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
         return { outside, differences, outliers,
           current: coverage(current, targets.knees), previous: coverage(previous, targets.knees),
           hipCurrent: coverage(current, targets.hips, 17), hipPrevious: coverage(previous, targets.hips, 17) };
-      }, { shot, baseline: baselineShots[sample], targets, scope });
+      }, { shot, baseline: baselineShots[sample], baselineThigh: baselineThighs[sample], targets, scope });
       changedOutsideScope += seam.outside;
       if (seam.outside) console.log({ sample, outliers: seam.outliers });
       worstHipCoverage = Math.min(worstHipCoverage, seam.hipCurrent);
@@ -187,7 +201,7 @@ const cycleSamples = scope === 'hips' ? 160 : 32;
       baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
       extendedPoseDifferences, shortestPullSleeve, flagPixelDifference: flagDifference }));
     assert.ok(worstKneeCoverage > .99, 'Knee fabric must cover the seam throughout the bend cycle');
-    if (scope === 'hips') assert.ok(worstHipCoverage > .99, 'Both hip seams must remain fully clothed as the thighs flex');
+    if (['hips', 'right-thigh'].includes(scope)) assert.ok(worstHipCoverage > .99, 'Both hip seams must remain fully clothed as the thighs flex');
     assert.equal(changedOutsideScope, 0, 'The appearance correction must remain local to its requested region');
     if (scope === 'right-arm') {
       assert.equal(extendedPoseDifferences, 0, 'The approved stretched-arm rendering must stay identical');
