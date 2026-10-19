@@ -1,14 +1,65 @@
 AIDAN CHEN PORTFOLIO V2 — LOCAL VALIDATION
-Latest continuation verified October 18, 2026 (America/Los_Angeles).
+Latest continuation verified October 19, 2026 (America/Los_Angeles).
 
-CURRENT RESULT
-The approved design remains intact. The active climber uses fourteen complete
-frames with contrasting white-left/dark-right trouser spirals and an extra
-left-leg lowering pose. Local Chrome, Firefox and WebKit focused Ascent checks
-pass. No push, merge or deployment.
-Remote Linux CI, final visual/device acceptance and domain verification remain.
-The historical results below describe older implementations and are superseded
-by this section where they differ.
+CURRENT RESULT — OCTOBER 19 FINAL LOCAL CONTINUATION
+The approved design and climbing pace remain intact. The live contact-anchored
+photographic climber has connected full-size legs/knees, waist gear, a softer
+full-size right sleeve, and the matching dark-blue summit flag. Fourteen prior
+whole-body drawings are preserved as legacy/no-JS/reduced-motion fallbacks.
+No push, merge or deployment. Release checks remain listed below.
+
+COMPLETED AND VERIFIED
+- Production Jekyll build; 26 original source files unchanged; nine original
+  post routes; 47 HTML pages; 1,690 valid local references/assets/anchors;
+  metadata and XML valid. Ruby article/taxonomy checks pass, including milestone
+  number boundaries beyond 99 without truncation.
+- Full Chrome/Firefox/WebKit suites on compressed production CSS: each browser
+  checks 94 routes, 132 responsive views, 22 axe scans in both appearances,
+  navigation/search/storage/no-JS behavior, editorial controls and both Ascent
+  implementations. Experience groups: Chrome 10, Firefox/WebKit 9. Editorial
+  groups 11; legacy expedition groups 10. Focused contact rig passes in all
+  three, with no downward rebound in sampled desktop wheel movement. Windows
+  headless Firefox/WebKit sample counts are not proof of phone frame rate.
+- Appearance review compares 1,001 solved poses and 32 painted cycle samples:
+  motion unchanged; no pixels changed outside the right arm; stretched arm
+  unchanged; knee cores opaque; torso-to-boot connectivity passes. The softer
+  pull retains at least 51.971 SVG units of sleeve. Blue-flag continuity remains.
+  Desktop/mobile scenes and live scrolling were visually inspected.
+- npm run test:posts builds two temporary future-dated Markdown fixtures in
+  isolation, then removes them. Both are discovered in Home highlights, Work
+  search/filter, archives, new category/tag, adjacent links, feed and sitemap.
+  One adds a Home/vertical Ascent checkpoint and longer live wall through the
+  summit; ascent:false excludes the other from both climbs. Responsive cover,
+  text-only cover omission and inferred description pass. Isolated output:
+  11 posts, 51 pages, 1,809 valid local references. The normal _site stays intact.
+- All twenty user design-reference items are documented in DESIGN_REVIEW.md.
+  The previous removal of glass header styling, Inter-first fonts, purple wash
+  and generic scroll reveals remains. Approved scenic/reading/navigation effects
+  are explicitly explained. Original article writing is preserved.
+- Production CSS is compressed using Sass native CSS syntax; sources remain
+  modular and readable. No dependency upgrades. Output is 57,221 bytes versus
+  71,396 source bytes (20% smaller). Sixteen light/dark mobile/desktop views of
+  Home, Work, article and Ascent match within one RGB rounding level. Photos
+  are masked in pixel comparison due to Chromium resampling; their source URLs,
+  geometry, object fit/position, opacity, transform and filter match separately.
+- Legacy service-worker retirement preserves unrelated registration scopes.
+
+FINAL LIGHTHOUSE — COMPRESSED PRODUCTION BUILD
+Performance (mobile / desktop): Home 99 / 100; Work 99 / 100;
+article 100 / 100; Ascent 95 / 97. Accessibility, best practices and SEO:
+100 on all eight runs. CLS 0 throughout. Ascent TBT 0 ms, LCP 2.9 s mobile /
+1.2 s desktop. These are simulated Lighthouse results, not real-device timings.
+The first uncompressed Ascent mobile run scored 94; the production CSS
+compression resolved that failure. Do not lower the existing 95 threshold.
+
+REMAINING RELEASE CHECKS
+Actual desktop/phone visual and performance acceptance, remote Linux CI and
+publication-domain confirmation. Contact positions retain the accepted synthetic
+wall profile rather than a new claim of exact individual ice-hold collision.
+Do not modify the accepted scene or climber without a specific user request.
+
+Historical results below describe older implementations and are superseded by
+this section wherever they differ.
 
 OCTOBER 18 SWIRL CONTRAST AND LEFT-LEG RETURN — LATEST
 - Fourteen complete transparent source drawings live in

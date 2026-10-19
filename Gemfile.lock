@@ -100,6 +100,7 @@ DEPENDENCIES
   jekyll-sitemap (~> 1.4)
   logger (~> 1.6)
   nokogiri (~> 1.18)
+  sass-embedded (~> 1.94)
   tzinfo (>= 1, < 3)
   tzinfo-data
   webrick (~> 1.9)
