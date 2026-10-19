@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 18, 2026 (America/Los_Angeles), live contact rig and editorial-pattern audit.
+Updated: October 18, 2026 (America/Los_Angeles), climber proportions, connected hips, gear, and matching blue flag.
 
 ## Current state
 
@@ -12,6 +12,15 @@ Updated: October 18, 2026 (America/Los_Angeles), live contact rig and editorial-
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 18 scoped appearance correction — latest handoff
+
+- **Completed:** kept all approved body/arm/leg poses, motion phases, camera movement, scroll pace, planting pose, and standing portrait. Made the photographic thighs and calves fuller to match the summit character, added a continuous photographic waist/seat from the approved summit image behind the thigh roots and jacket hem, and restored photographic tan rope coils from the preserved original climber plus a restrained harness/belay detail. Both leg roots now visually connect to the torso through the complete sampled cycle.
+- **Completed:** removed the final `ac` flag graphic. The moving/final flag reuses the actual dark-blue fabric pixels from `ascent-planting-pose.webp`; its size and placement converge to the planting image before the opaque pose handoff, and the same flag remains beside the hands-on-hips pose. The source planting/standing artwork and positions were not modified. Moved the anatomical left/far ice axe behind the body in SVG paint order so it stays behind the torso during the right-hand pull. Script cache version is `ascent-25`.
+- **Decisions:** appearance changes only; no new generated art and no edits to the approved complete-pose WebPs. Reuse existing photo pixels through native SVG clipping for the waist, ropes, and flag. A first test using full summit leg crops was rejected for a hard crop edge; the final implementation preserves the existing continuous limb skin with broader cross-sections and a separate overlapping waist.
+- **Testing:** baseline focused Chrome rig suite before edits; production Jekyll build; site integrity (26 originals unchanged, nine post routes, 47 pages, 1,690 references); full Chrome `npm test` (94 routes, 132 responsive pages, 22 axe scans, all experience/editorial/legacy/contact-rig groups); focused Firefox and WebKit contact-rig suites; 1,001 solver samples passed with the same reach/contact results. `node prototypes/appearance-review.cjs` compared all 1,001 complete solved states to approved commit `aad3cb3` and found them identical, verified that both boots remain connected to the torso in 32 rendered alpha silhouettes, and measured 0.12% changed flag-cloth pixels across the planting/standing handoff. Reviewed close-up phase captures and full desktop/mobile scene captures. Chrome wheel sampling showed 250 updates, zero downward rebound, and maximum per-frame movement 3.35 px; the Firefox/WebKit continuity checks also passed. No new page layout or large bitmap download was introduced.
+- **Currently in progress / known limitations:** no unfinished implementation for this scoped correction. Real-device visual acceptance and the broader release checks remain. The earlier hand-tuned wall-contact curve and possibly perceptible opaque summit pose switch remain broader limitations; this correction intentionally preserves the approved poses and pace. No push, merge, or deployment.
+- **Exact recommended next task:** review the updated local `/journey/` on a real desktop and phone, focusing on the waist connection in both alternating steps, leg proportions, far axe occlusion, and dark-blue flag continuity. Preserve the approved motion. Then finish the broader wall-contact/release checks documented below and run branch-only Linux CI before considering production publication.
 
 ## October 18 live integration and editorial-pattern audit — latest handoff
 

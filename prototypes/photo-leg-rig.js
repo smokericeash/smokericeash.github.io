@@ -1,4 +1,4 @@
-/* Authoring source for the live photographic limb skin in assets/js/. */
+/* Live photographic limb skin for the contact-anchored climber. */
 (() => {
   'use strict';
   const ns = 'http://www.w3.org/2000/svg';
@@ -44,16 +44,30 @@
   };
   const create = (body, assetRoot) => {
     const segments = { left: {}, right: {} };
+    const defs = body.ownerSVGElement.querySelector('defs');
+    const photoTorso = body.querySelector('[data-rig-photo-torso]');
+    const standingSrc = `${assetRoot}/ascent-standing-pose.webp`;
+    const cutout = (id, d) => {
+      const clip = svgNode('clipPath', { id, clipPathUnits: 'userSpaceOnUse' });
+      clip.append(svgNode('path', { d }));
+      defs.append(clip);
+      return `url(#${id})`;
+    };
     body.querySelectorAll('[data-rig-limb]').forEach(node => { node.style.display = 'none'; });
+    // The seat overlaps the jacket hem and both thigh roots. Keep it behind the
+    // legs so its lower edge never draws a rigid shorts-shaped cut across them.
+    const pelvis = svgNode('g', { 'data-photo-waist': '', transform: 'translate(-85.6 -117) scale(.16)' });
+    pelvis.append(svgNode('image', { href: standingSrc, width: 1086, height: 1448,
+      'clip-path': cutout('rig-photo-waist', 'M325 600 L745 600 L750 730 Q700 800 610 800 L530 825 L420 800 Q340 790 310 730Z') }));
+    body.insertBefore(pelvis, photoTorso);
     for (const type of ['leg', 'arm']) for (const side of ['left', 'right']) {
       const source = type === 'leg' ? parts[side] : sleeves[side];
       for (const segment of type === 'leg' ? ['thigh', 'shin'] : ['whole']) {
-        const crop = source[`${segment}Crop`];
         const group = svgNode('g', { 'data-photo-limb': `${side}-${type}-${segment}` });
+        const crop = source[`${segment}Crop`];
         group.append(svgNode('image', { href: `${assetRoot}/ascent-rig-${side}-${type}-${segment}.webp`,
           width: crop.width, height: crop.height }));
-        const photoTorso = body.querySelector('[data-rig-photo-torso]');
-        if (side === 'left' && photoTorso) body.insertBefore(group, photoTorso);
+        if ((type === 'leg' || side === 'left') && photoTorso) body.insertBefore(group, photoTorso);
         else body.append(group);
         segments[side][segment] = group;
       }
@@ -64,8 +78,8 @@
         const hip = rel(state.hips[side], state.origin);
         const knee = rel(state.knees[side], state.origin);
         const foot = rel(state.feet[side], state.origin);
-        align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .105);
-        align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .115);
+        align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .155);
+        align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .14);
         const a = sleeves[side];
         const shoulder = rel(state.shoulders[side], state.origin);
         const hand = rel(state.hands[side], state.origin);

@@ -17,6 +17,14 @@ const base = process.env.TEST_URL || 'http://127.0.0.1:4173';
     await page.waitForSelector('[data-contact-rig]');
     assert.equal(await page.locator('[data-rig-body]').count(), 1);
     assert.equal(await page.locator('[data-photo-limb]').count(), 6);
+    assert.equal(await page.locator('[data-photo-waist]').count(), 1);
+    assert.equal(await page.locator('[data-rig-waist-ropes]').count(), 1);
+    assert.ok(await page.evaluate(() => !!(document.querySelector('[data-rig-tool="left"]')
+      .compareDocumentPosition(document.querySelector('[data-rig-body]')) & Node.DOCUMENT_POSITION_FOLLOWING)),
+    'Far ice axe must render behind the climber');
+    assert.equal(await page.locator('[data-rig-flag] text').count(), 0, 'Flag must have no ac replacement mark');
+    assert.equal(await page.locator('[data-rig-flag-cloth] image').getAttribute('href'),
+      await page.locator('[data-rig-planting-portrait]').getAttribute('href'), 'Reuse the actual dark-blue planting flag');
     assert.equal(await page.locator('[data-expedition-climber]').evaluate(el => getComputedStyle(el).display), 'none');
     assert.equal(await page.locator('.expedition-wall-picture').evaluate(el => getComputedStyle(el).display), 'none');
     assert.equal(await page.locator('[data-rig-flag]').evaluate(el => getComputedStyle(el).display), 'none', 'Flag pole must not appear beside the climbing figure');

@@ -108,7 +108,16 @@
       figure.setAttribute('display', 'none');
     }
     const gear = make('g', { 'data-rig-gear': '' });
-    gear.innerHTML = '<path d="M-22 -7 Q0 1 19 -10" fill="none" stroke="#101820" stroke-width="5"/><path d="M-19 -6 Q-15 5 -12 9 M10 -7 Q15 1 14 9" fill="none" stroke="#8e9ba1" stroke-width="2"/><ellipse cx="3" cy="-6" rx="2.8" ry="4" fill="none" stroke="#d1d9d7" stroke-width="1.5"/><path d="M-24 0 Q-32 6 -29 14 Q-25 20 -20 13 M-20 1 Q-28 8 -25 15 Q-22 18 -20 11" fill="none" stroke="#bba381" stroke-width="2"/><path d="M20 -7 q7 3 3 10 q-4 4 -6 -1Z" fill="none" stroke="#c4c9c5" stroke-width="1.5"/><path d="M-3 1 l4 4 l4 -3" fill="none" stroke="#df7334" stroke-width="1.5"/>';
+    gear.innerHTML = '<path d="M-29 -9 Q-3 -1 26 -10" fill="none" stroke="#12191e" stroke-width="3"/><path d="M-28 -9 Q-2 -3 26 -10" fill="none" stroke="#637077" stroke-width=".7"/><ellipse cx="3" cy="-6" rx="2.5" ry="3.7" fill="none" stroke="#b0babb" stroke-width="1.1"/><path d="M-3 1 l4 4 l4 -3" fill="none" stroke="#bf612d" stroke-width="1"/>';
+    if (options.photoTorso) {
+      const ropeCut = make('clipPath', { id: 'rig-waist-rope-cut', clipPathUnits: 'userSpaceOnUse' });
+      ropeCut.append(make('path', { d: 'M136 243 Q150 238 161 242 L162 294 L145 304 L128 290Z M209 214 Q220 211 233 220 L239 252 L231 286 L216 291 L202 279 L207 248Z' }));
+      defs.append(ropeCut);
+      const ropes = make('g', { transform: 'translate(-91 -140) scale(.55)', 'data-rig-waist-ropes': '' });
+      ropes.append(make('image', { href: '/assets/media/ascent-climber-frame-01.webp', width: '400', height: '533',
+        'clip-path': 'url(#rig-waist-rope-cut)' }));
+      gear.prepend(ropes);
+    }
     body.append(gear);
     const front = make('g');
     const rightLeg = limb(front, 'right', 'leg');
@@ -122,7 +131,27 @@
     const toolRight = make('g', { 'data-rig-tool': 'right' });
     const impact = make('g', { 'data-rig-impact': '' });
     const flag = make('g', { 'data-rig-flag': '', style: 'display:none' });
-    world.append(body, toolLeft, toolRight, impact, flag);
+    // The anatomical far tool stays behind the torso, including the pull-up.
+    world.append(toolLeft, body, toolRight, impact, flag);
+    const cloth = make('g', { 'data-rig-flag-cloth': '' });
+    flag.append(make('path', { d: 'M864 320 L837 1354', fill: 'none', stroke: '#30373f',
+      'stroke-width': '10', 'stroke-linecap': 'round', 'data-rig-flag-pole': '' }));
+    flag.append(make('path', { d: 'M862 320 L835 1354', fill: 'none', stroke: '#9b9e9e',
+      'stroke-width': '2.5', 'stroke-linecap': 'round' }));
+    if (options.plantSrc) {
+      const flagCut = make('clipPath', { id: 'rig-blue-flag-cut', clipPathUnits: 'userSpaceOnUse' });
+      flagCut.append(make('rect', { x: '840', y: '300', width: '246', height: '245' }));
+      const poleCut = make('clipPath', { id: 'rig-blue-pole-cut', clipPathUnits: 'userSpaceOnUse' });
+      poleCut.append(make('path', { d: 'M830 653 L871 653 L856 1375 L820 1375Z' }));
+      defs.append(flagCut, poleCut);
+      cloth.append(make('image', { href: options.plantSrc, width: '1086', height: '1448',
+        'clip-path': 'url(#rig-blue-flag-cut)' }));
+      flag.append(make('image', { href: options.plantSrc, width: '1086', height: '1448',
+        'clip-path': 'url(#rig-blue-pole-cut)' }));
+    } else {
+      cloth.append(make('path', { d: 'M864 338 Q970 360 1086 410 L1086 545 Q970 507 859 492Z', fill: '#13254f' }));
+    }
+    flag.append(cloth);
     const finalImage = options.finalSrc ? make('image', { href: options.finalSrc,
       x: '275', y: '454', width: '174.1', height: '261.1', opacity: '0',
       'data-rig-final-portrait': '' }) : null;
@@ -239,8 +268,14 @@
       image.setAttribute('opacity', (1 - smooth((finalProgress - .60) / .30)).toFixed(3));
       flag.style.display = finalProgress < .78 ? 'none' : 'inline';
       if (finalProgress >= .78) {
-        const flagWidth = 36 * smooth((finalProgress - .89) / .08);
-        flag.innerHTML = `<path d="M${flagBase.x.toFixed(1)} ${flagBase.y.toFixed(1)} L${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)}" fill="none" stroke="#c7d3d4" stroke-width="2.5"/><path d="M${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)} q${(flagWidth * .6).toFixed(1)} -3 ${flagWidth.toFixed(1)} 1 l-${(flagWidth * .15).toFixed(1)} 13 q-${(flagWidth * .4).toFixed(1)} -3 -${(flagWidth * .85).toFixed(1)} 1Z" fill="#182d3b" stroke="#b8d2d8" stroke-width=".8"/><text x="${(flagBase.x + 1).toFixed(1)}" y="${(flagBase.y - flagLength + 10).toFixed(1)}" fill="#edf7f6" font-size="7" font-weight="700" opacity="${smooth((finalProgress - .9) / .06).toFixed(2)}">ac</text><path d="M${(flagBase.x + 2).toFixed(1)} ${(flagBase.y + 2).toFixed(1)} q6 -3 13 1" fill="none" stroke="#e6f1f1" stroke-width="${(1.5 * smooth((finalProgress - .87) / .09)).toFixed(2)}" opacity="${smooth((finalProgress - .87) / .09).toFixed(2)}"/>`;
+        // Match the planted image's exact flag pixels and position. Its image
+        // viewport is 174.1 x 261.1 with the source centered at its native ratio.
+        const match = smooth((finalProgress - .89) / .065);
+        const scale = mix(flagLength / 1034, 174.1 / 1086, match);
+        const baseX = mix(flagBase.x, 285 + 837 * 174.1 / 1086, match);
+        const baseY = mix(flagBase.y, 454 + (261.1 - 1448 * 174.1 / 1086) / 2 + 1354 * 174.1 / 1086, match);
+        flag.setAttribute('transform', `translate(${baseX.toFixed(3)} ${baseY.toFixed(3)}) scale(${scale.toFixed(6)}) translate(-837 -1354)`);
+        cloth.setAttribute('transform', `translate(864 0) scale(${smooth((finalProgress - .89) / .065).toFixed(4)} 1) translate(-864 0)`);
       }
       if (finalImage) {
         // Whole opaque character poses avoid a doubled figure during slow scrub.
