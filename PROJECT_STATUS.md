@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 18, 2026 (America/Los_Angeles), climber proportions, connected hips, gear, and matching blue flag.
+Updated: October 18, 2026 (America/Los_Angeles), localized knee seam repair.
 
 ## Current state
 
@@ -13,7 +13,14 @@ Updated: October 18, 2026 (America/Los_Angeles), climber proportions, connected 
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
 
-## October 18 scoped appearance correction — latest handoff
+## October 18 knee seam repair — latest handoff
+
+- **Completed:** closed the wedge-shaped gaps between both photographed thighs and calves during deep bends. A small matching photographic fabric gusset sits behind each knee seam and follows its existing joint. It reuses the approved summit trouser texture through an SVG clip; no image source was regenerated or edited. Only the two local knee regions change visually. The approved poses, proportions, waist/rope gear, arms, tools, flag, summit portraits, camera, and scroll timing are preserved. Photo-skin cache version is `ascent-26`.
+- **Verification:** `prototypes/appearance-review.cjs` now uses the latest approved `214bce2` baseline, waits for all referenced image decodes before capture, and compares 32 rendered positions across the alternating cycle. The knee seam core is fully opaque at every sample (minimum coverage improved from about 89.3% to 100%), with **zero changed pixels outside the small knee regions**. All 1,001 complete solved pose states remain identical; both boots remain connected to the torso in all 32 alpha silhouettes; the existing blue-flag continuity check still passes. Enlarged knee phases and full desktop/mobile scenes were visually reviewed. Production Jekyll build, site integrity (26 originals, nine posts, 47 pages, 1,690 references), JavaScript syntax, and focused Chrome/Firefox/WebKit contact-rig suites passed. Full-site layout/content tests were not repeated beyond site integrity because this change is confined to the photographic knee skin.
+- **Currently in progress / remaining:** no unfinished implementation for the requested knee repair. Real-device acceptance and the broader wall-contact/release checks below remain; no new known issue from this scoped change. Nothing pushed, merged, or deployed.
+- **Exact recommended next task:** review the repaired knees in the local preview at slow/moderate forward and reverse scrolling on desktop and phone, keeping the accepted motion and appearance intact. Continue the broader release checks only after that visual review; do not redesign the climber again without a specific request.
+
+## October 18 scoped appearance correction — earlier handoff
 
 - **Completed:** kept all approved body/arm/leg poses, motion phases, camera movement, scroll pace, planting pose, and standing portrait. Made the photographic thighs and calves fuller to match the summit character, added a continuous photographic waist/seat from the approved summit image behind the thigh roots and jacket hem, and restored photographic tan rope coils from the preserved original climber plus a restrained harness/belay detail. Both leg roots now visually connect to the torso through the complete sampled cycle.
 - **Completed:** removed the final `ac` flag graphic. The moving/final flag reuses the actual dark-blue fabric pixels from `ascent-planting-pose.webp`; its size and placement converge to the planting image before the opaque pose handoff, and the same flag remains beside the hands-on-hips pose. The source planting/standing artwork and positions were not modified. Moved the anatomical left/far ice axe behind the body in SVG paint order so it stays behind the torso during the right-hand pull. Script cache version is `ascent-25`.

@@ -62,6 +62,20 @@
     body.insertBefore(pelvis, photoTorso);
     for (const type of ['leg', 'arm']) for (const side of ['left', 'right']) {
       const source = type === 'leg' ? parts[side] : sleeves[side];
+      if (type === 'leg') {
+        // The two cropped fabric ends uncover a wedge at deep bends. A small
+        // photographic gusset behind them keeps the knee continuously clothed.
+        const fabric = { x: side === 'left' ? 425 : 630, y: 970 };
+        const kneeClip = svgNode('clipPath', { id: `rig-photo-${side}-knee`, clipPathUnits: 'userSpaceOnUse' });
+        kneeClip.append(svgNode('ellipse', { cx: fabric.x, cy: fabric.y, rx: 90, ry: 105 }));
+        defs.append(kneeClip);
+        const knee = svgNode('g', { 'data-photo-knee': side });
+        knee.append(svgNode('image', { href: standingSrc, width: 1086, height: 1448,
+          'clip-path': `url(#rig-photo-${side}-knee)` }));
+        body.insertBefore(knee, photoTorso);
+        segments[side].knee = knee;
+        segments[side].kneeFabric = fabric;
+      }
       for (const segment of type === 'leg' ? ['thigh', 'shin'] : ['whole']) {
         const group = svgNode('g', { 'data-photo-limb': `${side}-${type}-${segment}` });
         const crop = source[`${segment}Crop`];
@@ -80,6 +94,13 @@
         const foot = rel(state.feet[side], state.origin);
         align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .155);
         align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .14);
+        const upperLength = Math.hypot(knee.x - hip.x, knee.y - hip.y);
+        const lowerLength = Math.hypot(foot.x - knee.x, foot.y - knee.y);
+        const tangentX = (knee.x - hip.x) / upperLength + (foot.x - knee.x) / lowerLength;
+        const tangentY = (knee.y - hip.y) / upperLength + (foot.y - knee.y) / lowerLength;
+        const foldAngle = Math.atan2(tangentY, tangentX) * 180 / Math.PI - 90;
+        const fabric = segments[side].kneeFabric;
+        segments[side].knee.setAttribute('transform', `translate(${knee.x.toFixed(2)} ${knee.y.toFixed(2)}) rotate(${foldAngle.toFixed(2)}) scale(.16) translate(${-fabric.x} ${-fabric.y})`);
         const a = sleeves[side];
         const shoulder = rel(state.shoulders[side], state.origin);
         const hand = rel(state.hands[side], state.origin);
