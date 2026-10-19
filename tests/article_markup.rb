@@ -5,6 +5,9 @@ require_relative '../_plugins/portfolio'
 site = Jekyll::Site.new(Jekyll.configuration('source' => File.expand_path('..', __dir__), 'baseurl' => '/preview', 'quiet' => true))
 site.data['images'] = JSON.parse(File.read('_data/images.json'))
 filter = Object.new.extend(Portfolio::Filters)
+{ 1 => '01', 9 => '09', 10 => '10', 99 => '99', 100 => '100', 1234 => '1234' }.each do |value, expected|
+  raise "Truncated milestone number #{value}" unless filter.entry_number(value) == expected
+end
 filter.instance_variable_set(:@context, Liquid::Context.new({}, {}, { site: site }))
 markdown = <<~MARKDOWN
   # Example section

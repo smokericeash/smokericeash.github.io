@@ -35,6 +35,10 @@ module Portfolio
     end
   end
   module Filters
+    def entry_number(input)
+      input.to_i.to_s.rjust(2, '0')
+    end
+
     def slug_path(input)
       parts = input.split('/')
       "/#{parts[1]}/#{Jekyll::Utils.slugify(parts[2..].join('/'))}/"

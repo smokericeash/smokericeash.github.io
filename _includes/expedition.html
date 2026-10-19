@@ -27,7 +27,7 @@
       </g>
     </svg>
     <div class="expedition-vignette"></div>
-    <div class="expedition-hud"><span>THE ASCENT / <span data-expedition-position>01</span>—{{ milestones.size | plus: 1 | prepend: '0' | slice: -2, 2 }}</span></div>
+    <div class="expedition-hud"><span>THE ASCENT / <span data-expedition-position>01</span>—{{ milestones.size | plus: 1 | entry_number }}</span></div>
     <p class="expedition-direction">Scroll to ascend <span aria-hidden="true">↓</span></p>
   </div>
   <div class="expedition-story">
@@ -38,7 +38,7 @@
       {% assign milestone_title = note.title | default: post.title %}
       <li class="expedition-checkpoint" data-expedition-checkpoint data-title="{{ milestone_title | escape }}" data-year="{{ post.date | date: '%Y' }}">
         <article class="expedition-panel">
-          <p class="expedition-index">CHECKPOINT {{ forloop.index | prepend: '0' | slice: -2, 2 }} <span aria-hidden="true">/</span> {{ milestones.size | prepend: '0' | slice: -2, 2 }}</p>
+          <p class="expedition-index">CHECKPOINT {{ forloop.index | entry_number }} <span aria-hidden="true">/</span> {{ milestones.size | entry_number }}</p>
           {% if post.image and post.image != site.logo %}<a class="expedition-image" href="{{ post.url | relative_url }}" tabindex="-1" aria-hidden="true">{% include image.html src=post.image alt='' sizes='(max-width: 800px) 100vw, 520px' %}</a>{% endif %}
           <p class="post-meta"><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d, %Y' }}</time><span>{{ post.categories | first }}</span></p>
           <h2><a href="{{ post.url | relative_url }}">{{ milestone_title }}</a></h2>

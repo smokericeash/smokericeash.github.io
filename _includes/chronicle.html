@@ -22,7 +22,7 @@
       {% endfor %}
     </ol>
   </div>
-  <div class="chronicle-scrubber" hidden><label><span class="sr-only">Ascent position</span><input type="range" min="0" max="{{ milestones.size | minus: 1 }}" step="1" value="0" aria-label="Ascent position"></label><span class="mono" data-position>01 / {{ milestones.size | prepend: '0' | slice: -2, 2 }}</span></div>
+  <div class="chronicle-scrubber" hidden><label><span class="sr-only">Ascent position</span><input type="range" min="0" max="{{ milestones.size | minus: 1 }}" step="1" value="0" aria-label="Ascent position"></label><span class="mono" data-position>01 / {{ milestones.size | entry_number }}</span></div>
   <p class="chronicle-footnote">Every milestone connects to its original entry.</p>
   <p class="sr-only" role="status" aria-live="polite" data-timeline-announcement></p>
 </div>

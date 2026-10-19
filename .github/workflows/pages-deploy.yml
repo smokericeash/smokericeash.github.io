@@ -47,6 +47,7 @@ jobs:
           trap 'kill "$SERVER_PID"' EXIT
           npm test
           if [ "$TEST_BROWSER" = "chromium" ]; then
+            npm run test:posts
             node tests/worker-migration.cjs
             npm run test:performance
           fi

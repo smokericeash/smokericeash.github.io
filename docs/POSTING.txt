@@ -91,6 +91,14 @@ Run:
   bundle exec jekyll build
   bundle exec ruby tests/verify_site.rb
 
+For a repeatable check that new content reaches every view, also run:
+
+  npm run test:posts
+
+On this Windows machine, set $env:CHROME_CHANNEL='chrome' first. The test builds
+temporary posts in isolation and removes them afterward. It checks the longer
+live Ascent through the summit as well as search, archives, taxonomy and feeds.
+
 Your post appears automatically in Work, The Ascent on Home and at /journey/,
 its category/tag archives, and the feed. If it is one of the three newest posts,
 it also appears in Home's Recent posts section. Older entries stay in Work.
