@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), softer elbow and final design/content-pipeline review.
+Updated: October 19, 2026 (America/Los_Angeles), five requested browser copy corrections.
 
 ## Current state
 
@@ -12,6 +12,13 @@ Updated: October 19, 2026 (America/Los_Angeles), softer elbow and final design/c
 - Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
 - Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
 - Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+
+## October 19 browser copy corrections — latest handoff
+
+- **Completed:** removed “A RECORD OF PROGRESS” so The Ascent is the introduction's main heading; removed “AT A GLANCE” so Education & certification leads the About sidebar; removed the final period from “There is always another height to reach”; changed the Home introduction's second sentence to “This blog is where I write about…”; removed the Home milestone footnote. Changes are in the shared templates/profile data, with no duplicated page copy.
+- **Verification:** production Jekyll build and site integrity pass (26 originals unchanged, nine post routes, 47 HTML pages, 1,690 references). A real Chrome browser verified all five rendered changes, captured desktop screenshots, checked Home/About/Ascent at 390 px for one main heading and no horizontal overflow, and reported zero browser errors. Desktop Ascent introduction and About sidebar screenshots were visually reviewed. The existing broad suites were not repeated for these five text-only edits.
+- **Currently in progress:** none for this request. No animation, appearance-system or content-pipeline changes were needed. Existing release limitations remain: actual-device acceptance, Linux CI and domain confirmation. Nothing pushed, merged or deployed.
+- **Exact recommended next task:** review the updated local Home/About/Ascent copy, then continue the release checks below. Preserve the approved climbing animation and modular post workflow.
 
 ## October 19 softer elbow, design review and post propagation — latest handoff
 
