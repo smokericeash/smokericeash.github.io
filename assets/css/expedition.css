@@ -45,10 +45,14 @@
   transform: translate3d(0, -18.03%, 0); will-change: transform;
 }
 .expedition-wall { display: block; width: 100%; height: 100%; object-fit: cover; object-position: right center; }
+.expedition[data-contact-rig] .expedition-wall-picture,
+.expedition[data-contact-rig] [data-expedition-climber],
+.expedition[data-contact-rig] [data-expedition-contact] { display: none; }
 .expedition-visual[data-pacific-sky='night'] .expedition-backdrop {
   filter: brightness(.39) saturate(.7) contrast(1.12) hue-rotate(9deg);
 }
 .expedition-visual[data-pacific-sky='night'] .expedition-wall { filter: brightness(.56) saturate(.77); }
+.expedition-visual[data-pacific-sky='night'] [data-rig-wall] { filter: brightness(.56) saturate(.77); }
 .expedition-visual[data-pacific-sky='night']::before {
   content: ''; position: absolute; inset: 0; z-index: 1; pointer-events: none;
   background: linear-gradient(180deg, #0a1c345e, #091b2999);

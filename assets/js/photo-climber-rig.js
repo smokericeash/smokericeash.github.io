@@ -1,0 +1,78 @@
+/* Live photographic limb skin for the contact-anchored climber. */
+(() => {
+  'use strict';
+  const ns = 'http://www.w3.org/2000/svg';
+  const svgNode = (name, attrs = {}) => {
+    const element = document.createElementNS(ns, name);
+    for (const [key, value] of Object.entries(attrs)) element.setAttribute(key, value);
+    return element;
+  };
+  const parts = {
+    left: {
+      hip: { x: 320, y: 620 }, knee: { x: 350, y: 935 }, foot: { x: 395, y: 1320 },
+      thighCrop: { x: 190, y: 540, width: 360, height: 420 },
+      shinCrop: { x: 215, y: 915, width: 350, height: 530 },
+    },
+    right: {
+      hip: { x: 790, y: 620 }, knee: { x: 815, y: 935 }, foot: { x: 850, y: 1320 },
+      thighCrop: { x: 655, y: 540, width: 365, height: 420 },
+      shinCrop: { x: 675, y: 915, width: 345, height: 530 },
+    },
+  };
+  const sleeves = {
+    left: {
+      shoulder: { x: 145, y: 150 }, elbow: { x: 260, y: 315 }, hand: { x: 475, y: 452 },
+      wholeCrop: { x: 70, y: 65, width: 510, height: 490 },
+      upperCrop: { x: 75, y: 70, width: 310, height: 330 },
+      lowerCrop: { x: 245, y: 265, width: 325, height: 285 },
+    },
+    right: {
+      shoulder: { x: 675, y: 420 }, elbow: { x: 795, y: 278 }, hand: { x: 925, y: 103 },
+      wholeCrop: { x: 590, y: 40, width: 430, height: 485 },
+      upperCrop: { x: 595, y: 245, width: 300, height: 280 },
+      lowerCrop: { x: 770, y: 45, width: 250, height: 280 },
+    },
+  };
+  const rel = (p, origin) => ({ x: p.x - origin.x, y: p.y - origin.y });
+  const align = (node, sourceStart, sourceEnd, targetStart, targetEnd, widthScale) => {
+    const sourceAngle = Math.atan2(sourceEnd.y - sourceStart.y, sourceEnd.x - sourceStart.x) * 180 / Math.PI;
+    const targetAngle = Math.atan2(targetEnd.y - targetStart.y, targetEnd.x - targetStart.x) * 180 / Math.PI;
+    const sourceLength = Math.hypot(sourceEnd.x - sourceStart.x, sourceEnd.y - sourceStart.y);
+    const targetLength = Math.hypot(targetEnd.x - targetStart.x, targetEnd.y - targetStart.y);
+    const stretch = targetLength / sourceLength;
+    node.setAttribute('transform', `translate(${targetStart.x.toFixed(2)} ${targetStart.y.toFixed(2)}) rotate(${targetAngle.toFixed(2)}) scale(${stretch.toFixed(4)} ${widthScale}) rotate(${-sourceAngle.toFixed(2)}) translate(${-sourceStart.x} ${-sourceStart.y})`);
+  };
+  const create = (body, assetRoot) => {
+    const segments = { left: {}, right: {} };
+    body.querySelectorAll('[data-rig-limb]').forEach(node => { node.style.display = 'none'; });
+    for (const type of ['leg', 'arm']) for (const side of ['left', 'right']) {
+      const source = type === 'leg' ? parts[side] : sleeves[side];
+      for (const segment of type === 'leg' ? ['thigh', 'shin'] : ['whole']) {
+        const crop = source[`${segment}Crop`];
+        const group = svgNode('g', { 'data-photo-limb': `${side}-${type}-${segment}` });
+        group.append(svgNode('image', { href: `${assetRoot}/ascent-rig-${side}-${type}-${segment}.webp`,
+          width: crop.width, height: crop.height }));
+        const photoTorso = body.querySelector('[data-rig-photo-torso]');
+        if (side === 'left' && photoTorso) body.insertBefore(group, photoTorso);
+        else body.append(group);
+        segments[side][segment] = group;
+      }
+    }
+    const update = state => {
+      for (const side of ['left', 'right']) {
+        const p = parts[side];
+        const hip = rel(state.hips[side], state.origin);
+        const knee = rel(state.knees[side], state.origin);
+        const foot = rel(state.feet[side], state.origin);
+        align(segments[side].thigh, rel(p.hip, p.thighCrop), rel(p.knee, p.thighCrop), hip, knee, .105);
+        align(segments[side].shin, rel(p.knee, p.shinCrop), rel(p.foot, p.shinCrop), knee, foot, .115);
+        const a = sleeves[side];
+        const shoulder = rel(state.shoulders[side], state.origin);
+        const hand = rel(state.hands[side], state.origin);
+        align(segments[side].whole, rel(a.shoulder, a.wholeCrop), rel(a.hand, a.wholeCrop), shoulder, hand, .12);
+      }
+    };
+    return { update, segments };
+  };
+  window.PhotoLegRig = { create };
+})();

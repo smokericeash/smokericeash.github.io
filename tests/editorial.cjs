@@ -248,38 +248,19 @@ const result = { browser: name, checks: [], errors: [] };
 
     const target = page.locator(".post-row:has(.post-thumbnail)").nth(4);
     await target.scrollIntoViewIfNeeded();
-    await page.waitForFunction(() => motionEvidence.reveals > 0);
-    await page.waitForFunction(() =>
-      document
-        .getAnimations()
-        .some(
-          (animation) =>
-            animation.effect?.target?.matches?.(".post-thumbnail") &&
-            animation.playState === "running",
-        ),
-    );
-    await page.waitForFunction(
-      () =>
-        !document
-          .getAnimations()
-          .some(
-            (animation) =>
-              animation.effect?.target?.matches?.(".post-thumbnail") &&
-              animation.playState === "running",
-          ),
-    );
+    assert.equal(await page.evaluate(() => motionEvidence.reveals), 0);
     assert.equal(
       await target
         .locator(".post-thumbnail")
         .evaluate((el) => getComputedStyle(el).clipPath),
       "none",
     );
-    const count = await page.evaluate(() => motionEvidence.reveals);
+    assert.ok(await target.locator(".post-thumbnail").isVisible());
     await page.evaluate(() => scrollTo({ top: 0, behavior: "instant" }));
     await target.scrollIntoViewIfNeeded();
-    assert.equal(await page.evaluate(() => motionEvidence.reveals), count);
+    assert.equal(await page.evaluate(() => motionEvidence.reveals), 0);
     result.checks.push(
-      "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+      "Work previews remain visible and stable while scrolling, without entrance effects",
     );
 
     await page.emulateMedia({ reducedMotion: "reduce" });

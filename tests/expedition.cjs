@@ -36,7 +36,7 @@ const output = { browser: browserName, checks: [] };
     if (browserName === 'chromium') await page.locator('.about-aside').screenshot({ path: 'test-results/about-credentials.png' });
     output.checks.push('About lists Network+ and CRTO on separately spaced lines');
 
-    await page.goto(base + '/journey/');
+    await page.goto(base + '/journey/?rig=legacy');
     const checkpoints = page.locator('.expedition-checkpoint');
     assert.equal(await checkpoints.count(), homeCount);
     assert.equal(await page.locator('.chronicle').count(), 0);

@@ -25,6 +25,7 @@
   // wheel/touch interaction starts preloading sooner.
   const frameCache = [];
   const preloadFrames = () => {
+    if (contactRig && !motion.matches) return;
     if (frameCache.length) return;
     frameUrls.slice(1).forEach(src => {
       const image = new Image();
@@ -73,6 +74,8 @@
   let frame = 0;
   let renderTime = 0;
   let lastStage = -1;
+  let contactRig = null;
+  let photoSkin = null;
   const center = (element) => {
     const rect = element.getBoundingClientRect();
     return rect.top + scrollY + rect.height / 2;
@@ -101,8 +104,6 @@
     if (Math.abs(target - current) < .002) current = target;
     const fraction = current / stages;
     backdrop.style.transform = `translate3d(0, ${(-10.71 * (1 - fraction)).toFixed(2)}%, 0)`;
-    wall.style.transform = `translate3d(0, ${(-18.03 * (1 - fraction)).toFixed(2)}%, 0)`;
-    const point = route.getPointAtLength(totalLength * fraction);
     // The camera and climber share one progress value. A delayed camera made
     // the climber appear to fall back after the wheel stopped. The intended
     // screen height steadily rises throughout the route, without a loop reset.
@@ -113,6 +114,22 @@
     const pushLeft = ease(clamp01((stride - .78) / .22));
     const climbProgress = (Math.floor(current) + (pushRight + pushLeft) / 2) / stages;
     const screenY = 500 - 190 * climbProgress;
+    if (contactRig && photoSkin && !motion.matches) {
+      const state = contactRig.update(current);
+      photoSkin.update(state);
+      svg.setAttribute('viewBox', `0 ${(state.origin.y - screenY).toFixed(2)} 600 800`);
+      position.textContent = String(Math.min(stages + 1, Math.floor(current) + 1)).padStart(2, '0');
+      const nearest = Math.round(current);
+      if (nearest !== lastStage) {
+        cards.forEach((card, index) => card.toggleAttribute('data-near', index + 1 === nearest));
+        lastStage = nearest;
+      }
+      if (Math.abs(target - current) > .002 && !motion.matches) frame = requestAnimationFrame(render);
+      else renderTime = 0;
+      return;
+    }
+    wall.style.transform = `translate3d(0, ${(-18.03 * (1 - fraction)).toFixed(2)}%, 0)`;
+    const point = route.getPointAtLength(totalLength * fraction);
     const camera = Math.max(0, Math.min(worldHeight - 800, point.y - screenY));
     svg.setAttribute('viewBox', `0 ${camera.toFixed(2)} 600 800`);
     contact.setAttribute('cx', (point.x + 56).toFixed(2));
@@ -209,6 +226,7 @@
   }, { passive: true });
   addEventListener('resize', measure);
   motion.addEventListener('change', () => {
+    if (contactRig) root.toggleAttribute('data-contact-rig', !motion.matches);
     if (motion.matches) {
       if (scrollFrame) cancelAnimationFrame(scrollFrame);
       scrollFrame = 0;
@@ -220,4 +238,19 @@
   });
   addEventListener('pageshow', measure);
   measure();
+  // Preserve the approved complete-pose sequence for visual comparison and
+  // as the no-JavaScript/reduced-motion fallback while the new rig is reviewed.
+  if (new URLSearchParams(location.search).get('rig') !== 'legacy' && !motion.matches &&
+      window.IceClimberRig && window.PhotoLegRig) {
+    const world = svg.querySelector('[data-expedition-world]');
+    contactRig = window.IceClimberRig.create(svg, world, stages, {
+      photoTorso: true,
+      summitSrc: '/assets/media/ascent-summit-ledge.webp',
+      plantSrc: '/assets/media/ascent-planting-pose.webp',
+      finalSrc: '/assets/media/ascent-standing-pose.webp',
+    });
+    photoSkin = window.PhotoLegRig.create(contactRig.body, '/assets/media');
+    root.dataset.contactRig = '';
+    requestSync();
+  }
 })();

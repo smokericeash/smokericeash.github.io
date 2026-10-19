@@ -10,9 +10,9 @@
   --line: #d5ddec;
   --button: #454cc2;
   --soft-accent: #e9eaff;
-  --header: rgba(246, 248, 252, 0.96);
+  --header: #f6f8fc;
   --shadow: 0 18px 60px #24364d0a;
-  --sans: Inter, 'Segoe UI', Arial, sans-serif;
+  --sans: 'Segoe UI Variable Text', 'Segoe UI', Arial, sans-serif;
   --mono: 'Cascadia Code', Consolas, monospace;
 }
 :root[data-theme='dark'] {
@@ -26,7 +26,7 @@
   --line: #28374e;
   --button: #555bd5;
   --soft-accent: #202a4d;
-  --header: rgba(9, 17, 31, 0.96);
+  --header: #09111f;
   --shadow: 0 18px 60px #00000012;
 }
 @media (prefers-color-scheme: dark) {
@@ -41,7 +41,7 @@
     --line: #28374e;
     --button: #555bd5;
     --soft-accent: #202a4d;
-    --header: rgba(9, 17, 31, 0.96);
+    --header: #09111f;
   }
 }
 * {
@@ -245,7 +245,6 @@ main:focus {
   z-index: 20;
   background: var(--header);
   border-bottom: 1px solid var(--line);
-  backdrop-filter: blur(12px);
 }
 .header-inner {
   height: 86px;
@@ -558,9 +557,7 @@ main:focus {
 }
 .assessment-graphic {
   padding: 30px 35px;
-  background:
-    radial-gradient(ellipse at 70% 30%, #6873e322, transparent 70%),
-    var(--surface-2);
+  background: var(--surface-2);
   height: 100%;
   display: flex;
   flex-direction: column;

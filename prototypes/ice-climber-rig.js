@@ -66,7 +66,8 @@
   const makeRig = (svg, world, stageCount, options = {}) => {
     const maxSteps = stageCount * 2;
     // Keep the summit at one world height while future milestones extend the wall below it.
-    const baseFootY = 692 + (maxSteps - 1) * 22;
+    const stepRise = 28;
+    const baseFootY = 692 + (maxSteps - 1) * stepRise;
     const wallHeight = Math.max(1550, baseFootY + 400);
     const defs = svg.querySelector('defs') || svg.insertBefore(make('defs'), svg.firstChild);
     const paint = make('g');
@@ -101,7 +102,7 @@
       cut.append(make('path', { d: 'M154 67 Q187 50 223 75 L230 111 L238 142 L240 217 Q245 236 239 243 L210 246 L166 245 Q132 258 107 239 L99 207 Q93 174 115 145 Q132 116 154 111Z' }));
       defs.append(cut);
       const photo = make('g', { transform: 'translate(-91 -140) scale(.55)', 'data-rig-photo-torso': '' });
-      photo.append(make('image', { href: '/assets/media/ascent-climber-swirl-frame-01.webp',
+      photo.append(make('image', { href: options.torsoSrc || '/assets/media/ascent-climber-clean-frame-01.webp',
         width: '400', height: '533', 'clip-path': 'url(#rig-torso-cut)' }));
       body.append(photo);
       figure.setAttribute('display', 'none');
@@ -120,13 +121,21 @@
     const toolLeft = make('g', { 'data-rig-tool': 'left' });
     const toolRight = make('g', { 'data-rig-tool': 'right' });
     const impact = make('g', { 'data-rig-impact': '' });
-    const flag = make('g', { 'data-rig-flag': '' });
+    const flag = make('g', { 'data-rig-flag': '', style: 'display:none' });
     world.append(body, toolLeft, toolRight, impact, flag);
+    const finalImage = options.finalSrc ? make('image', { href: options.finalSrc,
+      x: '275', y: '454', width: '174.1', height: '261.1', opacity: '0',
+      'data-rig-final-portrait': '' }) : null;
+    const plantImage = options.plantSrc ? make('image', { href: options.plantSrc,
+      x: '285', y: '454', width: '174.1', height: '261.1', opacity: '0',
+      'data-rig-planting-portrait': '' }) : null;
+    if (plantImage) world.insertBefore(plantImage, flag);
+    if (finalImage) world.insertBefore(finalImage, flag);
     const debug = make('g', { 'data-rig-debug': '', display: options.debug ? 'inline' : 'none' });
     world.append(debug);
     const contacts = (index, side, type) => {
-      const y = type === 'foot' ? baseFootY - index * 22 : baseFootY - 139 - index * 22;
-      const x = surfaceX(y) + (type === 'foot' ? side === 'left' ? -20 : -10 : side === 'left' ? -9 : 4);
+      const y = type === 'foot' ? baseFootY - index * stepRise : baseFootY - 190 - index * stepRise;
+      const x = surfaceX(y) + (type === 'foot' ? side === 'left' ? -32 : -3 : side === 'left' ? 4 : 25);
       return point(x, y);
     };
     const animateContact = (old, newer, a, b, u, outward) => {
@@ -149,6 +158,8 @@
       debug.innerHTML = dots.map(([name, p, color]) => `<circle cx="${p.x}" cy="${p.y}" r="3" fill="${color}"/><text x="${p.x + 5}" y="${p.y - 5}" fill="${color}" font-size="8">${name}</text>`).join('');
     };
     let lastState;
+    let lastMarks = '';
+    let lastImpact = '';
     const update = progress => {
       const phase = clamp(progress * 2, 0, maxSteps);
       const step = Math.min(maxSteps - 1, Math.floor(phase));
@@ -158,9 +169,9 @@
       const push = smooth((u - .57) / .3);
       const finalProgress = clamp(progress - (stageCount - 1));
       const standing = smooth((finalProgress - .72) / .22);
-      const finalRise = smooth((finalProgress - .94) / .06);
-      const bodyY = mix(baseFootY - 45 - step * 22 - 22 * push, 624 - 50 * finalRise, standing);
-      const origin = point(mix(surfaceX(bodyY) - 62 + Math.sin(u * Math.PI) * 1.5,
+      const finalRise = smooth((finalProgress - .86) / .11);
+      const bodyY = mix(baseFootY - 68 - step * stepRise - stepRise * push, 624 - 50 * finalRise, standing);
+      const origin = point(mix(surfaceX(bodyY) - 42 + Math.sin(u * Math.PI) * 1.5,
         surfaceX(ridgeY) - 12, standing), bodyY);
       const hips = { left: point(origin.x - 13, origin.y + 3), right: point(origin.x + 11, origin.y + 3) };
       const shoulders = { left: point(origin.x - 16, origin.y - 59), right: point(origin.x + 16, origin.y - 60) };
@@ -168,9 +179,9 @@
       const stow = smooth((finalProgress - .74) / .12);
       const release = smooth((finalProgress - .93) / .07);
       const flagGrab = smooth((finalProgress - .79) / .10);
-      const flagBase = point(mix(origin.x - 30, surfaceX(ridgeY) + 5, flagGrab),
+      const flagBase = point(mix(origin.x - 30, surfaceX(ridgeY) + 55, flagGrab),
         mix(origin.y - 35, ridgeY, flagGrab));
-      const flagLength = mix(28, 80, flagGrab);
+      const flagLength = mix(28, 190, flagGrab);
       const flagHand = point(flagBase.x - 4, flagBase.y - flagLength + 5);
       for (const side of ['left', 'right']) {
         const offset = side === moving ? step : step - 1;
@@ -178,7 +189,7 @@
         const oldFoot = contacts(oldOffset, side, 'foot');
         const newFoot = contacts(offset, side, 'foot');
         feet[side] = side === moving ? animateContact(oldFoot, newFoot, .34, .54, u, 13) : newFoot;
-        feet[side] = point(mix(feet[side].x, surfaceX(ridgeY) + (side === 'left' ? -19 : 2), standing),
+        feet[side] = point(mix(feet[side].x, surfaceX(ridgeY) + (side === 'left' ? -25 : 14), standing),
           mix(feet[side].y, ridgeY - 8, standing));
         const oldTool = contacts(oldOffset, side, 'tool');
         const newTool = contacts(offset, side, 'tool');
@@ -195,14 +206,16 @@
         } else {
           hands[side] = point(mix(hands[side].x, resting.x, standing), mix(hands[side].y, resting.y, standing));
         }
-        knees[side] = solveIK(hips[side], feet[side], 59, 58, -1);
+        knees[side] = solveIK(hips[side], feet[side], 64, 64, -1);
         elbows[side] = solveIK(shoulders[side], hands[side], 43, 43, side === 'left' ? 1 : -1);
-        drawLimb(side === 'left' ? leftLeg : rightLeg, hips[side], knees[side], feet[side], origin, 'leg');
-        drawLimb(side === 'left' ? leftArm : rightArm, shoulders[side], elbows[side], hands[side], origin, 'arm');
+        if (!options.photoTorso) {
+          drawLimb(side === 'left' ? leftLeg : rightLeg, hips[side], knees[side], feet[side], origin, 'leg');
+          drawLimb(side === 'left' ? leftArm : rightArm, shoulders[side], elbows[side], hands[side], origin, 'arm');
+        }
       }
       body.setAttribute('transform', `translate(${origin.x.toFixed(2)} ${origin.y.toFixed(2)})`);
       gear.setAttribute('transform', `rotate(${(Math.sin(u * Math.PI) * 2).toFixed(1)} -20 -5)`);
-      head.setAttribute('transform', `rotate(${(u > .32 && u < .55 ? 3 : -2).toFixed(1)} 7 -83)`);
+      if (!options.photoTorso) head.setAttribute('transform', `rotate(${(u > .32 && u < .55 ? 3 : -2).toFixed(1)} 7 -83)`);
       drawTool(toolLeft, toolGrips.left, tips.left, moving !== 'left' || u >= .27);
       drawTool(toolRight, toolGrips.right, tips.right, moving !== 'right' || u >= .27);
       const visible = [];
@@ -214,16 +227,33 @@
         visible.push(`<path d="M${tool.x - 3} ${tool.y + 2} l6 -4 m-4 7 l5 2" stroke="#c7e8f0" stroke-width="1" opacity=".5" fill="none"/>`);
         if (i < step || u >= .54) visible.push(`<path d="M${foot.x - 5} ${foot.y + 6} q5 -3 9 -1" fill="none" stroke="#bdd5db" stroke-width="2" opacity=".55"/>`);
       }
-      marks.innerHTML = visible.join('');
-      impact.innerHTML = finalProgress < .74 && ((u >= .265 && u <= .31) || (u >= .535 && u <= .575))
+      const marksMarkup = visible.join('');
+      if (marksMarkup !== lastMarks) { marks.innerHTML = marksMarkup; lastMarks = marksMarkup; }
+      const impactMarkup = finalProgress < .74 && ((u >= .265 && u <= .31) || (u >= .535 && u <= .575))
         ? (() => { const p = u < .4 ? tips[moving] : feet[moving];
           const t = u < .4 ? (u - .265) / .045 : (u - .535) / .04;
           return Array.from({ length: 3 }, (_, i) => `<circle cx="${(p.x - 1 - i * 4).toFixed(1)}" cy="${(p.y + t * (6 + i * 3)).toFixed(1)}" r="${(1.7 - t).toFixed(1)}" fill="#d9eced" opacity="${(.7 * (1 - t)).toFixed(2)}"/>`).join(''); })()
         : '';
+      if (impactMarkup !== lastImpact) { impact.innerHTML = impactMarkup; lastImpact = impactMarkup; }
       summitImage.setAttribute('opacity', smooth((finalProgress - .60) / .30).toFixed(3));
       image.setAttribute('opacity', (1 - smooth((finalProgress - .60) / .30)).toFixed(3));
-      const flagWidth = 29 * smooth((finalProgress - .89) / .08);
-      flag.innerHTML = `<path d="M${flagBase.x.toFixed(1)} ${flagBase.y.toFixed(1)} L${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)}" fill="none" stroke="#c7d3d4" stroke-width="2.5"/><path d="M${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)} q${(flagWidth * .6).toFixed(1)} -3 ${flagWidth.toFixed(1)} 1 l-${(flagWidth * .15).toFixed(1)} 13 q-${(flagWidth * .4).toFixed(1)} -3 -${(flagWidth * .85).toFixed(1)} 1Z" fill="#182d3b" stroke="#b8d2d8" stroke-width=".8"/><text x="${(flagBase.x + 1).toFixed(1)}" y="${(flagBase.y - flagLength + 10).toFixed(1)}" fill="#edf7f6" font-size="7" font-weight="700" opacity="${smooth((finalProgress - .9) / .06).toFixed(2)}">ac</text><path d="M${(flagBase.x + 2).toFixed(1)} ${(flagBase.y + 2).toFixed(1)} q6 -3 13 1" fill="none" stroke="#e6f1f1" stroke-width="${(1.5 * smooth((finalProgress - .87) / .09)).toFixed(2)}" opacity="${smooth((finalProgress - .87) / .09).toFixed(2)}"/>`;
+      flag.style.display = finalProgress < .78 ? 'none' : 'inline';
+      if (finalProgress >= .78) {
+        const flagWidth = 36 * smooth((finalProgress - .89) / .08);
+        flag.innerHTML = `<path d="M${flagBase.x.toFixed(1)} ${flagBase.y.toFixed(1)} L${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)}" fill="none" stroke="#c7d3d4" stroke-width="2.5"/><path d="M${(flagBase.x - 4).toFixed(1)} ${(flagBase.y - flagLength).toFixed(1)} q${(flagWidth * .6).toFixed(1)} -3 ${flagWidth.toFixed(1)} 1 l-${(flagWidth * .15).toFixed(1)} 13 q-${(flagWidth * .4).toFixed(1)} -3 -${(flagWidth * .85).toFixed(1)} 1Z" fill="#182d3b" stroke="#b8d2d8" stroke-width=".8"/><text x="${(flagBase.x + 1).toFixed(1)}" y="${(flagBase.y - flagLength + 10).toFixed(1)}" fill="#edf7f6" font-size="7" font-weight="700" opacity="${smooth((finalProgress - .9) / .06).toFixed(2)}">ac</text><path d="M${(flagBase.x + 2).toFixed(1)} ${(flagBase.y + 2).toFixed(1)} q6 -3 13 1" fill="none" stroke="#e6f1f1" stroke-width="${(1.5 * smooth((finalProgress - .87) / .09)).toFixed(2)}" opacity="${smooth((finalProgress - .87) / .09).toFixed(2)}"/>`;
+      }
+      if (finalImage) {
+        // Whole opaque character poses avoid a doubled figure during slow scrub.
+        // The rig has already straightened onto the ledge before either swap.
+        const plant = plantImage && finalProgress >= .955 && finalProgress < .985;
+        const portrait = finalProgress >= .985;
+        if (plantImage) plantImage.setAttribute('opacity', plant ? '1' : '0');
+        finalImage.setAttribute('opacity', portrait ? '1' : '0');
+        body.setAttribute('opacity', plant || portrait ? '0' : '1');
+        toolLeft.setAttribute('opacity', plant || portrait ? '0' : '1');
+        toolRight.setAttribute('opacity', plant || portrait ? '0' : '1');
+        flag.setAttribute('opacity', plant ? '0' : '1');
+      }
       lastState = { phase, step, u, moving, planted, origin, hips, shoulders, knees, elbows, feet, tips, hands,
         finalProgress, standing, flagBase };
       setDebug(lastState);

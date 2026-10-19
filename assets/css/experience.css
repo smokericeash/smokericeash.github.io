@@ -622,11 +622,11 @@
   }
 }
 
-/* The short line is the recurring motion cue, tied to entering a section. */
-[data-reveal] {
+/* A quiet, fixed rule gives each editorial section a clear start. */
+.section-heading {
   position: relative;
 }
-.section-heading[data-reveal]::after {
+.section-heading::after {
   content: '';
   position: absolute;
   left: 0;
@@ -635,17 +635,6 @@
   width: 44px;
   background: var(--accent);
   transform-origin: left;
-}
-.section-heading.is-revealed::after {
-  animation: trace-in 800ms cubic-bezier(0.2, 0.7, 0.2, 1) both;
-}
-@keyframes trace-in {
-  from {
-    transform: scaleX(0);
-  }
-  to {
-    transform: scaleX(1);
-  }
 }
 
 /* Native document transitions retain real links, history and scroll restoration. */
@@ -820,9 +809,6 @@
   ::view-transition-new(*) {
     animation: none !important;
   }
-  .section-heading.is-revealed::after {
-    animation: none;
-  }
   .post-preview-media img,
   .post-thumbnail img,
   .post-preview h3 a > span,
@@ -864,7 +850,6 @@
   .post-preview-media {
     max-width: 300px;
   }
-  [data-reveal],
   .post-preview-media img {
     animation: none !important;
     transform: none !important;
