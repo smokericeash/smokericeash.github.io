@@ -101,7 +101,9 @@
       const cut = make('clipPath', { id: 'rig-torso-cut', clipPathUnits: 'userSpaceOnUse' });
       // Follow the hood/backpack silhouette, excluding the source pose's old
       // tool stub and raised sleeve now supplied by the animated limbs.
-      cut.append(make('path', { d: 'M154 67 Q187 50 223 75 L230 111 L218 126 L201 141 Q211 158 226 184 L240 217 Q245 236 239 243 L210 246 L166 245 Q132 258 107 239 L99 207 Q93 174 115 160 Q129 148 142 147 L144 137 Q145 122 154 111Z' }));
+      // Retain a rounded jacket shoulder under the hood, rather than cutting
+      // inward to the arm pivot and exposing a notch beside the neck.
+      cut.append(make('path', { d: 'M154 67 Q187 50 223 75 L230 111 Q224 125 224 141 Q224 162 226 184 L240 217 Q245 236 239 243 L210 246 L166 245 Q132 258 107 239 L99 207 Q93 174 115 160 Q129 148 142 147 L144 137 Q145 122 154 111Z' }));
       defs.append(cut);
       const photo = make('g', { transform: 'translate(-91 -140) scale(.55)', 'data-rig-photo-torso': '' });
       photo.append(make('image', { href: options.torsoSrc || '/assets/media/ascent-climber-clean-frame-01.webp',

@@ -3,9 +3,9 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '383c9ac';
-const scope = process.env.APPEARANCE_SCOPE || 'torso-cutout';
-const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 160 : 32;
+const approvedRef = process.env.APPEARANCE_BASELINE || '73a730b';
+const scope = process.env.APPEARANCE_SCOPE || 'neck-shoulder';
+const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].includes(scope) ? 160 : 32;
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
@@ -56,6 +56,10 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
         rightThigh: { inverse: [inverse.a, inverse.b, inverse.c, inverse.d, inverse.e, inverse.f],
           width: Number(thigh.getAttribute('width')), height: Number(thigh.getAttribute('height')) },
+        neck: [[215, 143], [219, 151], [222, 160]].map(([x, y]) => {
+          const p = new DOMPoint(x, y).matrixTransform(torsoInverse.inverse());
+          return { x: Math.round(p.x), y: Math.round(p.y) };
+        }),
         torsoInverse: [torsoInverse.a, torsoInverse.b, torsoInverse.c, torsoInverse.d, torsoInverse.e, torsoInverse.f],
         feet: [project(state.feet.left), project(state.feet.right)],
         knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a,
@@ -73,14 +77,14 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
     }
     await setup(false);
     assert.deepEqual(await states(), approvedMotion, 'All 1,001 solved poses must remain identical to the approved motion');
-    if (scope === 'torso-cutout') {
+    if (['torso-cutout', 'neck-shoulder'].includes(scope)) {
       const cutout = await page.evaluate(() => {
         const path = document.querySelector('#rig-torso-cut path');
         const inside = (x, y) => path.isPointInFill(new DOMPoint(x, y));
         return { oldTool: inside(133, 128), oldSleeve: inside(230, 137),
-          helmet: inside(190, 90), hood: inside(175, 125), backpack: inside(150, 180) };
+          shoulder: inside(218, 145), helmet: inside(190, 90), hood: inside(175, 125), backpack: inside(150, 180) };
       });
-      assert.deepEqual(cutout, { oldTool: false, oldSleeve: false, helmet: true, hood: true, backpack: true },
+      assert.deepEqual(cutout, { oldTool: false, oldSleeve: false, shoulder: true, helmet: true, hood: true, backpack: true },
         'Remove the two original-pose remnants while retaining helmet, hood and backpack');
     }
     for (const [index, progress] of [0, .25, .5, .75, 1.25, 1.5, 1.75, 9.92, 9.954, 9.956, 9.98, 9.986, 10].entries()) {
@@ -92,7 +96,7 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
       await page.screenshot({ path: `test-results/appearance-${String(index).padStart(2, '0')}.png` });
     }
     await isolateBody();
-    let connectedPoses = 0;
+    let connectedPoses = 0, worstNeckCoverage = 1;
     let worstKneeCoverage = 1, baselineKneeCoverage = 1, changedOutsideScope = 0;
     let worstHipCoverage = 1, baselineHipCoverage = 1;
     let extendedPoseDifferences = 0, shortestPullSleeve = Infinity;
@@ -126,9 +130,10 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
             };
             const inside = scope === 'right-thigh'
               ? insideThigh(targets.rightThigh) || insideThigh(baselineThigh)
-              : scope === 'torso-cutout'
+              : ['torso-cutout', 'neck-shoulder'].includes(scope)
               ? (() => { const [a,b,c,d,e,f] = targets.torsoInverse;
                   const u = a * (x + .5) + c * (y + .5) + e, v = b * (x + .5) + d * (y + .5) + f;
+                  if (scope === 'neck-shoulder') return u >= 198 && u <= 235 && v >= 108 && v <= 187;
                   return (u >= 94 && u <= 156 && v >= 109 && v <= 208) ||
                     (u >= 199 && u <= 242 && v >= 109 && v <= 218); })()
               : scope === 'hips'
@@ -148,9 +153,11 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
           return opaque / total;
         }));
         return { outside, differences, outliers,
+          neckCurrent: coverage(current, targets.neck, .6),
           current: coverage(current, targets.knees), previous: coverage(previous, targets.knees),
           hipCurrent: coverage(current, targets.hips, 17), hipPrevious: coverage(previous, targets.hips, 17) };
       }, { shot, baseline: baselineShots[sample], baselineThigh: baselineThighs[sample], targets, scope });
+      worstNeckCoverage = Math.min(worstNeckCoverage, seam.neckCurrent);
       changedOutsideScope += seam.outside;
       if (seam.outside) console.log({ sample, outliers: seam.outliers });
       worstHipCoverage = Math.min(worstHipCoverage, seam.hipCurrent);
@@ -215,8 +222,9 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout'].includes(scope) ? 1
       return different / (clothPixelBytes / 4);
     }, shots);
     console.log(JSON.stringify({ approvedRef, approvedPosesUnchanged: 1001, connectedPoses,
-      baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
+      worstNeckCoverage, baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
       extendedPoseDifferences, shortestPullSleeve, flagPixelDifference: flagDifference }));
+    if (scope === 'neck-shoulder') assert.equal(worstNeckCoverage, 1, 'Matching jacket fabric must fill the exposed neck/shoulder notch throughout the climb');
     assert.ok(worstKneeCoverage > .99, 'Knee fabric must cover the seam throughout the bend cycle');
     if (['hips', 'right-thigh'].includes(scope)) assert.ok(worstHipCoverage > .99, 'Both hip seams must remain fully clothed as the thighs flex');
     assert.equal(changedOutsideScope, 0, 'The appearance correction must remain local to its requested region');

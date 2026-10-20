@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), backpack/neck artifact cleanup on the Java Projects baseline.
+Updated: October 19, 2026 (America/Los_Angeles), rounded neck/shoulder restoration on the Java Projects cleanup branch.
 
 ## Current state
 
@@ -10,6 +10,13 @@ The authoritative project is now `C:/Users/super/Desktop/Java Projects/git2026/s
 - Origin remains `https://github.com/smokericeash/smokericeash.github.io.git`.
 - The original ChatGPT checkout is an older copy; do not resume changes there as if it were the current baseline.
 - Isolated verification copy: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/climber-artifact-review`, preview port 4174. It was cloned from the Java Projects repository before editing, preserving the user's performance settings.
+
+## October 19 rounded neck/shoulder restoration — latest handoff
+
+- **Completed:** restored the original photographic jacket fabric beneath the hood by rounding only the torso clip's front shoulder edge. This fills the sharp notch introduced by the preceding artifact cleanup. The orange stub and original raised-arm remnant remain excluded. No new image, limb deformation, motion target, proportion, pace, gear, summit, layout or performance-setting change. Live/authoring rig sources match; solver cache is ascent-27, photo skin remains ascent-32.
+- **Verification:** clean baseline appearance check passed before editing. Final comparison against 73a730b preserves all 1,001 solved states; 160 rendered climb positions have fully opaque coverage at three points across the restored shoulder, unchanged opaque hip/knee seams, connected boots, unchanged blue-flag handoff and zero changed pixels outside the local neck/shoulder region. Enlarged pull, reach and opposite-arm poses were reviewed. Production build and integrity pass (26 originals, nine post routes, 47 pages, 1,690 references). Chrome and WebKit contact-rig checks pass (Chrome: 248 samples, zero rebound). Firefox could not start a test page: the browser harness reports an internal browser.newPage _page TypeError before loading the site; a retry had the same result. No Firefox pass is claimed for this follow-up. Performance configuration is preserved; no new Lighthouse claim.
+- **Currently in progress / remaining:** implementation and local verification complete; retain the correction on the same Java Projects branch. No push or merge authorized/performed for this correction. Existing real-device, Linux CI and domain acceptance remain release checks.
+- **Exact recommended next task:** review the rounded jacket shoulder below the hood at slow/moderate forward and reverse scroll in the authoritative Java Projects preview at http://127.0.0.1:4175/journey/. Preserve all accepted motion and artwork.
 
 ## October 19 backpack/neck artifact cleanup — latest handoff
 
