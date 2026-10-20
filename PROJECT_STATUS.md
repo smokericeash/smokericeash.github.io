@@ -1,17 +1,23 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), right-thigh width correction.
+Updated: October 19, 2026 (America/Los_Angeles), backpack/neck artifact cleanup on the Java Projects baseline.
 
 ## Current state
 
-**The approved site composition remains intact. The live Ascent now uses a scroll-driven, contact-anchored photographic climber rig with a summit sequence.** The previous fourteen complete opaque drawings remain untouched as `?rig=legacy`, no-JavaScript, and reduced-motion fallbacks. This is a tested local branch, **not yet a production-ready release**. Nothing has been pushed, merged, or deployed.
+The authoritative project is now `C:/Users/super/Desktop/Java Projects/git2026/smokericeash.github.io`. The user merged the redesign through PR #1 and then committed their performance-test threshold adjustment as `383c9ac`. Older entries below describe the earlier separate ChatGPT workspace and are historical, including claims that nothing had yet been merged. Deployment status was not rechecked for this scoped cleanup.
 
-- Active repository: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/portfolio-v2`.
-- Branch: `codex/portfolio-v2`, based on `da50b14` (`main`).
-- Origin: `https://github.com/smokericeash/smokericeash.github.io.git`.
-- Original source checkout: `C:/Users/super/Desktop/git2026/smokericeash.github.io/`, unchanged.
-- Local preview: `http://127.0.0.1:4173/`, serving production `_site` output.
-- Parent workspace `PROJECT_STATUS.md` points here. This is the canonical handoff.
+- Cleanup branch: `codex/climber-artifact-cleanup`, based on the user's clean `main` at `383c9ac0ba48ea2ae0be6f6e1d708d3e41f8c316`.
+- Origin remains `https://github.com/smokericeash/smokericeash.github.io.git`.
+- The original ChatGPT checkout is an older copy; do not resume changes there as if it were the current baseline.
+- Isolated verification copy: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/climber-artifact-review`, preview port 4174. It was cloned from the Java Projects repository before editing, preserving the user's performance settings.
+
+## October 19 backpack/neck artifact cleanup — latest handoff
+
+- **Completed:** tightened the existing photographic torso clip to remove the truncated orange tool stub above the backpack and the original raised-sleeve fragment beside the neck. Added a local occlusion mask around the far sleeve's unused shoulder cap so it cannot protrude behind the hood/backpack. These are SVG silhouette/occlusion changes using existing assets; no bitmap was regenerated or modified. Helmet, hood, waist gear, approved leg width/seam repairs, all pose targets/lengths, camera, pace, flags and summit portraits are preserved. Cache versions: solver ascent-26; photo skin ascent-32.
+- **Performance preservation:** tests/performance.mjs is byte-identical to user commit 383c9ac (SHA256 1BAD2B96A65E4D1FEF9DB20C6B789B9D8208F57026392DDB461769F7F0666154). Its performance threshold remains 90, with accessibility/best-practices/SEO thresholds 95. No dependencies, CSS or performance configurations were changed.
+- **Verification:** the baseline production build/site integrity and Chrome contact-rig check passed before edits. Final appearance comparison against 383c9ac checks all 1,001 solved states unchanged, 160 connected rendered poses, opaque hip/knee cores, zero changed pixels outside the two source-photo artifact regions, original-tool/sleeve exclusion, retained helmet/hood/backpack anchors, and unchanged blue-flag continuity. Enlarged reach/pull phases were visually reviewed. Production build/site integrity pass (26 originals, nine routes, 47 pages, 1,690 references). Focused Chrome/Firefox/WebKit scrolling/reverse/summit/responsive/reduced-motion checks pass; Chrome wheel sample 249 frames with no rebound and max movement 3.95px. Broader layout/performance suites were not repeated for this local clipping-only patch.
+- **Currently in progress / remaining:** no unfinished implementation for the requested two-artifact correction. The scoped cleanup has not been pushed or merged. Existing wall-contact calibration and real-device limitations described in older notes are not changed by this patch.
+- **Exact recommended next task:** review the backpack top and neck/shoulder during slow/moderate forward and reverse scrolling in the Java Projects copy, preserving all accepted poses and the user's performance adjustments. Review the cleanup branch before any push or merge.
 
 ## October 19 right-thigh width correction — latest handoff
 

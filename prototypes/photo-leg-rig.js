@@ -95,7 +95,13 @@
         const crop = source[`${segment}Crop`];
         group.append(svgNode('image', { href: `${assetRoot}/ascent-rig-${side}-${type}-${segment}.webp`,
           width: crop.width, height: crop.height }));
-        if ((type === 'leg' || side === 'left') && photoTorso) body.insertBefore(group, photoTorso);
+        if (type === 'arm' && side === 'left' && photoTorso) {
+          // The far sleeve's unused shoulder cap belongs behind the hood/pack.
+          // Keep the forearm visible toward the wall, without changing its pose.
+          const shoulderMask = svgNode('g', { 'clip-path': cutout('rig-far-shoulder-occlusion',
+            'M-200 -55 H-12 V-200 H200 V200 H-200Z') });
+          shoulderMask.append(group); body.insertBefore(shoulderMask, photoTorso);
+        } else if (type === 'leg' && photoTorso) body.insertBefore(group, photoTorso);
         else body.append(group);
         segments[side][segment] = group;
       }
