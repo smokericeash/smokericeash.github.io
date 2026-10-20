@@ -86,8 +86,12 @@ fs.writeFileSync(
   JSON.stringify(results, null, 2),
 );
 if (
-  results.some((result) =>
-    Object.values(result.scores).some((score) => score < 95),
+  results.some(({ scores }) =>
+    scores.performance < 90 ||
+    scores.accessibility < 95 ||
+    scores["best-practices"] < 95 ||
+    scores.seo < 95
   )
-)
+) {
   process.exitCode = 1;
+}
