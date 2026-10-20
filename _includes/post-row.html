@@ -1,0 +1,5 @@
+{% assign note = site.data.journey[include.post.url] %}
+<article class="post-row" data-search="{{ include.post.title | append: ' ' | append: include.post.tags | append: ' ' | append: include.post.categories | downcase | escape }}" data-category="{{ include.post.categories | join: '|' | escape }}">
+  {% if include.post.image and include.post.image != site.logo %}<a class="post-thumbnail" href="{{ include.post.url | relative_url }}" tabindex="-1" aria-hidden="true">{% include image.html src=include.post.image alt='' sizes='(max-width: 560px) 110px, 240px' %}</a>{% endif %}
+  <div class="post-row-copy"><p class="post-meta"><time datetime="{{ include.post.date | date_to_xmlschema }}">{{ include.post.date | date: '%b %d, %Y' }}</time><span>{{ include.post.categories | first }}</span><span>{{ include.post.content | number_of_words | divided_by: 220 | plus: 1 }} min read</span></p><h3><a href="{{ include.post.url | relative_url }}">{{ include.post.title }} <span aria-hidden="true">↗</span></a></h3><p>{{ note.summary | default: include.post.description | strip_html | normalize_whitespace | truncate: 200 }}</p></div>
+</article>

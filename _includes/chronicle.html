@@ -1,0 +1,27 @@
+{% assign milestones = site.posts | where_exp: 'post', 'post.ascent != false' | reverse %}
+{% assign years = milestones | group_by_exp: 'post', 'post.date | date: "%Y"' %}
+<div class="chronicle" data-chronicle>
+  <div class="chronicle-header">
+    <p class="eyebrow">THE RECORD / {{ milestones.first.date | date: '%Y' }}–{{ milestones.last.date | date: '%Y' }}</p>
+    <div class="chronicle-controls" hidden>
+      <button type="button" data-step="-1" aria-label="Previous milestone">←</button>
+      <button type="button" data-step="1" aria-label="Next milestone">→</button>
+    </div>
+  </div>
+  {% include ascent-route.html %}
+  <div class="chronicle-years" hidden aria-label="Jump to a year">{% for year in years %}<button type="button" data-year-jump="{{ year.name }}">{{ year.name }}</button>{% endfor %}<span class="chronicle-hint">Drag to explore <span aria-hidden="true">↔</span></span></div>
+  <div class="chronicle-window" tabindex="0" role="region" aria-label="Ascent milestones. Scroll horizontally to explore; use left and right arrow keys when focused.">
+    <ol class="chronicle-track">
+      {% for post in milestones %}
+      {% assign milestone = site.data.journey[post.url] %}
+      {% assign milestone_title = milestone.title | default: post.title %}
+      <li class="chronicle-entry" data-year="{{ post.date | date: '%Y' }}" data-milestone-label="{{ post.date | date: '%B %d, %Y' }} — {{ milestone_title | escape }}">
+        <div class="chronicle-date"><span class="chronicle-node" aria-hidden="true"></span><time datetime="{{ post.date | date_to_xmlschema }}">{{ post.date | date: '%b %d' }} <span>{{ post.date | date: '%Y' }}</span></time></div>
+        <div class="chronicle-card"><p class="eyebrow">{{ post.categories | first }}</p><h3><a href="{{ post.url | relative_url }}" draggable="false">{{ milestone_title }}</a></h3><p>{{ milestone.summary | default: post.description | strip_html | normalize_whitespace | truncate: 200 }}</p><a class="chronicle-read" href="{{ post.url | relative_url }}" draggable="false">Read the entry <span aria-hidden="true">↗</span><span class="sr-only">: {{ milestone_title }}</span></a></div>
+      </li>
+      {% endfor %}
+    </ol>
+  </div>
+  <div class="chronicle-scrubber" hidden><label><span class="sr-only">Ascent position</span><input type="range" min="0" max="{{ milestones.size | minus: 1 }}" step="1" value="0" aria-label="Ascent position"></label><span class="mono" data-position>01 / {{ milestones.size | entry_number }}</span></div>
+  <p class="sr-only" role="status" aria-live="polite" data-timeline-announcement></p>
+</div>

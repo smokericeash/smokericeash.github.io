@@ -1,0 +1,4 @@
+---
+layout: default
+---
+<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">EXPLORE THE WORK</p><h1>Categories<span>.</span></h1></header><div class="taxonomy-list">{% for item in site.portfolio_categories %}<a href="{{ item.url | relative_url }}"><span>{{ item.name }}</span><span class="mono">{{ item.count }} entries ↗</span></a>{% endfor %}</div></div>

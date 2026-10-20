@@ -1,0 +1,150 @@
+ADDING YOUR OWN POSTS
+
+Yes: the content source is the _posts/ folder. You write Markdown; the website
+builds the pages, previews, dates, categories, tags and timeline automatically.
+You do not need to edit HTML, CSS, JavaScript, layouts or the timeline data.
+
+1. CREATE A MARKDOWN FILE
+
+Copy docs/post-template.md into _posts/2026/ (or the matching year folder).
+Rename it using YYYY-MM-DD-short-title.md, for example:
+
+  _posts/2026/2026-10-05-my-networking-lab.md
+
+Year subfolders are just organization. Files directly inside _posts/ also work.
+Use lowercase words and hyphens for new filenames. Keep the filename after
+publication: it determines the stable URL /posts/my-networking-lab/.
+Edit the sample date to your real publication date; match the filename date.
+Future-dated posts are not included in normal builds, so use today or an earlier
+date when you are ready to publish. A future date does not schedule an automatic
+rebuild; the site must be built again for the entry to become visible.
+
+2. EDIT THE HEADER AND WRITE
+
+Keep the opening and closing --- markers. Inside them:
+
+  title: the title displayed on the website (quote it)
+  date: publication date, YYYY-MM-DD
+  categories: [Competition] or [Certification], [Projects], etc.
+  tags: [linux, networking, cybersecurity]
+  description: one or two factual sentences for previews and search metadata
+  ascent: optional; set to false to omit this post from both Ascent views
+  image: optional path to a cover image
+  alt: describe the cover when you supply one
+
+Below the second --- is ordinary Markdown. Use ## for section headings: the
+website already displays the post title as its main heading. Links, images,
+lists, code fences, tables, bold and italics work. Example inline screenshot:
+
+  ![A diagram of my lab network](/assets/img/my-lab-diagram.png)
+
+An explicit description is recommended. Without it, the first paragraph is used.
+For a text-only post, leave the template's image/alt lines commented out. It will
+still appear normally, without an empty image box. Cover images are recommended
+for illustrated previews. Do not add the post to _data/journey.yml: that file
+only contains optional editorial overrides for existing entries. Published
+posts appear in the horizontal Home preview and vertical /journey/ expedition
+by default. Set ascent: false only for an ordinary post that should remain in
+Work but not become a climbing checkpoint. Both Ascent views, the date range
+and the route update at the next site build.
+
+3. ADD IMAGES (ONLY WHEN NEEDED)
+
+Place JPG/JPEG/PNG files directly in assets/img/. Use descriptive unique basenames
+such as my-networking-lab-cover.jpg; avoid names that differ only by extension.
+Set image: /assets/img/my-networking-lab-cover.jpg in the Markdown header.
+After adding or replacing images, run from the repository root:
+
+  python tools/optimize_images.py
+
+This creates WebP sizes and updates _data/images.json; originals stay untouched.
+Run it for inline screenshots too, so the build has their dimensions. The tool
+requires Pillow in the Python interpreter you use. The current default Python
+(C:/Python314/python.exe) does not have it installed. Install it once with:
+
+  python -m pip install Pillow
+
+Then rerun the image command. You can check availability with:
+
+  python -c "from PIL import Image; print(Image.__version__)"
+Commit the originals, generated assets/media files, and _data/images.json with
+the post. You never need to edit image metadata or derivatives manually.
+
+4. PREVIEW LOCALLY
+
+From the repository root:
+
+  bundle exec jekyll serve --host 127.0.0.1 --port 4000
+
+Open http://127.0.0.1:4000/. Jekyll rebuilds when you save a post; refresh the
+browser to see it. The existing port 4173 preview serves a static build and does
+not rebuild itself when Markdown changes.
+
+For drafts, create _drafts/ at the repository root and save my-post.md there
+without a date prefix. Preview drafts with:
+
+  bundle exec jekyll serve --drafts --host 127.0.0.1 --port 4000
+
+Drafts are omitted from normal production builds. To publish one, move it into
+_posts/YYYY/, add the date prefix, and set the publication date in its header.
+Do not put confidential material in a draft committed to a public repository:
+the source is still public even though it is omitted from the website.
+
+5. CHECK AND PUBLISH
+
+Run:
+
+  bundle exec jekyll build
+  bundle exec ruby tests/verify_site.rb
+
+For a repeatable check that new content reaches every view, also run:
+
+  npm run test:posts
+
+On this Windows machine, set $env:CHROME_CHANNEL='chrome' first. The test builds
+temporary posts in isolation and removes them afterward. It checks the longer
+live Ascent through the summit as well as search, archives, taxonomy and feeds.
+
+Your post appears automatically in Work, The Ascent on Home and at /journey/,
+its category/tag archives, and the feed. If it is one of the three newest posts,
+it also appears in Home's Recent posts section. Older entries stay in Work.
+
+Commit your post and image changes to your working branch, then use a reviewed
+pull request and the repository's GitHub Actions workflow. Saving locally alone
+does not update the public website. This redesign is currently on the local
+codex/portfolio-v2 branch and has not been deployed; until it is published, edit
+this repository rather than the untouched original production checkout.
+
+Official Markdown-post/draft reference: https://jekyllrb.com/docs/posts/
+
+MAINTENANCE NOTES
+
+- Edit source Markdown/templates/data, never _site/: every build regenerates it.
+- A filename's short-title becomes the URL. Keep published filenames stable and
+  use a unique short-title across all years: the URL does not include the date.
+- Use consistent category/tag names. Similar but different names create separate
+  topics. Case-only variants share an archive, but consistent spelling is clearer.
+- Old entries may have title/summary overrides in _data/journey.yml. If a preview
+  ignores an edited post title/description, check its URL-keyed override there.
+  New entries need no override. The older curated /work/ case studies use
+  _data/work.yml; the primary Work tab at /research/ is automatic from posts.
+- Image processing currently scans JPG/JPEG/PNG directly inside assets/img/,
+  not subfolders. It rebuilds the image manifest from that folder. Keep the
+  source files, use unique basenames, and commit originals, generated WebPs and
+  _data/images.json together. Do not delete an original still referenced by a post.
+- The integrity test locks the original migrated files using
+  docs/content-baseline.json. An intentional edit to one of those files reports
+  Content changed; review the edit and deliberately update its baseline as part
+  of that change. Do not weaken preservation checks merely to make them pass.
+- Saving locally is not publication. The current redesign is still a local
+  codex/portfolio-v2 branch. PRs/branch workflow runs validate; only main/master
+  can deploy through the existing Actions workflow after required checks pass.
+- For production validation, set $env:JEKYLL_ENV='production' before building
+  in PowerShell; production CSS compression is disabled in development builds.
+- Keep Gemfile.lock and package-lock.json committed. New-machine dependencies
+  use bundle install and npm ci --ignore-scripts. Update dependencies separately
+  from article changes, then rerun the browser and performance suites.
+- Actual-device acceptance, remote Linux CI and publication-domain confirmation
+  still remain before the redesign's first release. The current canonical URL
+  is https://smokericeash.github.io; change url/baseurl only when the deployment
+  destination is confirmed.

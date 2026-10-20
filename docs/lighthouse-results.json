@@ -1,0 +1,130 @@
+[
+  {
+    "page": "home",
+    "device": "mobile",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "2.2 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "home",
+    "device": "desktop",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "0.5 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "journal",
+    "device": "mobile",
+    "scores": {
+      "performance": 99,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "1.7 s",
+      "CLS": "0",
+      "TBT": "100 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "journal",
+    "device": "desktop",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "0.4 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "article",
+    "device": "mobile",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "1.7 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "article",
+    "device": "desktop",
+    "scores": {
+      "performance": 100,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "0.4 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "journey",
+    "device": "mobile",
+    "scores": {
+      "performance": 95,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "2.9 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  },
+  {
+    "page": "journey",
+    "device": "desktop",
+    "scores": {
+      "performance": 97,
+      "accessibility": 100,
+      "best-practices": 100,
+      "seo": 100
+    },
+    "metrics": {
+      "LCP": "1.2 s",
+      "CLS": "0",
+      "TBT": "0 ms"
+    },
+    "warnings": []
+  }
+]

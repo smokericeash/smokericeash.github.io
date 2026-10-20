@@ -1,0 +1,4 @@
+---
+layout: default
+---
+<div class="shell page-shell"><a class="back-link" href="{{ page.taxonomy_home | relative_url }}">← All {{ page.taxonomy_type }}</a><header class="page-heading"><p class="eyebrow">WORK / {{ page.taxonomy_type }}</p><h1>{{ page.title }}<span>.</span></h1><p>{{ page.entries.size }} entries from my work.</p></header><h2 class="sr-only">Work entries</h2>{% for post in page.entries %}{% include post-row.html post=post %}{% endfor %}</div>

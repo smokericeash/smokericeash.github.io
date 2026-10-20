@@ -1,0 +1,34 @@
+name: Aidan Chen
+location: California
+identity: Cybersecurity · Computer science · Cal Poly Pomona
+intro: I'm a computer science undergraduate interested in offensive security. This blog is where I write about CTF competitions, defending Linux and Windows systems, security assessments, and networking.
+resume_url: ""
+email: aidanchenn1@gmail.com
+socials:
+  - label: GitHub
+    icon: github
+    url: https://github.com/smokericeash
+    primary: true
+  - label: LinkedIn
+    icon: linkedin
+    url: https://www.linkedin.com/in/aidan-chen-90926a300/
+    primary: true
+  - label: Email
+    icon: email
+    url: mailto:aidanchenn1@gmail.com
+    primary: true
+  - label: X
+    icon: arrow
+    url: https://x.com/smokericeash
+  - label: RSS
+    icon: rss
+    url: /feed.xml
+credentials:
+  - name: Computer science undergraduate
+    organization: Cal Poly Pomona
+    detail: Pursuing cybersecurity
+    url: /about/
+  - name: CompTIA Network+
+    organization: Certification · May 2026
+    detail: View verified credential
+    url: https://www.credly.com/badges/ced87ce8-fa4f-4144-8f9e-4f098d141510/public_url

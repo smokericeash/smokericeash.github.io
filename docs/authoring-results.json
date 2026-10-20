@@ -1,0 +1,496 @@
+{
+  "scenario": "Isolated build with two temporary 2027 Markdown posts; future dates enabled for this test only. One existing cover and one text-only post. Fixture sources removed afterward; production site still has nine posts.",
+  "build": {
+    "posts": 11,
+    "html_pages": 49,
+    "local_references": 1656,
+    "preserved_files": 26,
+    "passed": true
+  },
+  "browsers": {
+    "chromium": {
+      "browser": {
+        "browser": "chromium",
+        "routeChecks": 94,
+        "responsiveChecks": 132,
+        "accessibility": [
+          {
+            "theme": "dark",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/archives/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/archives/",
+            "violations": []
+          }
+        ],
+        "interactions": [
+          "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+          "Search, category combination, empty results",
+          "System theme updates, explicit preference persistence, reduced motion",
+          "Copy-code control writes the exact code text",
+          "No-JS navigation, content, and static article TOC",
+          "Theme works when localStorage is unavailable"
+        ],
+        "failures": []
+      },
+      "experience": {
+        "browser": "chromium",
+        "checks": [
+          "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/: mouse drag advances timeline without activating an entry",
+          "/: final milestone fully reachable at all six responsive widths",
+          "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/journey/: mouse drag advances timeline without activating an entry",
+          "/journey/: final milestone fully reachable at all six responsive widths",
+          "Homepage post previews link to original entries; article reading trace reaches completion",
+          "Reduced motion: no active animations, instant timeline navigation",
+          "Delayed article cover reserves its space on mobile and desktop",
+          "No-JS timeline preserves all entries and keyboard-accessible destinations",
+          "Native mobile touch swipe scrolls the timeline without following links"
+        ],
+        "errors": [],
+        "passed": true
+      },
+      "editorial": {
+        "browser": "chromium",
+        "checks": [
+          "Four primary destinations; concise factual home; three illustrated posts and full-width timeline",
+          "Journal: native page-in/page-out transition with normal navigation",
+          "Journey: native page-in/page-out transition with normal navigation",
+          "About: native page-in/page-out transition with normal navigation",
+          "Home: native page-in/page-out transition with normal navigation",
+          "Back and forward retain browser history and correct pages",
+          "All Journal previews decode and match their original article cover image and destination",
+          "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+          "Reduced motion disables scroll and page animations without delaying links"
+        ],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "firefox": {
+      "browser": {
+        "browser": "firefox",
+        "routeChecks": 94,
+        "responsiveChecks": 132,
+        "accessibility": [
+          {
+            "theme": "dark",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/archives/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/archives/",
+            "violations": []
+          }
+        ],
+        "interactions": [
+          "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+          "Search, category combination, empty results",
+          "System theme updates, explicit preference persistence, reduced motion",
+          "Copy-code control writes the exact code text",
+          "No-JS navigation, content, and static article TOC",
+          "Theme works when localStorage is unavailable"
+        ],
+        "failures": []
+      },
+      "experience": {
+        "browser": "firefox",
+        "checks": [
+          "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/: mouse drag advances timeline without activating an entry",
+          "/: final milestone fully reachable at all six responsive widths",
+          "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/journey/: mouse drag advances timeline without activating an entry",
+          "/journey/: final milestone fully reachable at all six responsive widths",
+          "Homepage post previews link to original entries; article reading trace reaches completion",
+          "Reduced motion: no active animations, instant timeline navigation",
+          "Delayed article cover reserves its space on mobile and desktop",
+          "No-JS timeline preserves all entries and keyboard-accessible destinations"
+        ],
+        "errors": [],
+        "passed": true
+      },
+      "editorial": {
+        "browser": "firefox",
+        "checks": [
+          "Four primary destinations; concise factual home; three illustrated posts and full-width timeline",
+          "Journal: fallback entrance with normal navigation",
+          "Journey: fallback entrance with normal navigation",
+          "About: fallback entrance with normal navigation",
+          "Home: fallback entrance with normal navigation",
+          "Back and forward retain browser history and correct pages",
+          "All Journal previews decode and match their original article cover image and destination",
+          "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+          "Reduced motion disables scroll and page animations without delaying links"
+        ],
+        "errors": [],
+        "passed": true
+      }
+    },
+    "webkit": {
+      "browser": {
+        "browser": "webkit",
+        "routeChecks": 94,
+        "responsiveChecks": 132,
+        "accessibility": [
+          {
+            "theme": "dark",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "dark",
+            "route": "/archives/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/research/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/journey/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/about/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/work/itc-2026/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/MISSA-ITC-Competition/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/posts/NETWORK+/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/categories/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/tags/",
+            "violations": []
+          },
+          {
+            "theme": "light",
+            "route": "/archives/",
+            "violations": []
+          }
+        ],
+        "interactions": [
+          "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+          "Search, category combination, empty results",
+          "System theme updates, explicit preference persistence, reduced motion",
+          "Copy-code control writes the exact code text",
+          "No-JS navigation, content, and static article TOC",
+          "Theme works when localStorage is unavailable"
+        ],
+        "failures": []
+      },
+      "experience": {
+        "browser": "webkit",
+        "checks": [
+          "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/: mouse drag advances timeline without activating an entry",
+          "/: final milestone fully reachable at all six responsive widths",
+          "/journey/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+          "/journey/: mouse drag advances timeline without activating an entry",
+          "/journey/: final milestone fully reachable at all six responsive widths",
+          "Homepage post previews link to original entries; article reading trace reaches completion",
+          "Reduced motion: no active animations, instant timeline navigation",
+          "Delayed article cover reserves its space on mobile and desktop",
+          "No-JS timeline preserves all entries and keyboard-accessible destinations"
+        ],
+        "errors": [],
+        "passed": true
+      },
+      "editorial": {
+        "browser": "webkit",
+        "checks": [
+          "Four primary destinations; concise factual home; three illustrated posts and full-width timeline",
+          "Journal: native page-in/page-out transition with normal navigation",
+          "Journey: native page-in/page-out transition with normal navigation",
+          "About: native page-in/page-out transition with normal navigation",
+          "Home: native page-in/page-out transition with normal navigation",
+          "Back and forward retain browser history and correct pages",
+          "All Journal previews decode and match their original article cover image and destination",
+          "Scroll starts an actual image-mask animation, completes cleanly and does not replay",
+          "Reduced motion disables scroll and page animations without delaying links"
+        ],
+        "errors": [],
+        "passed": true
+      }
+    }
+  }
+}

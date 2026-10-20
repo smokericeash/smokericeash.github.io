@@ -1,43 +1,83 @@
-# Chirpy Starter
+# Aidan Chen — portfolio and work
 
-[![Gem Version](https://img.shields.io/gem/v/jekyll-theme-chirpy)][gem]&nbsp;
-[![GitHub license](https://img.shields.io/github/license/cotes2020/chirpy-starter.svg?color=blue)][mit]
+A custom Jekyll portfolio: a factual introduction, illustrated work entries, and The Ascent, an interactive milestone record in a cold editorial visual system with light and dark appearances. No premade theme, client framework, web-font dependency, analytics, or third-party runtime script.
 
-When installing the [**Chirpy**][chirpy] theme through [RubyGems.org][gem], Jekyll can only read files in the folders
-`_data`, `_layouts`, `_includes`, `_sass` and `assets`, as well as a small part of options of the `_config.yml` file
-from the theme's gem. If you have ever installed this theme gem, you can use the command
-`bundle info --path jekyll-theme-chirpy` to locate these files.
+## Local preview
 
-The Jekyll team claims that this is to leave the ball in the user’s court, but this also results in users not being
-able to enjoy the out-of-the-box experience when using feature-rich themes.
+Use Ruby 3.4 and Bundler. The committed lockfile supports Windows and Linux.
 
-To fully use all the features of **Chirpy**, you need to copy the other critical files from the theme's gem to your
-Jekyll site. The following is a list of targets:
-
-```shell
-.
-├── _config.yml
-├── _plugins
-├── _tabs
-└── index.html
+```sh
+bundle install
+bundle exec jekyll serve --host 127.0.0.1 --port 4000
 ```
 
-To save you time, and also in case you lose some files while copying, we extract those files/configurations of the
-latest version of the **Chirpy** theme and the [CD][CD] workflow to here, so that you can start writing in minutes.
+Open http://127.0.0.1:4000. For the final static output:
 
-## Usage
+```sh
+bundle exec jekyll build
+python -m http.server 4173 --bind 127.0.0.1 --directory _site
+```
 
-Check out the [theme's docs](https://github.com/cotes2020/jekyll-theme-chirpy/wiki).
+Set `JEKYLL_ENV=production` for the production build (`$env:JEKYLL_ENV='production'` in PowerShell). The local preview in this redesign session uses port 4173.
 
-## Contributing
+## Add a post
 
-This repository is automatically updated with new releases from the theme repository. If you encounter any issues or want to contribute to its improvement, please visit the [theme repository][chirpy] to provide feedback.
+All posts live in `_posts/` as Markdown files. Copy [`docs/post-template.md`](docs/post-template.md) to `_posts/YYYY/YYYY-MM-DD-short-title.md`, edit the header and write below it. Home, Work, The Ascent, archives and feeds update automatically at build time. No layout edits or manual milestone entries are needed.
 
-## License
+See [`docs/POSTING.txt`](docs/POSTING.txt) for images, drafts, live preview and publication. New images go in `assets/img/`; run `python tools/optimize_images.py` to generate their responsive versions before building.
 
-This work is published under [MIT][mit] License.
+## Content and components
 
-[gem]: https://rubygems.org/gems/jekyll-theme-chirpy
-[chirpy]: https://github.com/cotes2020/jekyll-theme-chirpy/
-[CD]: https://en.wikipedia.org/wiki/Continuous_deployment
-[mit]: https://github.com/cotes2020/chirpy-starter/blob/master/LICENSE
+- `_posts/`: original posts, unchanged; existing `/posts/:title/` URLs.
+- `_tabs/`: original biography and archive destinations.
+- `_data/profile.yml`: introduction, professional links, credentials and optional résumé URL. An empty résumé URL produces a clearly labeled email request.
+- `_data/work.yml`: sourced case-study summaries for the older case-study routes. The primary Work tab is the post archive at `/research/`.
+- `_data/journey.yml`: optional short titles and summaries keyed by original post URL. Timeline dates and order come from the posts themselves; new posts appear automatically with their title/description as a fallback.
+- `_layouts/`, `_includes/`, `assets/css/site.css`: custom presentation. Home contains a concise introduction, the three latest posts and a full-width milestone record. Navigation is Home / Work / The Ascent / About; the established `/journey/` URL remains valid.
+- `_includes/post-preview.html`: homepage post highlights. `_includes/post-row.html`: illustrated Work, taxonomy and related-entry rows. Both use each post's original image through responsive derivatives and optional summaries from `_data/journey.yml`.
+- `_includes/chronicle.html` and `_includes/ascent-route.html`: compact horizontal Home preview. `_includes/expedition.html`, `assets/css/expedition.css` and `assets/js/expedition.js`: the dedicated vertical climb at `/journey/`.
+- `_includes/mountaineer-home.html` keeps the small approved Home silhouette. The dedicated page uses a contact-anchored photographic climber with a shared wall camera, matching waist gear and a dark-blue summit flag. The fourteen approved complete drawings remain preserved as legacy, no-JavaScript and reduced-motion fallbacks (source and prompt in `docs/ASCENT_ART.md`). Both Ascent views read the same dated posts and optional `_data/journey.yml` summaries; `ascent: false` in a post's front matter excludes it from both.
+- `assets/css/experience.css`, `assets/css/ascent.css` and `assets/js/experience.js`: horizontal preview controls, cold editorial theme and restrained interaction details, separate from the base design.
+- `_plugins/portfolio.rb`: static taxonomy and work pages, descriptions, article TOC, image metadata, semantic article rendering.
+- `_plugins/posts-lastmod-hook.rb`: publication history from Git.
+- `_plugins/production-css.rb`: compresses published CSS in production with Sass's native CSS parser. Source styles stay separate and readable; local development builds keep them uncompressed.
+- `assets/img/`: preserved original documentary assets plus the new original Ascent illustration sources.
+- `assets/media/`: responsive WebP derivatives generated by `python tools/optimize_images.py` (requires Pillow).
+- `assets/social-preview.svg`: editable, original social artwork; the PNG is used for social sharing.
+
+Add posts with the existing Markdown/front-matter format. Article layouts support headings, references, images, tables, Rouge syntax highlighting, copy-code controls, and blockquote callouts. Tags and categories generate at build time. Case-only taxonomy variants share one combined archive rather than overwriting each other.
+
+The Home preview supports mouse dragging, native touch scrolling, year jumps, previous/next buttons and a range scrubber. Focus its viewport to use Left/Right/Home/End. A faint Everest image sits behind the Home identity section only. The dedicated Ascent page uses semantic post checkpoints. Desktop wheel input eases between positions and settles only in the wheel gesture's direction; touch, keyboard and scrollbar dragging retain native scrolling. An indigo mountain introduction blends into the sticky panorama and closer ice wall. The photographic climber uses permanent left/right contacts, continuous clothing deformation, and opaque summit planting/standing portraits. The approved leg positions, connected knees, proportions and pace are preserved. Camera and character share one progress value. Scrolling up reverses the climb. New checkpoints extend the world and add the same two-step cycle automatically; no frame, route or timing edits are needed. The visible line beside the climber is removed. The subtle day/night lighting uses `America/Los_Angeles` local time without a network request; the sun/moon ornament was removed. Dates are publication dates, and scene distance is narrative rather than literal altitude. Without JavaScript, every checkpoint remains readable and linked. Reduced-motion preferences leave native scrolling and a static climber pose. Content is visible immediately; article reading progress is a quiet line beneath the header.
+
+Content does not fade in on scroll. Homepage images move by a few pixels with native scroll timelines where supported. Same-origin page navigation uses native document view transitions, keeping the header stable while content changes. Browsers without that feature receive a brief entrance on internal navigation. Links and browser history stay native; there is no client router. Reduced motion disables these effects. See [the 20-point design review](docs/DESIGN_REVIEW.md) for the current appearance decisions.
+
+## Validation
+
+```sh
+bundle exec ruby tests/verify_site.rb
+bundle exec ruby tests/article_markup.rb
+npm ci --ignore-scripts
+npx playwright install chromium firefox webkit
+npm test
+npm run test:posts
+node tests/worker-migration.cjs
+npm run test:performance
+```
+
+The browser and performance tests expect the built site at port 4173. On Windows with installed Chrome, set `$env:CHROME_CHANNEL='chrome'`. To test Firefox or WebKit, install their Playwright binaries and set `TEST_BROWSER=firefox` or `webkit`. `PLAYWRIGHT_BROWSERS_PATH` can point to a workspace-local `.browser-cache` directory.
+
+The integrity test compares original source hashes, checks all generated HTML links/assets/anchors, original post routes, metadata and feeds. `npm test` runs the general browser, interaction and editorial/motion suites. `npm run test:posts` creates two temporary Markdown fixtures, builds to an isolated destination, checks every content view and runs the longer live climb through its summit. Fixtures are removed even on failure; `_site` stays untouched. The Chromium CI job repeats this check.
+
+Browser tests cover all routes in both themes, six responsive widths, axe checks on significant pages, theme storage/system behavior, keyboard menu, reduced motion, search, code copy, no-JS rendering and blocked storage. The interaction suite exercises free milestone scrolling, animated control jumps, year/range/keyboard controls, route and climber synchronization, final-card visibility, accessible values, no-JS fallback, touch swiping in Chromium, and article reading progress. Run it alone with `npm run test:experience`. `npm run test:editorial` verifies image-to-article correspondence, four navigation destinations, page transitions, immediately visible content, back/forward history and reduced motion. Lighthouse checks Home, Work, an article and The Ascent on mobile and desktop. Results are generated in ignored `test-results/`.
+
+## Safe deployment
+
+Work is on `codex/portfolio-v2` in a separate clone. Nothing has been pushed or merged. The original checkout and its production branch are unchanged.
+
+Pull requests and manual branch runs build and validate in Chromium, Firefox and WebKit, producing a separate downloadable review artifact per engine. All three matrix jobs must pass before deployment; only Chromium uploads the Pages artifact and runs the service-worker and Lighthouse checks. Only main/master can deploy; deployment permissions belong only to the deploy job. Existing GitHub Pages Actions hosting remains the destination. The local audit found no CNAME or Cloudflare DNS configuration. Keep the existing `url` and `baseurl` until the actual domain is supplied; then update canonical configuration and check Pages/Cloudflare settings before publication.
+
+The old Chirpy PWA is retired by `sw.min.js` and a narrowly scoped unregister operation. The code does not delete unrelated origin caches. A visitor's already-open old tab may need a reload to receive the redesign.
+
+The site uses Ruby 3.4 in CI to match the tested local environment, replacing the starter's Ruby 3.3. Linux dependencies are resolved in Gemfile.lock; the remote Actions run still needs to pass before merge.
+
+See `docs/AUDIT.txt` for the content/presentation audit and `docs/VALIDATION.txt` for measured results and limitations. The original MIT notice remains in LICENSE for retained starter material.

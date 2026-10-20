@@ -1,0 +1,4 @@
+---
+layout: default
+---
+<div class="shell page-shell"><header class="page-heading"><p class="eyebrow">FOLLOW A THREAD</p><h1>Topics & tags<span>.</span></h1><p>The topics across my work, gathered in one place.</p></header><div class="tag-index">{% for item in site.portfolio_tags %}<a href="{{ item.url | relative_url }}">{{ item.name }} <span>{{ item.count }}</span></a>{% endfor %}</div></div>

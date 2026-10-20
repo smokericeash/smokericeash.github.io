@@ -1,0 +1,23 @@
+{
+  "name": "aidan-chen-portfolio",
+  "version": "2.0.0",
+  "private": true,
+  "description": "Custom Jekyll portfolio and technical journal for Aidan Chen",
+  "scripts": {
+    "test:site": "bundle exec ruby tests/verify_site.rb",
+    "test:posts": "node tests/post-propagation.cjs",
+    "test": "node tests/browser.cjs && node tests/experience.cjs && node tests/editorial.cjs && node tests/expedition.cjs && node tests/contact-rig.cjs",
+    "test:expedition": "node tests/expedition.cjs",
+    "test:contact-rig": "node tests/contact-rig.cjs",
+    "test:experience": "node tests/experience.cjs",
+    "test:editorial": "node tests/editorial.cjs",
+    "test:performance": "node tests/performance.mjs",
+    "build:climber-frames": "node scripts/build_climber_frames.cjs"
+  },
+  "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
+    "lighthouse": "^13.5.0",
+    "playwright": "^1.63.0",
+    "prettier": "^3.9.9"
+  }
+}

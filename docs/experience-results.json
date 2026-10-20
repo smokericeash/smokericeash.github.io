@@ -1,0 +1,51 @@
+{
+  "chromium": {
+    "browser": "chromium",
+    "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: wheel scrolling remains continuous between milestones",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "Homepage post previews link to original entries; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations",
+      "Native mobile touch swipe scrolls the timeline without following links"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "firefox": {
+    "browser": "firefox",
+    "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: wheel scrolling remains continuous between milestones",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "Homepage post previews link to original entries; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations"
+    ],
+    "errors": [],
+    "passed": true
+  },
+  "webkit": {
+    "browser": "webkit",
+    "checks": [
+      "/: climber and illuminated route follow scroll to the latest entry",
+      "/: year jumps, next/previous, range endpoint, Home/End/Arrow keys and accessible value",
+      "/: wheel scrolling remains continuous between milestones",
+      "/: mouse drag advances timeline without activating an entry",
+      "/: final milestone fully reachable at all six responsive widths",
+      "Homepage post previews link to original entries; article reading trace reaches completion",
+      "Reduced motion: no active animations, instant timeline navigation",
+      "Delayed article cover reserves its space on mobile and desktop",
+      "No-JS timeline preserves all entries and keyboard-accessible destinations"
+    ],
+    "errors": [],
+    "passed": true
+  }
+}

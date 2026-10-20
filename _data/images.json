@@ -1,0 +1,194 @@
+{
+  "/assets/img/blob123.png": {
+    "src": "/assets/media/blob123-601.webp",
+    "width": 601,
+    "height": 601,
+    "sizes": [
+      {
+        "src": "/assets/media/blob123-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/blob123-601.webp",
+        "width": 601
+      }
+    ]
+  },
+  "/assets/img/channels4_profile.jpg": {
+    "src": "/assets/media/channels4_profile-900.webp",
+    "width": 900,
+    "height": 900,
+    "sizes": [
+      {
+        "src": "/assets/media/channels4_profile-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/channels4_profile-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/channels4_profile-900.webp",
+        "width": 900
+      }
+    ]
+  },
+  "/assets/img/image5443.png": {
+    "src": "/assets/media/image5443-728.webp",
+    "width": 728,
+    "height": 660,
+    "sizes": [
+      {
+        "src": "/assets/media/image5443-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/image5443-728.webp",
+        "width": 728
+      }
+    ]
+  },
+  "/assets/img/image67.png": {
+    "src": "/assets/media/image67-765.webp",
+    "width": 765,
+    "height": 828,
+    "sizes": [
+      {
+        "src": "/assets/media/image67-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/image67-765.webp",
+        "width": 765
+      }
+    ]
+  },
+  "/assets/img/image78.png": {
+    "src": "/assets/media/image78-646.webp",
+    "width": 646,
+    "height": 845,
+    "sizes": [
+      {
+        "src": "/assets/media/image78-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/image78-646.webp",
+        "width": 646
+      }
+    ]
+  },
+  "/assets/img/images4333.png": {
+    "src": "/assets/media/images4333-225.webp",
+    "width": 225,
+    "height": 225,
+    "sizes": [
+      {
+        "src": "/assets/media/images4333-225.webp",
+        "width": 225
+      }
+    ]
+  },
+  "/assets/img/IMG_1981.jpg": {
+    "src": "/assets/media/IMG_1981-1280.webp",
+    "width": 2419,
+    "height": 2838,
+    "sizes": [
+      {
+        "src": "/assets/media/IMG_1981-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/IMG_1981-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/IMG_1981-1280.webp",
+        "width": 1280
+      }
+    ]
+  },
+  "/assets/img/missa.png": {
+    "src": "/assets/media/missa-500.webp",
+    "width": 500,
+    "height": 500,
+    "sizes": [
+      {
+        "src": "/assets/media/missa-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/missa-500.webp",
+        "width": 500
+      }
+    ]
+  },
+  "/assets/img/pfpRyu.png": {
+    "src": "/assets/media/pfpRyu-860.webp",
+    "width": 860,
+    "height": 1233,
+    "sizes": [
+      {
+        "src": "/assets/media/pfpRyu-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/pfpRyu-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/pfpRyu-860.webp",
+        "width": 860
+      }
+    ]
+  },
+  "/assets/img/reportwrite1.png": {
+    "src": "/assets/media/reportwrite1-649.webp",
+    "width": 649,
+    "height": 827,
+    "sizes": [
+      {
+        "src": "/assets/media/reportwrite1-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/reportwrite1-649.webp",
+        "width": 649
+      }
+    ]
+  },
+  "/assets/img/techsymposium26.jpg": {
+    "src": "/assets/media/techsymposium26-630.webp",
+    "width": 630,
+    "height": 788,
+    "sizes": [
+      {
+        "src": "/assets/media/techsymposium26-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/techsymposium26-630.webp",
+        "width": 630
+      }
+    ]
+  },
+  "/assets/img/wefwefwefweff.png": {
+    "src": "/assets/media/wefwefwefweff-1280.webp",
+    "width": 1370,
+    "height": 823,
+    "sizes": [
+      {
+        "src": "/assets/media/wefwefwefweff-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/wefwefwefweff-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/wefwefwefweff-1280.webp",
+        "width": 1280
+      }
+    ]
+  }
+}

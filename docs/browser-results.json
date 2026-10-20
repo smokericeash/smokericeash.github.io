@@ -1,0 +1,380 @@
+{
+  "chromium": {
+    "browser": "chromium",
+    "routeChecks": 94,
+    "responsiveChecks": 132,
+    "accessibility": [
+      {
+        "theme": "dark",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/archives/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/archives/",
+        "violations": []
+      }
+    ],
+    "interactions": [
+      "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+      "Search, category combination, empty results",
+      "System theme updates, explicit preference persistence, reduced motion",
+      "Copy-code control writes the exact code text",
+      "No-JS navigation, content, and static article TOC",
+      "Theme works when localStorage is unavailable"
+    ],
+    "failures": []
+  },
+  "firefox": {
+    "browser": "firefox",
+    "routeChecks": 94,
+    "responsiveChecks": 132,
+    "accessibility": [
+      {
+        "theme": "dark",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/archives/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/archives/",
+        "violations": []
+      }
+    ],
+    "interactions": [
+      "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+      "Search, category combination, empty results",
+      "System theme updates, explicit preference persistence, reduced motion",
+      "Copy-code control writes the exact code text",
+      "No-JS navigation, content, and static article TOC",
+      "Theme works when localStorage is unavailable"
+    ],
+    "failures": []
+  },
+  "webkit": {
+    "browser": "webkit",
+    "routeChecks": 94,
+    "responsiveChecks": 132,
+    "accessibility": [
+      {
+        "theme": "dark",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "dark",
+        "route": "/archives/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/research/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/journey/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/about/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/work/itc-2026/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/MISSA-ITC-Competition/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/posts/NETWORK+/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/categories/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/tags/",
+        "violations": []
+      },
+      {
+        "theme": "light",
+        "route": "/archives/",
+        "violations": []
+      }
+    ],
+    "interactions": [
+      "Mobile menu Enter/Tab/Escape, focus return, hidden links excluded from focus order",
+      "Search, category combination, empty results",
+      "System theme updates, explicit preference persistence, reduced motion",
+      "Copy-code control writes the exact code text",
+      "No-JS navigation, content, and static article TOC",
+      "Theme works when localStorage is unavailable"
+    ],
+    "failures": []
+  }
+}
