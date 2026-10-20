@@ -97,9 +97,10 @@
           width: crop.width, height: crop.height }));
         if (type === 'arm' && side === 'left' && photoTorso) {
           // The far sleeve's unused shoulder cap belongs behind the hood/pack.
-          // Keep the forearm visible toward the wall, without changing its pose.
+          // Round the local occlusion behind the collar instead of leaving a square
+          // sleeve cap beside the neck. The forearm and its pose stay unchanged.
           const shoulderMask = svgNode('g', { 'clip-path': cutout('rig-far-shoulder-occlusion',
-            'M-200 -55 H-12 V-200 H200 V200 H-200Z') });
+            'M-200 -55 H-20 Q-3 -55 -3 -72 V-88 Q-3 -95 -12 -95 V-200 H200 V200 H-200Z') });
           shoulderMask.append(group); body.insertBefore(shoulderMask, photoTorso);
         } else if (type === 'leg' && photoTorso) body.insertBefore(group, photoTorso);
         else body.append(group);

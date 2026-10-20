@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '73a730b';
+const approvedRef = process.env.APPEARANCE_BASELINE || 'c57c283';
 const scope = process.env.APPEARANCE_SCOPE || 'neck-shoulder';
 const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].includes(scope) ? 160 : 32;
 
@@ -56,7 +56,7 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].in
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
         rightThigh: { inverse: [inverse.a, inverse.b, inverse.c, inverse.d, inverse.e, inverse.f],
           width: Number(thigh.getAttribute('width')), height: Number(thigh.getAttribute('height')) },
-        neck: [[215, 143], [219, 151], [222, 160]].map(([x, y]) => {
+        neck: [[212, 143], [217, 151], [222, 166]].map(([x, y]) => {
           const p = new DOMPoint(x, y).matrixTransform(torsoInverse.inverse());
           return { x: Math.round(p.x), y: Math.round(p.y) };
         }),
@@ -82,7 +82,7 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].in
         const path = document.querySelector('#rig-torso-cut path');
         const inside = (x, y) => path.isPointInFill(new DOMPoint(x, y));
         return { oldTool: inside(133, 128), oldSleeve: inside(230, 137),
-          shoulder: inside(218, 145), helmet: inside(190, 90), hood: inside(175, 125), backpack: inside(150, 180) };
+          shoulder: inside(215, 145), helmet: inside(190, 90), hood: inside(175, 125), backpack: inside(150, 180) };
       });
       assert.deepEqual(cutout, { oldTool: false, oldSleeve: false, shoulder: true, helmet: true, hood: true, backpack: true },
         'Remove the two original-pose remnants while retaining helmet, hood and backpack');
@@ -133,7 +133,8 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].in
               : ['torso-cutout', 'neck-shoulder'].includes(scope)
               ? (() => { const [a,b,c,d,e,f] = targets.torsoInverse;
                   const u = a * (x + .5) + c * (y + .5) + e, v = b * (x + .5) + d * (y + .5) + f;
-                  if (scope === 'neck-shoulder') return u >= 198 && u <= 235 && v >= 108 && v <= 187;
+                  if (scope === 'neck-shoulder') return (u >= 198 && u <= 235 && v >= 108 && v <= 187) ||
+                    (u >= 110 && u <= 170 && v >= 78 && v <= 165);
                   return (u >= 94 && u <= 156 && v >= 109 && v <= 208) ||
                     (u >= 199 && u <= 242 && v >= 109 && v <= 218); })()
               : scope === 'hips'

@@ -1,6 +1,6 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), rounded neck/shoulder restoration on the Java Projects cleanup branch.
+Updated: October 19, 2026 (America/Los_Angeles), softer collar contour on the Java Projects cleanup branch.
 
 ## Current state
 
@@ -10,6 +10,13 @@ The authoritative project is now `C:/Users/super/Desktop/Java Projects/git2026/s
 - Origin remains `https://github.com/smokericeash/smokericeash.github.io.git`.
 - The original ChatGPT checkout is an older copy; do not resume changes there as if it were the current baseline.
 - Isolated verification copy: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/climber-artifact-review`, preview port 4174. It was cloned from the Java Projects repository before editing, preserving the user's performance settings.
+
+## October 19 softer collar edge — latest handoff
+
+- **Completed:** replaced the upright front collar edge with a continuous curved roll from beneath the helmet into the shoulder. Rounded the small far-sleeve occlusion behind the hood to remove its square cap, exposing the original curved hood silhouette. Both changes use existing photographic pixels and native SVG curves; no image regeneration, blur filter, new texture, pose, limb geometry, pace, proportion, tool, gear, summit, layout or performance-setting change. Authoring/live copies match. Cache versions: solver ascent-28, photo skin ascent-33.
+- **Verification:** final appearance comparison against c57c283 passes: 1,001 solved states identical, 160 rendered positions connected, three collar fabric samples fully opaque, hip/knee coverage unchanged at 100%, zero changed pixels outside the front/rear collar regions, dark-blue flag handoff unchanged. Pull, reach and opposite-arm phases were inspected enlarged. Production build/site integrity pass (26 originals, nine routes, 47 pages, 1,690 references). Focused Chrome and WebKit scrolling, reverse, summit, responsive and reduced-motion checks pass; Chrome sampled 248 updates with zero rebound and max movement 4.45px. The earlier Firefox harness startup issue is unchanged and Firefox was not rerun for this small contour adjustment. Performance configuration remains byte-identical to the user's 383c9ac; no new Lighthouse measurement.
+- **Currently in progress / remaining:** requested implementation and local checks complete on codex/climber-artifact-cleanup. Nothing pushed or merged into main. Existing real-device, Linux CI and domain acceptance remain release checks.
+- **Exact recommended next task:** review the softer collar during forward/reverse scrolling in the authoritative Java Projects preview at http://127.0.0.1:4175/journey/. Preserve all accepted poses, pace and body proportions.
 
 ## October 19 rounded neck/shoulder restoration — latest handoff
 
