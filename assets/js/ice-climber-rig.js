@@ -99,7 +99,11 @@
     body.append(figure);
     if (options.photoTorso) {
       const cut = make('clipPath', { id: 'rig-torso-cut', clipPathUnits: 'userSpaceOnUse' });
-      cut.append(make('path', { d: 'M154 67 Q187 50 223 75 L230 111 L238 142 L240 217 Q245 236 239 243 L210 246 L166 245 Q132 258 107 239 L99 207 Q93 174 115 145 Q132 116 154 111Z' }));
+      // Follow the hood/backpack silhouette, excluding the source pose's old
+      // tool stub and raised sleeve now supplied by the animated limbs.
+      // The collar rolls inward toward the shoulder in one soft curve; a tall
+      // upright edge made the retained jacket fabric look like a cropped panel.
+      cut.append(make('path', { d: 'M154 67 Q187 50 223 75 L226 111 C226 118 221 122 218 129 C214 137 218 150 222 159 Q225 172 226 184 L240 217 Q245 236 239 243 L210 246 L166 245 Q132 258 107 239 L99 207 Q93 174 115 160 Q129 148 142 147 L144 137 Q145 122 154 111Z' }));
       defs.append(cut);
       const photo = make('g', { transform: 'translate(-91 -140) scale(.55)', 'data-rig-photo-torso': '' });
       photo.append(make('image', { href: options.torsoSrc || '/assets/media/ascent-climber-clean-frame-01.webp',

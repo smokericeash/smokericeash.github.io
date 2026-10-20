@@ -3,15 +3,15 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const { execFileSync } = require('node:child_process');
-const approvedRef = process.env.APPEARANCE_BASELINE || '81c65f4';
-const scope = process.env.APPEARANCE_SCOPE || 'right-thigh';
-const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
+const approvedRef = process.env.APPEARANCE_BASELINE || 'c57c283';
+const scope = process.env.APPEARANCE_SCOPE || 'neck-shoulder';
+const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].includes(scope) ? 160 : 32;
 
 (async () => {
   const browser = await chromium.launch({ headless: true, channel: 'chrome' });
   try {
     const page = await browser.newPage({ viewport: { width: 600, height: 800 } });
-    await page.goto('http://127.0.0.1:4173/');
+    await page.goto(process.env.APPEARANCE_URL || 'http://127.0.0.1:4173/');
     const setup = async baseline => {
       await page.setContent('<style>html,body{margin:0;background:#53616a}svg{display:block;width:600px;height:800px}</style><svg viewBox="0 0 600 800"><defs></defs><g id="world"></g></svg>');
       for (const file of ['ice-climber-rig.js', 'photo-climber-rig.js']) {
@@ -52,9 +52,15 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
         const s = v.matrixTransform(svg.getScreenCTM()); return { x: Math.round(s.x), y: Math.round(s.y) }; };
       const thigh = document.querySelector('[data-photo-limb="right-leg-thigh"] image');
       const inverse = thigh.getScreenCTM().inverse();
+      const torsoInverse = document.querySelector('[data-rig-photo-torso] image').getScreenCTM().inverse();
       return { torso: project({ x: state.origin.x, y: state.origin.y - 30 }),
         rightThigh: { inverse: [inverse.a, inverse.b, inverse.c, inverse.d, inverse.e, inverse.f],
           width: Number(thigh.getAttribute('width')), height: Number(thigh.getAttribute('height')) },
+        neck: [[212, 143], [217, 151], [222, 166]].map(([x, y]) => {
+          const p = new DOMPoint(x, y).matrixTransform(torsoInverse.inverse());
+          return { x: Math.round(p.x), y: Math.round(p.y) };
+        }),
+        torsoInverse: [torsoInverse.a, torsoInverse.b, torsoInverse.c, torsoInverse.d, torsoInverse.e, torsoInverse.f],
         feet: [project(state.feet.left), project(state.feet.right)],
         knees: [project(state.knees.left), project(state.knees.right)], scale: svg.getScreenCTM().a,
         hips: [project(state.hips.left), project(state.hips.right)],
@@ -71,6 +77,16 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
     }
     await setup(false);
     assert.deepEqual(await states(), approvedMotion, 'All 1,001 solved poses must remain identical to the approved motion');
+    if (['torso-cutout', 'neck-shoulder'].includes(scope)) {
+      const cutout = await page.evaluate(() => {
+        const path = document.querySelector('#rig-torso-cut path');
+        const inside = (x, y) => path.isPointInFill(new DOMPoint(x, y));
+        return { oldTool: inside(133, 128), oldSleeve: inside(230, 137),
+          shoulder: inside(215, 145), helmet: inside(190, 90), hood: inside(175, 125), backpack: inside(150, 180) };
+      });
+      assert.deepEqual(cutout, { oldTool: false, oldSleeve: false, shoulder: true, helmet: true, hood: true, backpack: true },
+        'Remove the two original-pose remnants while retaining helmet, hood and backpack');
+    }
     for (const [index, progress] of [0, .25, .5, .75, 1.25, 1.5, 1.75, 9.92, 9.954, 9.956, 9.98, 9.986, 10].entries()) {
       await page.evaluate(progress => {
         const state = rig.update(progress); skin.update(state);
@@ -80,7 +96,7 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
       await page.screenshot({ path: `test-results/appearance-${String(index).padStart(2, '0')}.png` });
     }
     await isolateBody();
-    let connectedPoses = 0;
+    let connectedPoses = 0, worstNeckCoverage = 1;
     let worstKneeCoverage = 1, baselineKneeCoverage = 1, changedOutsideScope = 0;
     let worstHipCoverage = 1, baselineHipCoverage = 1;
     let extendedPoseDifferences = 0, shortestPullSleeve = Infinity;
@@ -114,6 +130,15 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
             };
             const inside = scope === 'right-thigh'
               ? insideThigh(targets.rightThigh) || insideThigh(baselineThigh)
+              : ['torso-cutout', 'neck-shoulder'].includes(scope)
+              ? (() => { const [a,b,c,d,e,f] = targets.torsoInverse;
+                  const u = a * (x + .5) + c * (y + .5) + e, v = b * (x + .5) + d * (y + .5) + f;
+                  if (scope === 'neck-shoulder') return (u >= 198 && u <= 235 && v >= 108 && v <= 187) ||
+                    (u >= 110 && u <= 170 && v >= 78 && v <= 165);
+                  // The complete fix includes the later rounded collar cap above
+                  // the original stub-removal area, plus its antialias fringe.
+                  return (u >= 94 && u <= 170 && v >= 78 && v <= 208) ||
+                    (u >= 198 && u <= 242 && v >= 108 && v <= 218); })()
               : scope === 'hips'
               ? targets.hips.some(p => Math.hypot(x - p.x, y - p.y) <= 22 * s)
               : scope === 'knees'
@@ -131,9 +156,11 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
           return opaque / total;
         }));
         return { outside, differences, outliers,
+          neckCurrent: coverage(current, targets.neck, .6),
           current: coverage(current, targets.knees), previous: coverage(previous, targets.knees),
           hipCurrent: coverage(current, targets.hips, 17), hipPrevious: coverage(previous, targets.hips, 17) };
       }, { shot, baseline: baselineShots[sample], baselineThigh: baselineThighs[sample], targets, scope });
+      worstNeckCoverage = Math.min(worstNeckCoverage, seam.neckCurrent);
       changedOutsideScope += seam.outside;
       if (seam.outside) console.log({ sample, outliers: seam.outliers });
       worstHipCoverage = Math.min(worstHipCoverage, seam.hipCurrent);
@@ -198,8 +225,9 @@ const cycleSamples = ['hips', 'right-thigh'].includes(scope) ? 160 : 32;
       return different / (clothPixelBytes / 4);
     }, shots);
     console.log(JSON.stringify({ approvedRef, approvedPosesUnchanged: 1001, connectedPoses,
-      baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
+      worstNeckCoverage, baselineKneeCoverage, worstKneeCoverage, baselineHipCoverage, worstHipCoverage, scope, changedOutsideScope,
       extendedPoseDifferences, shortestPullSleeve, flagPixelDifference: flagDifference }));
+    if (scope === 'neck-shoulder') assert.equal(worstNeckCoverage, 1, 'Matching jacket fabric must fill the exposed neck/shoulder notch throughout the climb');
     assert.ok(worstKneeCoverage > .99, 'Knee fabric must cover the seam throughout the bend cycle');
     if (['hips', 'right-thigh'].includes(scope)) assert.ok(worstHipCoverage > .99, 'Both hip seams must remain fully clothed as the thighs flex');
     assert.equal(changedOutsideScope, 0, 'The appearance correction must remain local to its requested region');
