@@ -135,8 +135,10 @@ const cycleSamples = ['hips', 'right-thigh', 'torso-cutout', 'neck-shoulder'].in
                   const u = a * (x + .5) + c * (y + .5) + e, v = b * (x + .5) + d * (y + .5) + f;
                   if (scope === 'neck-shoulder') return (u >= 198 && u <= 235 && v >= 108 && v <= 187) ||
                     (u >= 110 && u <= 170 && v >= 78 && v <= 165);
-                  return (u >= 94 && u <= 156 && v >= 109 && v <= 208) ||
-                    (u >= 199 && u <= 242 && v >= 109 && v <= 218); })()
+                  // The complete fix includes the later rounded collar cap above
+                  // the original stub-removal area, plus its antialias fringe.
+                  return (u >= 94 && u <= 170 && v >= 78 && v <= 208) ||
+                    (u >= 198 && u <= 242 && v >= 108 && v <= 218); })()
               : scope === 'hips'
               ? targets.hips.some(p => Math.hypot(x - p.x, y - p.y) <= 22 * s)
               : scope === 'knees'

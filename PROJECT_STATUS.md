@@ -1,15 +1,25 @@
 # Aidan Chen portfolio — persistent handoff
 
-Updated: October 19, 2026 (America/Los_Angeles), softer collar contour on the Java Projects cleanup branch.
+Updated: October 19, 2026 (America/Los_Angeles), verified climber cleanup delivery on codex/portfolio-v2.
 
 ## Current state
 
 The authoritative project is now `C:/Users/super/Desktop/Java Projects/git2026/smokericeash.github.io`. The user merged the redesign through PR #1 and then committed their performance-test threshold adjustment as `383c9ac`. Older entries below describe the earlier separate ChatGPT workspace and are historical, including claims that nothing had yet been merged. Deployment status was not rechecked for this scoped cleanup.
 
-- Cleanup branch: `codex/climber-artifact-cleanup`, based on the user's clean `main` at `383c9ac0ba48ea2ae0be6f6e1d708d3e41f8c316`.
+- Development delivery branch: `codex/portfolio-v2`, retaining the current GitHub main history and the accepted cleanup commits. The older separate ChatGPT checkout with that branch name is stale and was not used as the publication source.
+- Preserved cleanup branch: `codex/climber-artifact-cleanup`, based on the user's clean `main` at `383c9ac0ba48ea2ae0be6f6e1d708d3e41f8c316`.
 - Origin remains `https://github.com/smokericeash/smokericeash.github.io.git`.
 - The original ChatGPT checkout is an older copy; do not resume changes there as if it were the current baseline.
 - Isolated verification copy: `C:/Users/super/Documents/ChatGPT/portfolio website remodel/climber-artifact-review`, preview port 4174. It was cloned from the Java Projects repository before editing, preserving the user's performance settings.
+
+## October 19 development-branch publication verification — latest handoff
+
+- **Completed:** inspected the clean Java Projects working tree, origin and local/remote history. GitHub main was verified at 383c9ac0ba48ea2ae0be6f6e1d708d3e41f8c316; the remote codex/portfolio-v2 branch was absent at inspection. The accepted fix was already committed as 73a730b, c57c283 and 7527b15 on top of that main revision. Development delivery uses codex/portfolio-v2 with this complete ancestry, without rebasing, rewriting or merging into main. No deployed-site setting changed.
+- **Exact scope:** eight files differ from main: _layouts/default.html; assets/js/ice-climber-rig.js; assets/js/photo-climber-rig.js; their authoring counterparts prototypes/ice-climber-rig.js and prototypes/photo-leg-rig.js; prototypes/appearance-review.cjs; prototypes/README.md; PROJECT_STATUS.md. Runtime changes remove the clipped orange tool and fixed sleeve remnants, soften the collar silhouette and update the two script cache versions. All poses, timing, body proportions, content, image assets, styles, expedition controller and configuration remain unchanged.
+- **Verification:** fresh production build, preserved-site integrity (26 originals, nine routes, 47 pages, 1,690 references), nine article/taxonomy contracts, syntax/diff checks and 1,001-position physics pass. Complete Chrome npm test passes: 94 routes, 132 responsive views, 22 axe scans, six interaction groups, ten experience groups, eleven editorial/motion groups, ten expedition groups and contact/reverse/summit/mobile/reduced-motion coverage. WebKit contact-rig check passes. Full-fix appearance comparison directly against GitHub main passes: all 1,001 solved poses identical; 160 rendered poses connected; collar/hip/knee coverage opaque; zero pixel changes outside backpack/collar regions; blue flag continuity unchanged. Updated the aggregate comparison mask to include the later rounded collar cap; no runtime code changed during publication preparation.
+- **Performance preservation:** tests/performance.mjs and all protected content/configuration paths are identical to current main. Existing thresholds remain performance 90 and other categories 95. Re-ran the existing Lighthouse test for Ascent mobile/desktop with only its preview origin redirected in an ignored local copy: performance 95/97, all other categories 100, CLS zero, no warnings. Reports are local under test-results, not committed.
+- **Currently in progress / remaining:** no unfinished requested website implementation or local checks. Main is untouched; no merge or deployment performed. Pull Request creation and remote Linux CI are pending. Firefox's earlier local startup issue remains documented and a fresh local Firefox pass is not claimed; the PR's three-engine workflow remains the remote release check.
+- **Exact recommended next task:** create a PR from codex/portfolio-v2 into main using https://github.com/smokericeash/smokericeash.github.io/compare/main...codex/portfolio-v2?expand=1; review the eight-file diff and all Linux CI jobs. Do not merge without the user's authorization. Keep the existing aidan.is-a.dev domain setup and main's performance settings unchanged.
 
 ## October 19 softer collar edge — latest handoff
 
