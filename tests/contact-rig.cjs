@@ -13,6 +13,11 @@ const base = process.env.TEST_URL || 'http://127.0.0.1:4173';
   try {
     const page = await browser.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: 'dark' });
     page.on('pageerror', error => errors.push(error.message));
+    // Control application time, not the runner's rendering throughput. Install
+    // before navigation so every application timer and rAF uses the same clock.
+    const epoch = Date.now();
+    await page.clock.install({ time: epoch });
+    await page.clock.pauseAt(epoch + 1000);
     await page.goto(base + '/journey/');
     await page.waitForSelector('[data-contact-rig]');
     assert.equal(await page.locator('[data-rig-body]').count(), 1);
@@ -41,29 +46,100 @@ const base = process.env.TEST_URL || 'http://127.0.0.1:4173';
     });
     assert.ok(assets.every(([, width, height]) => width > 200 && height > 200));
 
-    const centers = await page.evaluate(() => {
+    await page.evaluate(async () => {
+      await document.fonts.ready;
+      await Promise.all([...document.images].map(image => {
+        image.loading = 'eager';
+        return image.decode();
+      }));
+      dispatchEvent(new Event('resize'));
+    });
+    await page.clock.runFor(32);
+    const installProbe = () => {
       const nodes = [document.querySelector('.expedition-prologue'),
         ...document.querySelectorAll('.expedition-checkpoint'),
         document.querySelector('.expedition-continuation')];
-      return nodes.map(node => {
+      const centers = nodes.map(node => {
         const rect = node.getBoundingClientRect();
         return rect.top + scrollY + rect.height / 2;
       });
-    });
-    const go = async progress => {
-      const index = Math.floor(progress);
-      const fraction = progress - index;
+      // A detached solver is the expected pose at a known scroll progress. It
+      // never drives the live controller or replaces the live photographic skin.
+      const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const world = document.createElementNS(svg.namespaceURI, 'g');
+      svg.append(world);
+      const oracle = IceClimberRig.create(svg, world, centers.length - 1, { photoTorso: true });
+      window.__rigTest = {
+        progress() {
+          const focus = scrollY + innerHeight * .52;
+          if (focus <= centers[0]) return 0;
+          for (let i = 1; i < centers.length; i++)
+            if (focus <= centers[i]) return i - 1 + (focus - centers[i - 1]) / (centers[i] - centers[i - 1]);
+          return centers.length - 1;
+        },
+        expected() {
+          const progress = this.progress(), state = oracle.update(progress);
+          const stride = progress % 1;
+          const smooth = x => { const t = Math.max(0, Math.min(1, x)); return t * t * (3 - 2 * t); };
+          const rise = (Math.floor(progress) + (smooth((stride - .28) / .23) + smooth((stride - .78) / .22)) / 2) / (centers.length - 1);
+          return { progress, body: oracle.body.getAttribute('transform'), state,
+            camera: state.origin.y - (500 - 190 * rise) };
+        },
+        read() {
+          const svg = document.querySelector('.expedition-art');
+          const worldFromScreen = svg.getScreenCTM().inverse();
+          const feet = Object.fromEntries(['left', 'right'].map(side => {
+            const shin = document.querySelector(`[data-photo-limb="${side}-leg-shin"]`);
+            const screen = new DOMPoint(side === 'left' ? 180 : 175, 405).matrixTransform(shin.getScreenCTM());
+            const point = screen.matrixTransform(worldFromScreen);
+            return [side, { x: point.x, y: point.y }];
+          }));
+          const transform = selector => document.querySelector(selector).getAttribute('transform');
+          return {
+            body: transform('[data-rig-body]'),
+            origin: { x: document.querySelector('[data-rig-body]').transform.baseVal.getItem(0).matrix.e,
+              y: document.querySelector('[data-rig-body]').transform.baseVal.getItem(0).matrix.f }, feet,
+            leftLeg: transform('[data-photo-limb="left-leg-shin"]'),
+            rightLeg: transform('[data-photo-limb="right-leg-shin"]'),
+            leftArm: transform('[data-photo-limb="left-arm-whole"]'),
+            rightArm: transform('[data-photo-limb="right-arm-whole"]'),
+            camera: Number(svg.getAttribute('viewBox').split(' ')[1]),
+            y: document.querySelector('[data-rig-body]').getScreenCTM().f,
+            scroll: scrollY,
+          };
+        },
+      };
+      return centers;
+    };
+    const centers = await page.evaluate(installProbe);
+    const assertPose = (actual, expected, label) => {
+      assert.ok(Math.hypot(actual.origin.x - expected.state.origin.x, actual.origin.y - expected.state.origin.y) < .03,
+        `${label}: body must reach the scroll-derived pose (within SVG rounding precision)`);
+      assert.ok(Math.abs(actual.camera - expected.camera) < .02, `${label}: camera must follow the same progress`);
+      for (const side of ['left', 'right'])
+        assert.ok(Math.hypot(actual.feet[side].x - expected.state.feet[side].x,
+          actual.feet[side].y - expected.state.feet[side].y) < .15,
+        `${label}: ${side} photographic boot must follow its own solved contact`);
+    };
+    const settledPose = async (label, sparse = false) => {
+      if (sparse) for (let tick = 0; tick < 10; tick++) await page.clock.fastForward(100);
+      else await page.clock.runFor(1000);
+      const result = await page.evaluate(() => ({ actual: __rigTest.read(), expected: __rigTest.expected() }));
+      assertPose(result.actual, result.expected, label);
+      return result;
+    };
+    const go = async (progress, sparse = false) => {
+      const index = Math.floor(progress), fraction = progress - index;
       const y = centers[index] + (centers[Math.min(index + 1, centers.length - 1)] - centers[index]) * fraction - 900 * .52;
-      await page.evaluate(value => scrollTo(0, value), y);
-      await page.waitForTimeout(850);
-      return page.evaluate(() => ({
-        body: document.querySelector('[data-rig-body]').getAttribute('transform'),
-        leftLeg: document.querySelector('[data-photo-limb="left-leg-shin"]').getAttribute('transform'),
-        rightLeg: document.querySelector('[data-photo-limb="right-leg-shin"]').getAttribute('transform'),
-        leftArm: document.querySelector('[data-photo-limb="left-arm-whole"]').getAttribute('transform'),
-        rightArm: document.querySelector('[data-photo-limb="right-arm-whole"]').getAttribute('transform'),
-        camera: Number(document.querySelector('.expedition-art').getAttribute('viewBox').split(' ')[1]),
-      }));
+      await page.evaluate(value => new Promise(resolve => {
+        dispatchEvent(new PointerEvent('pointerdown'));
+        const before = scrollY;
+        const onScroll = () => resolve();
+        addEventListener('scroll', onScroll, { once: true });
+        scrollTo({ top: value, behavior: 'instant' });
+        if (scrollY === before) { removeEventListener('scroll', onScroll); resolve(); }
+      }), y);
+      return (await settledPose(`progress ${progress}`, sparse)).actual;
     };
     const rightStep = await go(.25);
     const leftStep = await go(.75);
@@ -79,58 +155,98 @@ const base = process.env.TEST_URL || 'http://127.0.0.1:4173';
     for (const limb of ['leftLeg', 'rightLeg', 'leftArm', 'rightArm'])
       assert.equal(reverse[limb], rightStep[limb], `${limb} should return to the same pose after reversing`);
 
-    await go(1.2);
-    await page.evaluate(() => {
-      window.__rigMotion = [];
-      const start = performance.now();
-      const sample = time => {
-        const body = document.querySelector('[data-rig-body]');
-        window.__rigMotion.push({ time, y: body.getScreenCTM().f,
-          left: document.querySelector('[data-photo-limb="left-leg-shin"]').getAttribute('transform'),
-          right: document.querySelector('[data-photo-limb="right-leg-shin"]').getAttribute('transform') });
-        if (time - start < 900) requestAnimationFrame(sample);
-      };
-      requestAnimationFrame(sample);
-    });
-    await page.mouse.move(1050, 450);
-    await page.mouse.wheel(0, 500);
-    await page.waitForTimeout(1250);
-    const motion = await page.evaluate(() => {
-      const samples = window.__rigMotion;
-      return {
-        frames: samples.length,
-        uniqueLeft: new Set(samples.map(sample => sample.left)).size,
-        uniqueRight: new Set(samples.map(sample => sample.right)).size,
-        maxDownward: samples.slice(1).reduce((max, sample, index) => Math.max(max, sample.y - samples[index].y), 0),
-        maxJump: samples.slice(1).reduce((max, sample, index) => Math.max(max, Math.abs(sample.y - samples[index].y)), 0),
-      };
-    });
-    console.log(`${browserName} sampled motion: ${JSON.stringify(motion)}`);
-    // Headless Windows WebKit yielded 15 rAF samples for the unchanged legacy
-    // scene in this same 900 ms benchmark. Assert continuity and no rebound;
-    // this runner's sample count is not a device frame-rate guarantee.
-    assert.ok(motion.frames >= (browserName === 'chromium' ? 25 : 12),
-      `Wheel gesture should be sampled over many animation frames: ${JSON.stringify(motion)}`);
-    assert.ok(motion.uniqueLeft >= 10 && motion.uniqueRight >= 10, `Both legs must update continuously: ${JSON.stringify(motion)}`);
-    assert.ok(motion.maxDownward < 3 && motion.maxJump < 18, `Climber should not snap or drop during ascent: ${JSON.stringify(motion)}`);
+    // Fixed progress samples span four alternating steps, independent of how
+    // many frames the host can paint. Check the actual skin, not just a solver.
+    let previous = null;
+    const swings = new Map();
+    for (let index = 0; index <= 64; index++) {
+      const actual = await go(1 + index / 32, index % 2 === 1);
+      const { progress, state } = await page.evaluate(() => __rigTest.expected());
+      assert.equal(state.moving, state.step % 2 === 0 ? 'right' : 'left', 'Anatomical step order must alternate');
+      if (previous && state.step === previous.state.step) {
+        const distance = side => Math.hypot(actual.feet[side].x - previous.actual.feet[side].x,
+          actual.feet[side].y - previous.actual.feet[side].y);
+        assert.ok(distance(state.planted) < .15, 'The supporting boot must stay planted while the other leg swings');
+        assert.ok(distance(state.moving) < 35, 'A swing must not teleport between footholds');
+        if (distance(state.moving) > 1) swings.set(state.step, state.moving);
+        assert.ok(previous.actual.y - actual.y >= -1 && previous.actual.y - actual.y < 5,
+          'Dense forward progress must not drop or snap the climber');
+      }
+      previous = { actual, state, progress };
+    }
+    assert.deepEqual([...swings.values()], ['right', 'left', 'right', 'left'],
+      'Both anatomical legs must independently complete alternating swings');
 
-    // Re-measure after lazy-loaded panels have settled. The initial card
-    // centers can shift slightly during the long scroll on Firefox/WebKit.
-    await page.evaluate(() => {
-      dispatchEvent(new PointerEvent('pointerdown'));
-      document.documentElement.style.scrollBehavior = 'auto';
-      const nodes = [document.querySelector('.expedition-prologue'),
-        ...document.querySelectorAll('.expedition-checkpoint'),
-        document.querySelector('.expedition-continuation')];
-      const center = node => { const rect = node.getBoundingClientRect();
-        return rect.top + scrollY + rect.height / 2; };
-      const a = center(nodes[nodes.length - 2]);
-      const b = center(nodes[nodes.length - 1]);
-      scrollTo({ top: a + (b - a) * .97 - innerHeight * .52, behavior: 'instant' });
-    });
-    await page.waitForFunction(() =>
-      document.querySelector('[data-rig-planting-portrait]').getAttribute('opacity') === '1',
-    );
+    console.log(`${browserName}: 65 fixed-progress poses, alternating regular/sparse callbacks; four independent swings`);
+
+    // Native input and compositor delivery run on a separate, real clock.
+    // Wait for the scroll/pose contract, not a fixed wall-time frame count.
+    const live = await browser.newPage({ viewport: { width: 1440, height: 900 }, colorScheme: 'dark' });
+    live.on('pageerror', error => errors.push(error.message));
+    try {
+      await live.goto(base + '/journey/');
+      await live.evaluate(async () => {
+        await document.fonts.ready;
+        await Promise.all([...document.images].map(image => { image.loading = 'eager'; return image.decode(); }));
+        dispatchEvent(new Event('resize'));
+      });
+      const anchors = await live.evaluate(installProbe);
+      await live.evaluate(y => { dispatchEvent(new PointerEvent('pointerdown')); scrollTo({ top: y, behavior: 'instant' }); },
+        anchors[1] + (anchors[2] - anchors[1]) * .2 - 900 * .52);
+      await live.waitForFunction(() => {
+        const a = __rigTest.read(), e = __rigTest.expected();
+        return Math.hypot(a.origin.x - e.state.origin.x, a.origin.y - e.state.origin.y) < .03;
+      }, null, { timeout: 15000 });
+      await live.mouse.move(1050, 450);
+      const start = await live.evaluate(() => {
+        const first = __rigTest.read();
+        window.__liveSamples = [first];
+        window.__liveRecording = true;
+        const sample = () => {
+          if (!__liveRecording) return;
+          __liveSamples.push(__rigTest.read());
+          requestAnimationFrame(sample);
+        };
+        requestAnimationFrame(sample);
+        window.__liveInput = new Promise(resolve => addEventListener('wheel', event => {
+          const delta = event.deltaY * (event.deltaMode === 1 ? 16 : event.deltaMode === 2 ? innerHeight : 1);
+          const readingCenter = (innerHeight + 84) / 2, target = scrollY + delta * 1.2;
+          const nodes = [document.querySelector('.expedition-prologue'),
+            ...document.querySelectorAll('.expedition-checkpoint'), document.querySelector('.expedition-continuation')];
+          const next = nodes.map(node => { const r = node.getBoundingClientRect(); return r.top + scrollY + r.height / 2; })
+            .find(center => center - readingCenter >= target - 1);
+          resolve({ delta, destination: next != null && next - readingCenter - target < 300 ? next - readingCenter : target });
+        }, { once: true }));
+        return first;
+      });
+      await live.mouse.wheel(0, 500);
+      const input = await live.evaluate(() => __liveInput);
+      assert.ok(input.delta > 0, 'Native wheel must deliver forward input');
+      await live.waitForFunction(destination => {
+        const actual = __rigTest.read(), expected = __rigTest.expected();
+        return Math.abs(actual.scroll - destination) <= 1 && Math.hypot(actual.origin.x - expected.state.origin.x, actual.origin.y - expected.state.origin.y) < .03 &&
+          Math.abs(actual.camera - expected.camera) < .02;
+      }, input.destination, { timeout: 15000 });
+      const finish = await live.evaluate(() => {
+        __liveRecording = false;
+        const samples = __liveSamples;
+        return { actual: __rigTest.read(), expected: __rigTest.expected(),
+          frames: samples.length,
+          intermediate: samples.some(s => s.scroll > samples[0].scroll + 20 && s.scroll < samples.at(-1).scroll - 20 &&
+            s.y < samples[0].y - 1 && s.leftLeg !== samples[0].leftLeg && s.rightLeg !== samples[0].rightLeg),
+          maxDownward: samples.slice(1).reduce((m, s, i) => Math.max(m, s.y - samples[i].y), 0),
+          maxJump: samples.slice(1).reduce((m, s, i) => Math.max(m, Math.abs(s.y - samples[i].y)), 0) };
+      });
+      assertPose(finish.actual, finish.expected, 'native wheel endpoint');
+      assert.ok(finish.actual.y < start.y - 3 && finish.intermediate, 'Native input must animate both legs and ascend before settling');
+      assert.ok(finish.maxDownward < 3 && finish.maxJump < 18, 'Native wheel must not drop or snap the climber');
+      console.log(`${browserName} native wheel: ${JSON.stringify({ frames: finish.frames, delta: input.delta,
+        maxDownward: finish.maxDownward, maxJump: finish.maxJump })}`);
+    } finally { await live.close(); }
+
+    // Assets/fonts were settled before measuring anchors; go waits for the
+    // native scroll event before advancing application time.
+    await go(centers.length - 2 + .97);
     assert.deepEqual(await page.evaluate(() => ({
       body: document.querySelector('[data-rig-body]').getAttribute('opacity'),
       planting: document.querySelector('[data-rig-planting-portrait]').getAttribute('opacity'),
