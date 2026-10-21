@@ -1,4 +1,175 @@
 {
+  "/assets/img/ascent-climber-alpine.png": {
+    "src": "/assets/media/ascent-climber-alpine-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-climber-alpine-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-climber-alpine-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-climber-alpine-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ascent-climber-cycle-left.png": {
+    "src": "/assets/media/ascent-climber-cycle-left-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-climber-cycle-left-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-left-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-left-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ascent-climber-cycle-right-a.png": {
+    "src": "/assets/media/ascent-climber-cycle-right-a-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-a-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-a-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-a-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ascent-climber-cycle-right-b.png": {
+    "src": "/assets/media/ascent-climber-cycle-right-b-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-b-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-b-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-climber-cycle-right-b-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ascent-climber-frames.png": {
+    "src": "/assets/media/ascent-climber-frames-1280.webp",
+    "width": 2172,
+    "height": 724,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-climber-frames-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-climber-frames-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-climber-frames-1280.webp",
+        "width": 1280
+      }
+    ]
+  },
+  "/assets/img/ascent-everest-illustration.png": {
+    "src": "/assets/media/ascent-everest-illustration-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-everest-illustration-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-everest-illustration-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-everest-illustration-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ascent-icewall-illustration.png": {
+    "src": "/assets/media/ascent-icewall-illustration-1086.webp",
+    "width": 1086,
+    "height": 1448,
+    "sizes": [
+      {
+        "src": "/assets/media/ascent-icewall-illustration-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ascent-icewall-illustration-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ascent-icewall-illustration-1086.webp",
+        "width": 1086
+      }
+    ]
+  },
+  "/assets/img/ashborne-dashboard.png": {
+    "src": "/assets/media/ashborne-dashboard-1280.webp",
+    "width": 2550,
+    "height": 1276,
+    "sizes": [
+      {
+        "src": "/assets/media/ashborne-dashboard-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ashborne-dashboard-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ashborne-dashboard-1280.webp",
+        "width": 1280
+      }
+    ]
+  },
+  "/assets/img/ashborne-logo.png": {
+    "src": "/assets/media/ashborne-logo-1254.webp",
+    "width": 1254,
+    "height": 1254,
+    "sizes": [
+      {
+        "src": "/assets/media/ashborne-logo-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/ashborne-logo-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/ashborne-logo-1254.webp",
+        "width": 1254
+      }
+    ]
+  },
   "/assets/img/blob123.png": {
     "src": "/assets/media/blob123-601.webp",
     "width": 601,
@@ -30,6 +201,36 @@
       {
         "src": "/assets/media/channels4_profile-900.webp",
         "width": 900
+      }
+    ]
+  },
+  "/assets/img/homelab-cover.png": {
+    "src": "/assets/media/homelab-cover-420.webp",
+    "width": 420,
+    "height": 420,
+    "sizes": [
+      {
+        "src": "/assets/media/homelab-cover-420.webp",
+        "width": 420
+      }
+    ]
+  },
+  "/assets/img/homelab-topology.png": {
+    "src": "/assets/media/homelab-topology-1280.webp",
+    "width": 1536,
+    "height": 1024,
+    "sizes": [
+      {
+        "src": "/assets/media/homelab-topology-480.webp",
+        "width": 480
+      },
+      {
+        "src": "/assets/media/homelab-topology-800.webp",
+        "width": 800
+      },
+      {
+        "src": "/assets/media/homelab-topology-1280.webp",
+        "width": 1280
       }
     ]
   },
@@ -154,6 +355,17 @@
       {
         "src": "/assets/media/reportwrite1-649.webp",
         "width": 649
+      }
+    ]
+  },
+  "/assets/img/rto-cover.png": {
+    "src": "/assets/media/rto-cover-400.webp",
+    "width": 400,
+    "height": 400,
+    "sizes": [
+      {
+        "src": "/assets/media/rto-cover-400.webp",
+        "width": 400
       }
     ]
   },
