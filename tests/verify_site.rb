@@ -42,7 +42,7 @@ documents.each do |file, doc|
   errors << "#{label}: expected one h1" unless doc.css('h1').size == 1
   errors << "#{label}: missing title/description/canonical" if doc.at_css('title')&.text.to_s.empty? || doc.at_css('meta[name="description"]')&.[]('content').to_s.empty? || doc.at_css('link[rel="canonical"]')&.[]('href').to_s.empty?
   canonical = doc.at_css('link[rel="canonical"]')&.[]('href').to_s
-  errors << "#{label}: wrong canonical #{canonical}" unless canonical.start_with?("https://smokericeash.github.io#{prefix}/")
+  errors << "#{label}: wrong canonical #{canonical}" unless canonical.start_with?("https://aidan.is-a.dev#{prefix}/")
   errors << "#{label}: missing social preview" unless doc.at_css('meta[property="og:image"]')
   ids = doc.css('[id]').map { |node| node['id'] }
   errors << "#{label}: duplicate ids" unless ids.uniq.size == ids.size
